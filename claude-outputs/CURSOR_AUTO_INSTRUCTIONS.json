@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-17T20:00:00Z",
+  "description": "Claude Auto-Execution Instructions für Cursor",
+  "trigger_patterns": {
+    "Follow Claude's instructions": "AUTO_EXECUTE - full_automation",
+    "Claude says": "AUTO_EXECUTE - full_automation",
+    "Implement Claude's fix": "AUTO_EXECUTE - full_automation",
+    "Apply Claude's solution": "AUTO_EXECUTE - full_automation",
+    "Auto-update from Claude": "AUTO_EXECUTE - full_automation",
+    "Execute Claude plan": "AUTO_EXECUTE - full_automation",
+    "Deploy Claude code": "AUTO_EXECUTE - full_automation"
+  },
+  "auto_execution_workflow": {
+    "step_1": "Detect Trigger Pattern",
+    "step_2": "Fetch Claude Outputs from GitHub",
+    "step_3": "Parse Instructions",
+    "step_4": "Validate (Syntax, Dependencies, Safety)",
+    "step_5": "Execute (Integrate, Test, Deploy)",
+    "step_6": "Report Back to Claude"
+  },
+  "claude_output_locations": {
+    "code_files": "/claude-outputs/latest/code/",
+    "strategies": "/claude-outputs/latest/strategy/",
+    "implementations": "/claude-outputs/latest/implementation/",
+    "tests": "/claude-outputs/latest/tests/",
+    "deployments": "/claude-outputs/latest/deployment/"
+  },
+  "n8n_integration": {
+    "server": "https://n8n.srv1091615.hstgr.cloud",
+    "api_endpoint": "/api/v1/workflows",
+    "auth_method": "Bearer Token",
+    "token_location": "process.env.N8N_API_KEY"
+  },
+  "safety_checks": {
+    "production_changes": "Always ask before touching production",
+    "backup_before_deploy": "Create git backup branch",
+    "test_before_deploy": "Run test cases first",
+    "manual_review": "Ask if Success Rate < 80% OR Error Rate > 5%"
+  },
+  "cursor_commands": {
+    "fetch_latest": "@git fetch /claude-outputs/latest/",
+    "validate": "@claude Validate this code before deploy",
+    "deploy": "@n8n Deploy this workflow",
+    "rollback": "@git Revert to last working version",
+    "report": "@claude Here's what I did: [status]"
+  }
+}
