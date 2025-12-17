@@ -280,42 +280,129 @@ async function autoFixWorkflow() {
     });
     console.log();
     
-    // 5. Fix Prepare GTN/EAN → Rate Limiting Connection
+    // 5. Fix Prepare GTN/EAN → Rate Limiting Connection (GTN/EAN Rate Limiting, NICHT Adult "Rate Limiting")
     console.log('🔗 FIX 4: Korrigiere Prepare GTN/EAN → Rate Limiting...\n');
     const prepareGTN = nodes.find(n => n.name === 'Prepare GTN/EAN_Loop');
-    const rateLimiting = nodes.find(n => 
-      n.name.toLowerCase().includes('rate limiting') && 
-      (n.name.toLowerCase().includes('gtn') || n.name.toLowerCase().includes('gtin'))
-    ) || nodes.find(n => 
-      n.name.toLowerCase().includes('rate limiting') && 
-      !nodes.find(update => update.name.toLowerCase().includes('update') && 
-        connections[update.name]?.main?.[0]?.some(c => c.node === n.name))
-    );
     
-    if (prepareGTN && rateLimiting) {
+    // Finde Rate Limiting GTN/EAN (sollte "Rate Limiting GTN/EAN" oder ähnlich heißen)
+    const rateLimitingGTN = nodes.find(n => {
+      const name = n.name.toLowerCase();
+      return (name.includes('rate') || name.includes('wait')) && 
+             (name.includes('gtn') || name.includes('gtin') || name.includes('ean'));
+    });
+    
+    // Das "Rate Limiting" ohne Suffix ist für Adult - soll NICHT verwendet werden
+    const rateLimitingAdult = nodes.find(n => {
+      const name = n.name.toLowerCase();
+      return name === 'rate limiting' && 
+             !name.includes('gtn') && 
+             !name.includes('gtin') && 
+             !name.includes('ean') &&
+             !name.includes('image') &&
+             !name.includes('text');
+    });
+    
+    if (prepareGTN && rateLimitingGTN) {
       if (!connections['Prepare GTN/EAN_Loop']) {
         connections['Prepare GTN/EAN_Loop'] = { main: [[]] };
       }
       
       const gtnOutputs = connections['Prepare GTN/EAN_Loop'].main[0] || [];
-      const hasRateConnection = gtnOutputs.some(c => c.node === rateLimiting.name);
       
-      if (!hasRateConnection) {
+      // Prüfe ob es zu Adult "Rate Limiting" geht (FALSCH!)
+      const goesToAdult = rateLimitingAdult && gtnOutputs.some(c => c.node === rateLimitingAdult.name);
+      const goesToGTN = gtnOutputs.some(c => c.node === rateLimitingGTN.name);
+      
+      if (goesToAdult) {
+        console.log(`   ❌ Prepare GTN/EAN_Loop geht zu "${rateLimitingAdult.name}" (FALSCH!)`);
+        
+        // Entferne falsche Connection
+        connections['Prepare GTN/EAN_Loop'].main[0] = gtnOutputs.filter(c => c.node !== rateLimitingAdult.name);
+        changes++;
+        
+        // Füge korrekte Connection hinzu
+        if (!goesToGTN) {
+          connections['Prepare GTN/EAN_Loop'].main[0].push({
+            node: rateLimitingGTN.name,
+            type: 'main',
+            index: 0
+          });
+          console.log(`   ✅ Prepare GTN/EAN_Loop → ${rateLimitingGTN.name} (KORRIGIERT)`);
+          changes++;
+        }
+      } else if (goesToGTN) {
+        console.log(`   ✅ Prepare GTN/EAN_Loop → ${rateLimitingGTN.name} (bereits korrekt verbunden)`);
+      } else {
+        // Keine Connection, füge hinzu
         connections['Prepare GTN/EAN_Loop'].main[0] = [{
-          node: rateLimiting.name,
+          node: rateLimitingGTN.name,
           type: 'main',
           index: 0
         }];
-        console.log(`   ✅ Prepare GTN/EAN_Loop → ${rateLimiting.name}`);
+        console.log(`   ✅ Prepare GTN/EAN_Loop → ${rateLimitingGTN.name}`);
         changes++;
-      } else {
-        console.log(`   ⏭️  Prepare GTN/EAN_Loop → ${rateLimiting.name} (bereits verbunden)`);
       }
     }
     console.log();
     
+    // 5.1 Fix Prepare Multi Country Loop Code (behebt Error bei allen Items)
+    console.log('🔧 FIX 5: Korrigiere Prepare Multi Country Loop Code...\n');
+    const prepareMultiCountryNode = nodes.find(n => n.name === 'Prepare Multi Country Loop');
+    
+    if (prepareMultiCountryNode && prepareMultiCountryNode.parameters) {
+      const code = prepareMultiCountryNode.parameters.jsCode || '';
+      
+      // Zeige ersten Teil des Codes
+      if (code.length > 0) {
+        console.log('   📄 Aktueller Code (erste 300 Zeichen):');
+        console.log(`   ${code.substring(0, 300)}${code.length > 300 ? '...' : ''}\n`);
+      }
+      
+      // Prüfe ob Code problematisch ist
+      const usesInputAll = code.includes('$input.all()');
+      const usesInputFirst = code.includes('$input.first()');
+      const hasReturn = code.includes('return');
+      
+      // Wenn $input.all() verwendet wird, könnte es zu Fehlern führen wenn sequenziell verarbeitet werden soll
+      // ODER wenn kein return vorhanden ist
+      if (usesInputAll || !hasReturn || !usesInputFirst) {
+        console.log(`   ⚠️  Code benötigt Korrektur:`);
+        console.log(`      Verwendet $input.all(): ${usesInputAll ? '⚠️  Ja (kann Fehler verursachen)' : '✅ Nein'}`);
+        console.log(`      Verwendet $input.first(): ${usesInputFirst ? '✅ Ja' : '❌ Nein'}`);
+        console.log(`      Hat return Statement: ${hasReturn ? '✅ Ja' : '❌ Nein'}`);
+        console.log('   🔧 Korrigiere Code...\n');
+        
+        // Ersetze durch sequenziellen Code (vereinfacht)
+        prepareMultiCountryNode.parameters.jsCode = `// ============================================================================
+// PREPARE MULTI COUNTRY LOOP - SEQUENTIELLE VERARBEITUNG
+// ============================================================================
+const inputItem = $input.first().json;
+const config = $('Shop Configuration2').first().json;
+
+// Multi-Country Logik - sequenziell verarbeiten
+return {
+  json: {
+    ...inputItem,
+    action: 'multi_country',
+    priority: 'multi_country',
+    multi_country_processed: true,
+    countries: inputItem.countries || inputItem.countries_from_gemini || [],
+    shipping: inputItem.shipping || []
+  }
+};`;
+        
+        console.log(`   ✅ Code korrigiert (sequenzielle Verarbeitung)`);
+        changes++;
+      } else {
+        console.log(`   ✅ Code sieht korrekt aus`);
+      }
+    } else {
+      console.log(`   ⚠️  Prepare Multi Country Loop Node nicht gefunden`);
+    }
+    console.log();
+    
     // 6. Fix Update Product Adult Flag spezifisch
-    console.log('🔧 FIX 5: Korrigiere Update Product Adult Flag...\n');
+    console.log('🔧 FIX 6: Korrigiere Update Product Adult Flag...\n');
     const adultFlagNode = nodes.find(n => 
       n.name.toLowerCase().includes('update') && 
       n.name.toLowerCase().includes('adult')
