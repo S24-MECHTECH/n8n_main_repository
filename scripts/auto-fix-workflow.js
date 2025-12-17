@@ -350,36 +350,23 @@ async function autoFixWorkflow() {
     const prepareMultiCountryNode = nodes.find(n => n.name === 'Prepare Multi Country Loop');
     
     if (prepareMultiCountryNode && prepareMultiCountryNode.parameters) {
-      const code = prepareMultiCountryNode.parameters.jsCode || '';
+      const currentCode = prepareMultiCountryNode.parameters.jsCode || '';
       
-      // Zeige ersten Teil des Codes
-      if (code.length > 0) {
-        console.log('   📄 Aktueller Code (erste 300 Zeichen):');
-        console.log(`   ${code.substring(0, 300)}${code.length > 300 ? '...' : ''}\n`);
+      console.log('   📄 Aktueller Code:');
+      if (currentCode.length > 0) {
+        console.log(`   ${currentCode.substring(0, 400)}${currentCode.length > 400 ? '...' : ''}\n`);
+      } else {
+        console.log('   (Leer)\n');
       }
       
-      // Prüfe ob Code problematisch ist
-      const usesInputAll = code.includes('$input.all()');
-      const usesInputFirst = code.includes('$input.first()');
-      const hasReturn = code.includes('return');
-      
-      // Wenn $input.all() verwendet wird, sollte es entfernt werden (sequenzielle Verarbeitung)
-      // Da User meldet dass alle Items als Error angezeigt werden, ersetze Code wenn $input.all() verwendet wird
-      if (usesInputAll) {
-        console.log(`   ⚠️  Code benötigt Korrektur:`);
-        console.log(`      Verwendet $input.all(): ${usesInputAll ? '⚠️  Ja (kann Fehler verursachen - wird korrigiert)' : '✅ Nein'}`);
-        console.log(`      Verwendet $input.first(): ${usesInputFirst ? '✅ Ja' : '❌ Nein (wird hinzugefügt)'}`);
-        console.log(`      Hat return Statement: ${hasReturn ? '✅ Ja' : '❌ Nein (wird hinzugefügt)'}`);
-        console.log('   🔧 Korrigiere Code (ersetze durch einfache sequenzielle Version)...\n');
-        
-        // Ersetze durch sequenziellen Code (vereinfacht)
-        prepareMultiCountryNode.parameters.jsCode = `// ============================================================================
+      // Ersetze durch korrekten sequenziellen Code
+      const correctCode = `// ============================================================================
 // PREPARE MULTI COUNTRY LOOP - SEQUENTIELLE VERARBEITUNG
 // ============================================================================
 const inputItem = $input.first().json;
 const config = $('Shop Configuration2').first().json;
 
-// Multi-Country Logik - sequenziell verarbeiten
+// Multi-Country Logik - sequenziell verarbeiten (ein Item)
 return {
   json: {
     ...inputItem,
@@ -390,65 +377,16 @@ return {
     shipping: inputItem.shipping || []
   }
 };`;
-        
-        console.log(`   ✅ Code korrigiert (sequenzielle Verarbeitung)`);
+      
+      if (currentCode !== correctCode) {
+        prepareMultiCountryNode.parameters.jsCode = correctCode;
+        console.log('   ✅ Code korrigiert (sequenzielle Verarbeitung mit $input.first())');
         changes++;
       } else {
-        // Prüfe ob Code trotzdem $input.all() verwendet (könnte weiter unten im Code sein)
-        if (code.includes('$input.all()')) {
-          console.log(`   ⚠️  Code verwendet $input.all() - könnte zu Fehlern führen`);
-          console.log(`   🔧 Ersetze Code durch einfache sequenzielle Version...\n`);
-          
-          prepareMultiCountryNode.parameters.jsCode = `// ============================================================================
-// PREPARE MULTI COUNTRY LOOP - SEQUENTIELLE VERARBEITUNG
-// ============================================================================
-const inputItem = $input.first().json;
-const config = $('Shop Configuration2').first().json;
-
-// Multi-Country Logik - sequenziell verarbeiten
-return {
-  json: {
-    ...inputItem,
-    action: 'multi_country',
-    priority: 'multi_country',
-    multi_country_processed: true,
-    countries: inputItem.countries || inputItem.countries_from_gemini || [],
-    shipping: inputItem.shipping || []
-  }
-};`;
-          
-          console.log(`   ✅ Code korrigiert (entfernt $input.all())`);
-          changes++;
-        } else {
-          // Code verwendet kein $input.all(), aber User meldet Fehler
-          // Ersetze trotzdem durch einfache Version um Fehler zu beheben
-          console.log(`   ⚠️  Code sieht syntaktisch korrekt aus, aber User meldet Fehler`);
-          console.log(`   🔧 Ersetze Code trotzdem durch einfache funktionierende Version...\n`);
-          
-          prepareMultiCountryNode.parameters.jsCode = `// ============================================================================
-// PREPARE MULTI COUNTRY LOOP - SEQUENTIELLE VERARBEITUNG
-// ============================================================================
-const inputItem = $input.first().json;
-const config = $('Shop Configuration2').first().json;
-
-// Multi-Country Logik - sequenziell verarbeiten (nur ein Item)
-return {
-  json: {
-    ...inputItem,
-    action: 'multi_country',
-    priority: 'multi_country',
-    multi_country_processed: true,
-    countries: inputItem.countries || inputItem.countries_from_gemini || [],
-    shipping: inputItem.shipping || []
-  }
-};`;
-          
-          console.log(`   ✅ Code ersetzt (einfache funktionierende Version)`);
-          changes++;
-        }
+        console.log('   ⏭️  Code ist bereits korrekt');
       }
     } else {
-      console.log(`   ⚠️  Prepare Multi Country Loop Node nicht gefunden`);
+      console.log('   ⚠️  Prepare Multi Country Loop Node nicht gefunden');
     }
     console.log();
     
