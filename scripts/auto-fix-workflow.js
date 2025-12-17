@@ -5,14 +5,65 @@
 
 const https = require('https');
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
 const N8N_URL = process.env.N8N_URL || 'https://n8n.srv1091615.hstgr.cloud';
-const N8N_API_KEY = process.env.N8N_API_KEY || process.argv[2];
 const WORKFLOW_ID = 'ftZOou7HNgLOwzE5';
+
+// Versuche API Key aus verschiedenen Quellen zu lesen
+function getApiKey() {
+  // 1. Als Command-Line-Argument
+  if (process.argv[2]) {
+    return process.argv[2];
+  }
+  
+  // 2. Aus Umgebungsvariable
+  if (process.env.N8N_API_KEY) {
+    return process.env.N8N_API_KEY;
+  }
+  
+  // 3. Aus mcp.json Dateien
+  const configPaths = [
+    path.join(__dirname, '..', '..', '.cursor', 'mcp.json'),
+    path.join(__dirname, '..', '..', '.cursor', 'FUNKTIONIERENDE_CONFIG.json'),
+    path.join(__dirname, '..', '..', '.cursor', 'mcp-config.json'),
+    path.join(process.env.USERPROFILE || process.env.HOME, '.cursor', 'mcp.json'),
+    path.join(process.env.APPDATA || '', 'Claude', 'claude_desktop_config.json')
+  ];
+  
+  for (const configPath of configPaths) {
+    try {
+      if (fs.existsSync(configPath)) {
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        
+        // Prüfe verschiedene Pfade
+        if (config.mcpServers?.['n8n-mcp']?.env?.N8N_API_KEY) {
+          return config.mcpServers['n8n-mcp'].env.N8N_API_KEY;
+        }
+        
+        // Prüfe auch in args für Bearer Token
+        if (config.mcpServers?.['n8n-mcp']?.args) {
+          const authHeader = config.mcpServers['n8n-mcp'].args.find(arg => arg.startsWith('authorization:Bearer '));
+          if (authHeader) {
+            return authHeader.replace('authorization:Bearer ', '');
+          }
+        }
+      }
+    } catch (error) {
+      // Ignoriere Fehler und versuche nächste Datei
+    }
+  }
+  
+  return null;
+}
+
+const N8N_API_KEY = getApiKey();
 
 if (!N8N_API_KEY) {
   console.error('❌ N8N_API_KEY fehlt!');
   console.error('   Nutzung: node auto-fix-workflow.js YOUR_API_KEY');
+  console.error('   Oder setzen Sie: $env:N8N_API_KEY = "YOUR_API_KEY"');
   process.exit(1);
 }
 

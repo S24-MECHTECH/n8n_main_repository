@@ -2,6 +2,17 @@
 
 Zentrale Quelle für alle n8n Workflows, Scripts und Templates für MECHTECH.
 
+## ⚡ QUICK START
+
+### Workflow automatisch reparieren:
+
+```powershell
+cd C:\Users\Andree\n8n_main_repository
+.\run-auto-fix.ps1 YOUR_API_KEY
+```
+
+Siehe [INSTALL.md](INSTALL.md) für detaillierte Anleitung.
+
 ## 📋 Inhalt
 
 - **Workflows:** n8n Workflow-Definitionen und Templates
@@ -15,26 +26,30 @@ Zentrale Quelle für alle n8n Workflows, Scripts und Templates für MECHTECH.
 n8n_main_repository/
 ├── workflows/          # Workflow-Definitionen & Templates
 ├── scripts/            # JavaScript-Scripts
+│   ├── analysis/       # Analyse-Scripts
+│   ├── fixes/          # Fix-Scripts
+│   ├── monitoring/     # Monitoring-Scripts
+│   ├── utils/          # Utility-Scripts
+│   └── auto-fix-workflow.js  # ⭐ Haupt-Auto-Fix Script
 ├── docs/               # Dokumentation
 ├── config/             # Konfigurationsdateien
 └── templates/          # Code-Templates
 ```
 
-## 🚀 Schnellstart
+## 🚀 NPM Scripts
 
-### Workflow analysieren:
 ```bash
-node scripts/analysis/analyze-entire-workflow.js YOUR_API_KEY
-```
-
-### Workflow überwachen:
-```bash
-node scripts/monitoring/monitor-workflow-execution.js YOUR_API_KEY
+npm run fix        # Auto-Fix ausführen
+npm run analyze    # Workflow analysieren
+npm run monitor    # Workflow überwachen
+npm run watch      # Live-Monitoring
 ```
 
 ## 📚 Dokumentation
 
-Siehe `docs/` für detaillierte Dokumentation.
+- [INSTALL.md](INSTALL.md) - Installation & Setup
+- [QUICK_FIX.md](QUICK_FIX.md) - Schnellstart für Fixes
+- [docs/guides/](docs/guides/) - Detaillierte Anleitungen
 
 ## 🔧 Workflows
 
