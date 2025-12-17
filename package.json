@@ -1,0 +1,25 @@
+{
+  "name": "n8n-main-repository",
+  "version": "1.0.0",
+  "description": "n8n Workflows, Scripts und Templates für MECHTECH",
+  "main": "index.js",
+  "scripts": {
+    "fix": "node scripts/auto-fix-workflow.js",
+    "analyze": "node scripts/analysis/analyze-entire-workflow.js",
+    "monitor": "node scripts/monitoring/monitor-workflow-execution.js",
+    "watch": "node scripts/monitoring/watch-live-execution.js",
+    "validate": "node scripts/utils/verify-workflow-saved.js"
+  },
+  "keywords": [
+    "n8n",
+    "workflow",
+    "automation",
+    "mechtech"
+  ],
+  "author": "S24-MECHTECH",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

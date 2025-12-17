@@ -1,0 +1,335 @@
+/**
+ * AUTO-FIX WORKFLOW
+ * Behebt automatisch alle bekannten Probleme im MECHTECH_MERCHANT_CENTER_ADMIN Workflow
+ */
+
+const https = require('https');
+const http = require('http');
+
+const N8N_URL = process.env.N8N_URL || 'https://n8n.srv1091615.hstgr.cloud';
+const N8N_API_KEY = process.env.N8N_API_KEY || process.argv[2];
+const WORKFLOW_ID = 'ftZOou7HNgLOwzE5';
+
+if (!N8N_API_KEY) {
+  console.error('❌ N8N_API_KEY fehlt!');
+  console.error('   Nutzung: node auto-fix-workflow.js YOUR_API_KEY');
+  process.exit(1);
+}
+
+function n8nRequest(path, method = 'GET', body = null) {
+  return new Promise((resolve, reject) => {
+    const url = new URL(path, N8N_URL);
+    const isHttps = url.protocol === 'https:';
+    const lib = isHttps ? https : http;
+    
+    const options = {
+      hostname: url.hostname,
+      port: url.port || (isHttps ? 443 : 80),
+      path: url.pathname + url.search,
+      method: method,
+      headers: {
+        'X-N8N-API-KEY': N8N_API_KEY,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    
+    const req = lib.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          try {
+            resolve(JSON.parse(data));
+          } catch (e) {
+            resolve(data);
+          }
+        } else {
+          reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+        }
+      });
+    });
+    
+    req.on('error', reject);
+    if (body) req.write(JSON.stringify(body));
+    req.end();
+  });
+}
+
+async function autoFixWorkflow() {
+  console.log('\n' + '='.repeat(80));
+  console.log('🔧 AUTO-FIX WORKFLOW');
+  console.log('='.repeat(80) + '\n');
+  
+  try {
+    // 1. Workflow laden
+    console.log('📥 Lade Workflow...\n');
+    const workflow = await n8nRequest(`/api/v1/workflows/${WORKFLOW_ID}`);
+    const nodes = workflow.nodes;
+    let connections = workflow.connections || {};
+    let changes = 0;
+    
+    console.log(`✅ Workflow geladen: ${workflow.name}\n`);
+    
+    // 2. Fix Credentials (googleApi → googleOAuth2Api)
+    console.log('🔐 FIX 1: Korrigiere Credentials...\n');
+    nodes.forEach(node => {
+      if (node.type.includes('httpRequest') && node.parameters) {
+        const params = node.parameters;
+        if (params.nodeCredentialType === 'googleApi') {
+          params.nodeCredentialType = 'googleOAuth2Api';
+          params.authentication = 'predefinedCredentialType';
+          console.log(`   ✅ ${node.name}: googleApi → googleOAuth2Api`);
+          changes++;
+        }
+      }
+    });
+    console.log();
+    
+    // 3. Fix Prepare Chain Connections
+    console.log('🔗 FIX 2: Korrigiere Prepare Chain...\n');
+    const prepareChain = [
+      'Prepare Products Loop',
+      'Prepare Images Loop',
+      'Prepare Text Loop',
+      'Prepare Merchant Quality Loop',
+      'Prepare Multi Country Loop',
+      'Prepare GTN/EAN_Loop'
+    ];
+    
+    for (let i = 0; i < prepareChain.length - 1; i++) {
+      const current = prepareChain[i];
+      const next = prepareChain[i + 1];
+      
+      const currentNode = nodes.find(n => n.name === current);
+      const nextNode = nodes.find(n => n.name === next);
+      
+      if (currentNode && nextNode) {
+        if (!connections[current]) {
+          connections[current] = { main: [[]] };
+        }
+        
+        // Prüfe ob bereits korrekt verbunden
+        const currentConn = connections[current].main[0] || [];
+        const isConnected = currentConn.some(c => c.node === next);
+        
+        if (!isConnected) {
+          connections[current].main[0] = [{
+            node: next,
+            type: 'main',
+            index: 0
+          }];
+          console.log(`   ✅ ${current} → ${next}`);
+          changes++;
+        } else {
+          console.log(`   ⏭️  ${current} → ${next} (bereits verbunden)`);
+        }
+      }
+    }
+    console.log();
+    
+    // 4. Fix Route by Priority → Update → Rate Limiting Structure
+    console.log('🔄 FIX 3: Korrigiere Route by Priority Struktur...\n');
+    
+    const routeNodes = nodes.filter(n => 
+      n.name.toLowerCase().includes('route') && n.name.toLowerCase().includes('priority')
+    );
+    
+    routeNodes.forEach(routeNode => {
+      const routeName = routeNode.name;
+      const routeConn = connections[routeName];
+      
+      // Finde zugehörige Update Nodes
+      const updateNodes = nodes.filter(n => {
+        const name = n.name.toLowerCase();
+        const routeCategory = routeName.toLowerCase();
+        
+        // Prüfe auf Kategorien
+        if (routeCategory.includes('adult') && name.includes('adult')) return true;
+        if (routeCategory.includes('image') && name.includes('image')) return true;
+        if (routeCategory.includes('text') && name.includes('text')) return true;
+        if (routeCategory.includes('merchant') && name.includes('merchant')) return true;
+        if (routeCategory.includes('country') && name.includes('country')) return true;
+        if (routeCategory.includes('gtn') && (name.includes('gtin') || name.includes('gtn'))) return true;
+        
+        return false;
+      });
+      
+      updateNodes.forEach(updateNode => {
+        const updateName = updateNode.name;
+        
+        // Route → Update
+        if (!connections[routeName]) {
+          connections[routeName] = { main: [[]] };
+        }
+        
+        const routeOutputs = connections[routeName].main[0] || [];
+        const hasUpdateConnection = routeOutputs.some(c => c.node === updateName);
+        
+        if (!hasUpdateConnection) {
+          if (routeOutputs.length === 0) {
+            connections[routeName].main[0] = [{ node: updateName, type: 'main', index: 0 }];
+          } else {
+            connections[routeName].main[0].push({ node: updateName, type: 'main', index: 0 });
+          }
+          console.log(`   ✅ ${routeName} → ${updateName}`);
+          changes++;
+        }
+        
+        // Update → Rate Limiting
+        const rateLimitingNodes = nodes.filter(n => 
+          (n.name.toLowerCase().includes('rate') || n.name.toLowerCase().includes('wait')) &&
+          n.name.toLowerCase().includes(updateName.toLowerCase().split(' ').pop()?.toLowerCase() || '')
+        );
+        
+        if (rateLimitingNodes.length === 0) {
+          // Suche nach generischem Rate Limiting
+          const genericRateLimiting = nodes.find(n => 
+            n.name.toLowerCase().includes('rate limiting') && 
+            !n.name.toLowerCase().includes('gtn')
+          );
+          
+          if (genericRateLimiting) {
+            if (!connections[updateName]) {
+              connections[updateName] = { main: [[]] };
+            }
+            const updateOutputs = connections[updateName].main[0] || [];
+            const hasRateConnection = updateOutputs.some(c => c.node === genericRateLimiting.name);
+            
+            if (!hasRateConnection) {
+              connections[updateName].main[0] = [{
+                node: genericRateLimiting.name,
+                type: 'main',
+                index: 0
+              }];
+              console.log(`   ✅ ${updateName} → ${genericRateLimiting.name}`);
+              changes++;
+            }
+          }
+        } else {
+          rateLimitingNodes.forEach(rateNode => {
+            if (!connections[updateName]) {
+              connections[updateName] = { main: [[]] };
+            }
+            const updateOutputs = connections[updateName].main[0] || [];
+            const hasRateConnection = updateOutputs.some(c => c.node === rateNode.name);
+            
+            if (!hasRateConnection) {
+              connections[updateName].main[0] = [{
+                node: rateNode.name,
+                type: 'main',
+                index: 0
+              }];
+              console.log(`   ✅ ${updateName} → ${rateNode.name}`);
+              changes++;
+            }
+          });
+        }
+      });
+    });
+    console.log();
+    
+    // 5. Fix Prepare GTN/EAN → Rate Limiting Connection
+    console.log('🔗 FIX 4: Korrigiere Prepare GTN/EAN → Rate Limiting...\n');
+    const prepareGTN = nodes.find(n => n.name === 'Prepare GTN/EAN_Loop');
+    const rateLimiting = nodes.find(n => 
+      n.name.toLowerCase().includes('rate limiting') && 
+      (n.name.toLowerCase().includes('gtn') || n.name.toLowerCase().includes('gtin'))
+    ) || nodes.find(n => 
+      n.name.toLowerCase().includes('rate limiting') && 
+      !nodes.find(update => update.name.toLowerCase().includes('update') && 
+        connections[update.name]?.main?.[0]?.some(c => c.node === n.name))
+    );
+    
+    if (prepareGTN && rateLimiting) {
+      if (!connections['Prepare GTN/EAN_Loop']) {
+        connections['Prepare GTN/EAN_Loop'] = { main: [[]] };
+      }
+      
+      const gtnOutputs = connections['Prepare GTN/EAN_Loop'].main[0] || [];
+      const hasRateConnection = gtnOutputs.some(c => c.node === rateLimiting.name);
+      
+      if (!hasRateConnection) {
+        connections['Prepare GTN/EAN_Loop'].main[0] = [{
+          node: rateLimiting.name,
+          type: 'main',
+          index: 0
+        }];
+        console.log(`   ✅ Prepare GTN/EAN_Loop → ${rateLimiting.name}`);
+        changes++;
+      } else {
+        console.log(`   ⏭️  Prepare GTN/EAN_Loop → ${rateLimiting.name} (bereits verbunden)`);
+      }
+    }
+    console.log();
+    
+    // 6. Fix Update Product Adult Flag spezifisch
+    console.log('🔧 FIX 5: Korrigiere Update Product Adult Flag...\n');
+    const adultFlagNode = nodes.find(n => 
+      n.name.toLowerCase().includes('update') && 
+      n.name.toLowerCase().includes('adult')
+    );
+    
+    if (adultFlagNode && adultFlagNode.type.includes('httpRequest')) {
+      const params = adultFlagNode.parameters || {};
+      
+      // URL Expression
+      if (params.url && params.url.includes('$json.product.id')) {
+        params.url = params.url.replace('$json.product.id', '$json.product_id');
+        console.log(`   ✅ URL Expression korrigiert`);
+        changes++;
+      }
+      
+      // Body prüfen
+      if (!params.sendBody && params.method === 'PATCH') {
+        params.sendBody = true;
+        params.specifyBody = 'json';
+        params.jsonBody = params.jsonBody || `={
+  "adult": true,
+  "ageGroup": "adult",
+  "googleProductCategory": "778"
+}`;
+        console.log(`   ✅ Body hinzugefügt`);
+        changes++;
+      }
+    }
+    console.log();
+    
+    // 7. Workflow speichern
+    if (changes > 0) {
+      console.log(`💾 Speichere ${changes} Änderungen...\n`);
+      
+      const cleanSettings = workflow.settings ? 
+        { executionOrder: workflow.settings.executionOrder || 'v1' } : 
+        { executionOrder: 'v1' };
+      
+      const updatePayload = {
+        name: workflow.name,
+        nodes: nodes,
+        connections: connections,
+        settings: cleanSettings
+      };
+      
+      await n8nRequest(`/api/v1/workflows/${WORKFLOW_ID}`, 'PUT', updatePayload);
+      
+      console.log('✅ Workflow erfolgreich aktualisiert!\n');
+      console.log(`📊 ZUSAMMENFASSUNG:`);
+      console.log(`   Änderungen: ${changes}`);
+      console.log(`   Workflow ID: ${WORKFLOW_ID}`);
+      console.log(`   Name: ${workflow.name}\n`);
+    } else {
+      console.log('✅ Keine Änderungen notwendig - Workflow ist bereits korrekt!\n');
+    }
+    
+    console.log('='.repeat(80) + '\n');
+    
+  } catch (error) {
+    console.error('\n❌ FEHLER:', error.message);
+    if (error.stack) {
+      console.error(error.stack);
+    }
+    process.exit(1);
+  }
+}
+
+autoFixWorkflow();
