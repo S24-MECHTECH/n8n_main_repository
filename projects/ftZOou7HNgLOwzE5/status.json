@@ -1,15 +1,31 @@
 {
   "workflow_id": "ftZOou7HNgLOwzE5",
   "workflow_name": "MERCHANT_CENTER_ADMIN",
-  "timestamp": "2025-12-19T02:44:40.629Z",
+  "timestamp": "2025-12-19T03:31:43.256Z",
   "cursor_sync": {
-    "last_sync": "2025-12-19T02:44:40.631Z",
+    "last_sync": "2025-12-19T03:31:43.258Z",
     "status_file": "cursor-status-live.json",
     "status_source": "cursor"
   },
   "current_status": {
-    "status": "unknown",
-    "message": "No status from cursor"
+    "timestamp": "2025-12-19T03:31:42.303Z",
+    "current_task": "📤 POST to Claude: test (RUNNING)",
+    "status": "RUNNING",
+    "progress": "50%",
+    "claude_post": {
+      "to": "claude",
+      "timestamp": "2025-12-19T03:31:42.297Z",
+      "action": "test",
+      "status": "RUNNING",
+      "details": {
+        "task": "Test message",
+        "result": "In progress...",
+        "workflow_hash": "10facd4cb1f2cacce3ca60e48ee7a3b5",
+        "changes": "Starting test"
+      }
+    },
+    "note": "Webhook not available, using fallback to status file",
+    "workflow_id": "ftZOou7HNgLOwzE5"
   },
   "sync_active": true
 }
