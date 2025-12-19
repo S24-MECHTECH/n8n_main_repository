@@ -1,0 +1,26 @@
+{
+  "session_id": "session_2025_12_19_1766112229003",
+  "workflow_id": "ftZOou7HNgLOwzE5",
+  "workflow_name": "MERCHANT_CENTER_ADMIN",
+  "start_time": "2025-12-19T02:43:49.003Z",
+  "end_time": null,
+  "status": "active",
+  "tasks": [
+    {
+      "task": "📤 POST to Claude: test (DONE)",
+      "status": "done",
+      "timestamp": "2025-12-19T02:29:34.675Z",
+      "result": "Status updated"
+    }
+  ],
+  "changes": {
+    "workflow_hash": null,
+    "files_changed": [],
+    "commits": []
+  },
+  "cursor_sync": {
+    "last_read": "2025-12-19T02:44:40.636Z",
+    "last_written": null,
+    "status_file": "cursor-status-live.json"
+  }
+}

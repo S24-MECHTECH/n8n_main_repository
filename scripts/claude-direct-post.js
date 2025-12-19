@@ -192,10 +192,16 @@ async function test() {
   console.log('='.repeat(100) + '\n');
 
   try {
+    console.log('1. Testing RUNNING notification...');
     await notifyRunning('test', 'Test message');
     await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    console.log('2. Testing DONE notification...');
     await notifyDone('test', 'Test message', 'System is working', 'Testing Claude direct post');
+    
     console.log('\n✅ Test completed!\n');
+    console.log('📋 Status written to: cursor-status-live.json');
+    console.log('💡 To use webhook, set CLAUDE_WEBHOOK_URL environment variable\n');
   } catch (error) {
     console.error('\n❌ Test failed:', error.message);
     process.exit(1);

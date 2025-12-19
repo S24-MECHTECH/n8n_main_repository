@@ -1,0 +1,15 @@
+{
+  "workflow_id": "ftZOou7HNgLOwzE5",
+  "workflow_name": "MERCHANT_CENTER_ADMIN",
+  "timestamp": "2025-12-19T02:44:40.629Z",
+  "cursor_sync": {
+    "last_sync": "2025-12-19T02:44:40.631Z",
+    "status_file": "cursor-status-live.json",
+    "status_source": "cursor"
+  },
+  "current_status": {
+    "status": "unknown",
+    "message": "No status from cursor"
+  },
+  "sync_active": true
+}

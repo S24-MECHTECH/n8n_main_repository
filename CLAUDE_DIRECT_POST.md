@@ -74,6 +74,10 @@ node scripts/claude-direct-post.js backup ERROR "Backup failed" "Git push failed
 
 Standard: `https://n8n.srv1091615.hstgr.cloud/webhook/claude-direct-post`
 
+**⚠️ WICHTIG:** Der Webhook muss in n8n erstellt und aktiviert werden!
+
+**Fallback:** Wenn der Webhook nicht verfügbar ist, wird der Status automatisch in `cursor-status-live.json` geschrieben.
+
 Kann via Umgebungsvariable geändert werden:
 ```bash
 $env:CLAUDE_ENDPOINT="https://your-endpoint.com/webhook"
