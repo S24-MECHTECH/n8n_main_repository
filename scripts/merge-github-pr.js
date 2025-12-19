@@ -83,10 +83,15 @@ async function mergePullRequest() {
   try {
     console.log(`📋 Merge PR #${PR_NUMBER}...\n`);
     
+    // Prüfe welche Merge-Methode erlaubt ist
+    const prInfo = await githubRequest(`/repos/${OWNER}/${REPO}/pulls/${PR_NUMBER}`);
+    console.log(`   PR Status: ${prInfo.state}`);
+    console.log(`   Mergeable: ${prInfo.mergeable}\n`);
+    
     const mergeData = {
       commit_title: `Merge PR #${PR_NUMBER}: Multi-AI Route by Priority Complete Fix`,
       commit_message: 'Multi-AI orchestration completed. Route-by-Priority fix deployed.',
-      merge_method: 'merge'
+      merge_method: 'rebase' // Versuche rebase statt merge
     };
     
     const result = await githubRequest(`/repos/${OWNER}/${REPO}/pulls/${PR_NUMBER}/merge`, 'PUT', mergeData);
