@@ -1,0 +1,57 @@
+{
+  "connections": [
+    {
+      "from": "Rate Limiting",
+      "to": "Gemini Error Handler Adult Flags",
+      "outputType": "main",
+      "inputType": "main",
+      "outputIndex": 0,
+      "inputIndex": 0
+    },
+    {
+      "from": "Rate Limiting Images",
+      "to": "Gemini Error Handler Images",
+      "outputType": "main",
+      "inputType": "main",
+      "outputIndex": 0,
+      "inputIndex": 0
+    },
+    {
+      "from": "Rate Limiting Text",
+      "to": "Gemini Error Handler Text",
+      "outputType": "main",
+      "inputType": "main",
+      "outputIndex": 0,
+      "inputIndex": 0
+    },
+    {
+      "from": "Rate Limiting Merchant",
+      "to": "Gemini Error Handler Merchant Quality",
+      "outputType": "main",
+      "inputType": "main",
+      "outputIndex": 0,
+      "inputIndex": 0
+    },
+    {
+      "from": "Rate Limiting Country",
+      "to": "Gemini Error Handler Multi Country",
+      "outputType": "main",
+      "inputType": "main",
+      "outputIndex": 0,
+      "inputIndex": 0
+    },
+    {
+      "from": "Rate Limiting GTN/EAN",
+      "to": "Gemini Error Handler GTN/EAN",
+      "outputType": "main",
+      "inputType": "main",
+      "outputIndex": 0,
+      "inputIndex": 0
+    }
+  ],
+  "metadata": {
+    "created": "2025-01-13",
+    "purpose": "Gemini Error Handler Connections für alle 6 Stränge",
+    "workflowId": "ftZOou7HNgLOwzE5"
+  }
+}

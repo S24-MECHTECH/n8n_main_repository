@@ -22,8 +22,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const WORKFLOW_ID = process.argv[2] || 'ftZOou7HNgLOwzE5';
-const WORKFLOW_FILE = path.join(__dirname, '..', 'workflows', `MERCHANT_CENTER_ADMIN_${WORKFLOW_ID}.json`);
+// Parse command line arguments
+const args = process.argv.slice(2);
+const FIX_DISABLED = args.includes('--fix-disabled');
+const WORKFLOW_ID = args.find(arg => arg !== '--fix-disabled') || 'ftZOou7HNgLOwzE5';
+const WORKFLOW_FILE = path.join(__dirname, '..', '..', 'workflows', `MERCHANT_CENTER_ADMIN_${WORKFLOW_ID}.json`).replace(/\\/g, '/');
 
 function analyzeWorkflow() {
   console.log('\n' + '='.repeat(100));
@@ -331,8 +334,82 @@ function generateMarkdownReport(report) {
   return md;
 }
 
-if (require.main === module) {
-  analyzeWorkflow();
+function fixDisabledProperties() {
+  console.log('\n' + '='.repeat(100));
+  console.log('FIX DISABLED PROPERTIES');
+  console.log('='.repeat(100) + '\n');
+  
+  if (!fs.existsSync(WORKFLOW_FILE)) {
+    console.error(`❌ Workflow file not found: ${WORKFLOW_FILE}`);
+    process.exit(1);
+  }
+  
+  console.log(`📄 Loading workflow: ${WORKFLOW_FILE}\n`);
+  const workflow = JSON.parse(fs.readFileSync(WORKFLOW_FILE, 'utf8'));
+  const nodes = workflow.nodes || [];
+  
+  // Find nodes without 'disabled' property
+  const nodesWithoutDisabled = nodes.filter(node => 
+    !node.hasOwnProperty('disabled')
+  );
+  
+  console.log(`🔍 Found ${nodesWithoutDisabled.length} nodes without 'disabled' property\n`);
+  
+  if (nodesWithoutDisabled.length === 0) {
+    console.log('✅ All nodes already have the "disabled" property!\n');
+    return;
+  }
+  
+  // Show first 10 nodes
+  console.log('Nodes to fix (first 10):');
+  nodesWithoutDisabled.slice(0, 10).forEach((node, idx) => {
+    console.log(`  ${idx + 1}. ${node.name || node.type} (${node.type})`);
+  });
+  if (nodesWithoutDisabled.length > 10) {
+    console.log(`  ... and ${nodesWithoutDisabled.length - 10} more\n`);
+  } else {
+    console.log('');
+  }
+  
+  // Fix nodes
+  console.log('🔧 Adding "disabled": false to all nodes without this property...\n');
+  let fixedCount = 0;
+  
+  nodes.forEach(node => {
+    if (!node.hasOwnProperty('disabled')) {
+      node.disabled = false;
+      fixedCount++;
+    }
+  });
+  
+  // Create backup
+  const backupFile = WORKFLOW_FILE.replace('.json', `.backup_${Date.now()}.json`);
+  fs.writeFileSync(backupFile, JSON.stringify(workflow, null, 2), 'utf8');
+  console.log(`💾 Backup created: ${backupFile}\n`);
+  
+  // Save fixed workflow
+  fs.writeFileSync(WORKFLOW_FILE, JSON.stringify(workflow, null, 2), 'utf8');
+  
+  console.log(`✅ Fixed ${fixedCount} nodes!\n`);
+  console.log(`📄 Workflow saved: ${WORKFLOW_FILE}\n`);
+  console.log('⚠️  Next steps:');
+  console.log('   1. Upload the fixed workflow to n8n');
+  console.log('   2. Test the workflow');
+  console.log('   3. Verify all nodes work correctly\n');
+  
+  return {
+    fixed: fixedCount,
+    total: nodes.length,
+    backupFile: backupFile
+  };
 }
 
-module.exports = { analyzeWorkflow };
+if (require.main === module) {
+  if (FIX_DISABLED) {
+    fixDisabledProperties();
+  } else {
+    analyzeWorkflow();
+  }
+}
+
+module.exports = { analyzeWorkflow, fixDisabledProperties };

@@ -1,0 +1,1034 @@
+{
+  "nodeTypes": null,
+  "workflowNodes": [
+    {
+      "name": "Chat Trigger (RAG Query)",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "id": "9baabb04-7161-4ec5-b55e-f60db618fb2a"
+    },
+    {
+      "name": "Chat Agent (RAG)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "id": "9bc4af95-f5bd-4f66-92af-9dd4780285f6"
+    },
+    {
+      "name": "Gemini Chat Model (RAG)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "id": "c23df7d5-2db0-4397-a635-8fe929c75f0d"
+    },
+    {
+      "name": "Supabase Vector Store (Retrieve)",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "id": "15b38e7b-23bd-4e25-847c-9bd727d3161f"
+    },
+    {
+      "name": "Gemini Embeddings (RAG)",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "id": "d4606641-fd18-4201-844a-3bcc80a70fcf"
+    },
+    {
+      "name": "Postgres Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "id": "2bff2895-6846-4720-bfd4-1a8eaff1386e"
+    },
+    {
+      "name": "Check Last Run",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "id": "e217bdb8-8710-475d-acaa-c033d138c2cd"
+    },
+    {
+      "name": "Prepare Products Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "2d6517f1-ebbc-48fd-894c-287420175a7a"
+    },
+    {
+      "name": "Update Product Adult Flag",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "15586a83-cda8-4ac9-9826-9ed77f24fa1c"
+    },
+    {
+      "name": "Rate Limiting",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "id": "09ba4846-6da9-425c-a762-4f9f4bc1b4e6"
+    },
+    {
+      "name": "Save Workflow Run",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "id": "588efd00-c612-4bb9-9837-abab980e50ab"
+    },
+    {
+      "name": "Log Results to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "id": "108880c3-e17a-4976-bce9-9edef6a441a7"
+    },
+    {
+      "name": "Send Daily Report",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "id": "5e5a1e29-70f7-45bf-9d3f-80ec9efb83f7"
+    },
+    {
+      "name": "Export Report to Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "id": "b8be1226-8b56-4499-927f-611b6d5f606a"
+    },
+    {
+      "name": "Import Commands from Gmail",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "id": "cdb90d0d-ccc5-473c-94a8-ea3ac6adc09b"
+    },
+    {
+      "name": "Send WhatsApp Expert Alert",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "id": "b1701b06-0047-42f9-8558-b9d2bf7453ad"
+    },
+    {
+      "name": "Import Commands from WhatsApp",
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "id": "dad0b159-2230-417c-9a99-35aad6692aa9"
+    },
+    {
+      "name": "Format Report for Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "f42a4d00-e073-42db-a62a-e6fc4afdea43"
+    },
+    {
+      "name": "Parse Command Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "1508074b-8edb-4df0-86d3-9830444fb9e1"
+    },
+    {
+      "name": "Check if Expert Needed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "id": "3f130224-b8e7-4411-a208-572c46510fae"
+    },
+    {
+      "name": "Route Command",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "id": "8d4d4848-43b2-4809-b459-1c262b31cd0d"
+    },
+    {
+      "name": "Send Command Response",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "id": "45396118-d2da-455e-9a97-75cbabde112b"
+    },
+    {
+      "name": "Prepare Images Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "9bf990d0-1d87-4bbb-9153-46146b506ae6"
+    },
+    {
+      "name": "Update Product Images",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "id": "3c250fa7-ca68-49fa-869d-1d0b1761a4b1"
+    },
+    {
+      "name": "Rate Limiting Images",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "id": "bfed81ba-0dfb-4fd3-9161-3dadb6aebe1d"
+    },
+    {
+      "name": "Prepare Text Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "3245d64d-7810-44de-beaa-f97d55eb2274"
+    },
+    {
+      "name": "Update Product Text",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "id": "34310e5a-2422-4ce3-a615-5b8f911b5407"
+    },
+    {
+      "name": "Rate Limiting Text",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "id": "dcf77ef7-4f9b-4487-be98-b0480a6b9b2a"
+    },
+    {
+      "name": "Handle Invalid Priority",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "80b0ee00-87d9-44ec-8b62-8c86eda7737b"
+    },
+    {
+      "name": "Shop Configuration2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "id": "c56a220a-81d4-49e8-8f8b-70b5051f89d0"
+    },
+    {
+      "name": "Get Merchant Products2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "39d79c98-55c7-418a-8c36-bce59d3efd3f"
+    },
+    {
+      "name": "Analyze Products2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "f49cb6b3-195b-42f6-a025-a0e78d62cfca"
+    },
+    {
+      "name": "Aggregate Results2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "e8e880e8-557c-42e8-a95f-fb077510c508"
+    },
+    {
+      "name": "JSON Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "id": "984a5be4-d1fa-4229-aa5b-5a50528673ec"
+    },
+    {
+      "name": "Prepare Merchant Quality Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "92b514de-5cd0-4f79-9857-123e685a1405"
+    },
+    {
+      "name": "Update Merchant Settings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "3ad28c6f-6828-483e-a696-c83bd1382966"
+    },
+    {
+      "name": "Rate Limiting Merchant",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "id": "3226b31b-79d4-4877-9432-a192258a6099"
+    },
+    {
+      "name": "Prepare Multi Country Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "40a1e96b-15f2-4eb0-bdad-bd7532b02a22"
+    },
+    {
+      "name": "Update Country Feeds",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "3c873a42-3df1-4f70-89a4-08a7391cf78e"
+    },
+    {
+      "name": "Rate Limiting Country",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "id": "62a07200-0815-4098-869a-8ec5fa3927f5"
+    },
+    {
+      "name": "Route by Priority",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "id": "d4b56adf-ee7f-4c31-91ff-22d64ef182a0"
+    },
+    {
+      "name": "Get Merchant Products Shop2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "07c684bc-18ff-493d-833f-4fc1a26e2cca"
+    },
+    {
+      "name": "Save to Supabase Products",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "725473eb-3d1e-4d65-84cf-084cc1c521fb"
+    },
+    {
+      "name": "Update Optimization Patterns",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "12c519ef-b6b4-4f07-86b6-0bb9dc47f074"
+    },
+    {
+      "name": "Get Human Instructions",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "id": "42e30df8-bb6a-4410-a1aa-35d8be0f9ddb"
+    },
+    {
+      "name": "Filter Unprocessed Instructions",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "02c7b8d8-d36f-4ef9-866e-069bf77eddbf"
+    },
+    {
+      "name": "Process Instructions with Gemini",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "id": "f2b6a65c-9975-4082-afbc-91acf0a73604"
+    },
+    {
+      "name": "Gemini Model Learning",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "id": "55f39251-adad-438f-975f-011c7a1497d6"
+    },
+    {
+      "name": "JSON Parser Learning",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "id": "1faa2330-99e5-4acd-8253-a9d6dd30c5bd"
+    },
+    {
+      "name": "Apply to Similar Products",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "8bccc6c6-1e34-426d-80cb-90fadf6082e0"
+    },
+    {
+      "name": "Update Sheet with AI Response",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "id": "c77cdd70-7296-45e8-b454-d5d9a766f365"
+    },
+    {
+      "name": "Save Learning to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "46929706-525b-42d0-adb4-1ec1932a2249"
+    },
+    {
+      "name": "Get Workflow Status REAL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "24dfb842-786a-45ed-89bf-a8cf8b2b15af"
+    },
+    {
+      "name": "Format Status Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "4bd56d4b-4f4e-4696-b41b-e9937892618d"
+    },
+    {
+      "name": "MCP Client",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "id": "04a8f30d-72eb-494b-87ec-faff1ecf2a2b"
+    },
+    {
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "id": "c105a095-1fad-40c3-a323-e631b53cb6bd"
+    },
+    {
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "id": "fa6bd48c-91d5-4e16-8bc3-f102df17f4e1"
+    },
+    {
+      "name": "Gemini Daily Decision",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "id": "d693f698-d40b-46a1-88df-ab9dd01765bf"
+    },
+    {
+      "name": "Gemini flash_2.0",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "id": "aa5fcfd4-61e9-4522-8e08-fc5739fd1fd7"
+    },
+    {
+      "name": "MCP Client1",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "id": "6a4002e5-0908-41de-bd03-1dc359e33cbe"
+    },
+    {
+      "name": "Supabase RAG Context",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "id": "69313a23-245e-4812-8f0d-6a0f49f9ae46"
+    },
+    {
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "id": "81c65263-dd9c-47ce-bb36-5ef2c918c51f"
+    },
+    {
+      "name": "Update GTN/EAN",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "7a01b7e8-3184-4982-92f4-a0ba03f781a4"
+    },
+    {
+      "name": "Rate Limiting GTN/EAN",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "id": "65ca06d9-ae1b-4669-ba03-4418312d0442"
+    },
+    {
+      "name": "Prepare GTN/EAN_Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "f0a9ce99-2f4c-4baf-857a-02c81d0cae4d"
+    },
+    {
+      "name": "Log Results_Sheets_01",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "id": "4d05ceb8-9f63-4593-bc11-609b83f7f012"
+    },
+    {
+      "name": "Email Trigger (IMAP)1",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.1,
+      "id": "4aafec14-c1cf-4b56-a311-a808641ba07a"
+    },
+    {
+      "name": "Gemini Error Handler Adult",
+      "type": "n8n-nodes-base.googleGemini",
+      "typeVersion": 1,
+      "id": "gemini-error-adult-1766023123239-k1t4zjbm8"
+    },
+    {
+      "name": "Gemini Error Handler Images",
+      "type": "n8n-nodes-base.googleGemini",
+      "typeVersion": 1,
+      "id": "gemini-error-images-1766023123240-9jvymbua0"
+    },
+    {
+      "name": "Gemini Error Handler Text",
+      "type": "n8n-nodes-base.googleGemini",
+      "typeVersion": 1,
+      "id": "gemini-error-text-1766023123240-x2t1v6pe6"
+    },
+    {
+      "name": "Gemini Error Handler Quality",
+      "type": "n8n-nodes-base.googleGemini",
+      "typeVersion": 1,
+      "id": "gemini-error-quality-1766023123240-7huqry67f"
+    },
+    {
+      "name": "Gemini Error Handler Country",
+      "type": "n8n-nodes-base.googleGemini",
+      "typeVersion": 1,
+      "id": "gemini-error-country-1766023123240-dfeybmbru"
+    },
+    {
+      "name": "Gemini Error Handler GTN/EAN",
+      "type": "n8n-nodes-base.googleGemini",
+      "typeVersion": 1,
+      "id": "gemini-error-gtn-ean-1766023123241-hcxchhuun"
+    }
+  ],
+  "nodeCategories": {
+    "@n8n/n8n-nodes-langchain": [
+      {
+        "name": "Chat Trigger (RAG Query)",
+        "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+        "version": 1.4
+      },
+      {
+        "name": "Chat Agent (RAG)",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "version": 3
+      },
+      {
+        "name": "Gemini Chat Model (RAG)",
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "version": 1
+      },
+      {
+        "name": "Supabase Vector Store (Retrieve)",
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "version": 1.3
+      },
+      {
+        "name": "Gemini Embeddings (RAG)",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "version": 1
+      },
+      {
+        "name": "Postgres Chat Memory",
+        "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+        "version": 1.3
+      },
+      {
+        "name": "JSON Output Parser1",
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "version": 1.3
+      },
+      {
+        "name": "Process Instructions with Gemini",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "version": 1.7
+      },
+      {
+        "name": "Gemini Model Learning",
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "version": 1
+      },
+      {
+        "name": "JSON Parser Learning",
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "version": 1.2
+      },
+      {
+        "name": "MCP Client",
+        "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+        "version": 1.2
+      },
+      {
+        "name": "Gemini Daily Decision",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "version": 3
+      },
+      {
+        "name": "Gemini flash_2.0",
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "version": 1
+      },
+      {
+        "name": "MCP Client1",
+        "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+        "version": 1.2
+      },
+      {
+        "name": "Google Gemini Chat Model",
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "version": 1
+      }
+    ],
+    "n8n-nodes-base": [
+      {
+        "name": "Check Last Run",
+        "type": "n8n-nodes-base.supabase",
+        "version": 1
+      },
+      {
+        "name": "Prepare Products Loop",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Update Product Adult Flag",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Rate Limiting",
+        "type": "n8n-nodes-base.wait",
+        "version": 1.1
+      },
+      {
+        "name": "Save Workflow Run",
+        "type": "n8n-nodes-base.supabase",
+        "version": 1
+      },
+      {
+        "name": "Log Results to Sheets",
+        "type": "n8n-nodes-base.googleSheets",
+        "version": 4.4
+      },
+      {
+        "name": "Send Daily Report",
+        "type": "n8n-nodes-base.telegram",
+        "version": 1.2
+      },
+      {
+        "name": "Export Report to Gmail",
+        "type": "n8n-nodes-base.gmail",
+        "version": 2.2
+      },
+      {
+        "name": "Import Commands from Gmail",
+        "type": "n8n-nodes-base.gmailTrigger",
+        "version": 1.3
+      },
+      {
+        "name": "Send WhatsApp Expert Alert",
+        "type": "n8n-nodes-base.whatsApp",
+        "version": 1.1
+      },
+      {
+        "name": "Import Commands from WhatsApp",
+        "type": "n8n-nodes-base.whatsAppTrigger",
+        "version": 1
+      },
+      {
+        "name": "Format Report for Email",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Parse Command Input",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Check if Expert Needed",
+        "type": "n8n-nodes-base.if",
+        "version": 2.3
+      },
+      {
+        "name": "Route Command",
+        "type": "n8n-nodes-base.switch",
+        "version": 3.4
+      },
+      {
+        "name": "Send Command Response",
+        "type": "n8n-nodes-base.gmail",
+        "version": 2.2
+      },
+      {
+        "name": "Prepare Images Loop",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Update Product Images",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.3
+      },
+      {
+        "name": "Rate Limiting Images",
+        "type": "n8n-nodes-base.wait",
+        "version": 1.1
+      },
+      {
+        "name": "Prepare Text Loop",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Update Product Text",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.3
+      },
+      {
+        "name": "Rate Limiting Text",
+        "type": "n8n-nodes-base.wait",
+        "version": 1.1
+      },
+      {
+        "name": "Handle Invalid Priority",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Shop Configuration2",
+        "type": "n8n-nodes-base.set",
+        "version": 3.4
+      },
+      {
+        "name": "Get Merchant Products2",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Analyze Products2",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Aggregate Results2",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Prepare Merchant Quality Loop",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Update Merchant Settings",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Rate Limiting Merchant",
+        "type": "n8n-nodes-base.wait",
+        "version": 1.1
+      },
+      {
+        "name": "Prepare Multi Country Loop",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Update Country Feeds",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Rate Limiting Country",
+        "type": "n8n-nodes-base.wait",
+        "version": 1.1
+      },
+      {
+        "name": "Route by Priority",
+        "type": "n8n-nodes-base.switch",
+        "version": 3.2
+      },
+      {
+        "name": "Get Merchant Products Shop2",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Save to Supabase Products",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Update Optimization Patterns",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Get Human Instructions",
+        "type": "n8n-nodes-base.googleSheets",
+        "version": 4.4
+      },
+      {
+        "name": "Filter Unprocessed Instructions",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Apply to Similar Products",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Update Sheet with AI Response",
+        "type": "n8n-nodes-base.googleSheets",
+        "version": 4.4
+      },
+      {
+        "name": "Save Learning to Supabase",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Get Workflow Status REAL",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Format Status Response",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "When clicking ‘Execute workflow’",
+        "type": "n8n-nodes-base.manualTrigger",
+        "version": 1
+      },
+      {
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "version": 1.3
+      },
+      {
+        "name": "Supabase RAG Context",
+        "type": "n8n-nodes-base.httpRequestTool",
+        "version": 4.3
+      },
+      {
+        "name": "Update GTN/EAN",
+        "type": "n8n-nodes-base.httpRequest",
+        "version": 4.2
+      },
+      {
+        "name": "Rate Limiting GTN/EAN",
+        "type": "n8n-nodes-base.wait",
+        "version": 1.1
+      },
+      {
+        "name": "Prepare GTN/EAN_Loop",
+        "type": "n8n-nodes-base.code",
+        "version": 2
+      },
+      {
+        "name": "Log Results_Sheets_01",
+        "type": "n8n-nodes-base.googleSheets",
+        "version": 4.4
+      },
+      {
+        "name": "Email Trigger (IMAP)1",
+        "type": "n8n-nodes-base.emailReadImap",
+        "version": 2.1
+      },
+      {
+        "name": "Gemini Error Handler Adult",
+        "type": "n8n-nodes-base.googleGemini",
+        "version": 1
+      },
+      {
+        "name": "Gemini Error Handler Images",
+        "type": "n8n-nodes-base.googleGemini",
+        "version": 1
+      },
+      {
+        "name": "Gemini Error Handler Text",
+        "type": "n8n-nodes-base.googleGemini",
+        "version": 1
+      },
+      {
+        "name": "Gemini Error Handler Quality",
+        "type": "n8n-nodes-base.googleGemini",
+        "version": 1
+      },
+      {
+        "name": "Gemini Error Handler Country",
+        "type": "n8n-nodes-base.googleGemini",
+        "version": 1
+      },
+      {
+        "name": "Gemini Error Handler GTN/EAN",
+        "type": "n8n-nodes-base.googleGemini",
+        "version": 1
+      }
+    ]
+  },
+  "aiNodes": [
+    {
+      "name": "Chat Trigger (RAG Query)",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "version": 1.4
+    },
+    {
+      "name": "Chat Agent (RAG)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "version": 3
+    },
+    {
+      "name": "Gemini Chat Model (RAG)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "Supabase Vector Store (Retrieve)",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "version": 1.3
+    },
+    {
+      "name": "Gemini Embeddings (RAG)",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "Postgres Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "version": 1.3
+    },
+    {
+      "name": "JSON Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "version": 1.3
+    },
+    {
+      "name": "Process Instructions with Gemini",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "version": 1.7
+    },
+    {
+      "name": "Gemini Model Learning",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "JSON Parser Learning",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "version": 1.2
+    },
+    {
+      "name": "MCP Client",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "version": 1.2
+    },
+    {
+      "name": "Gemini Daily Decision",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "version": 3
+    },
+    {
+      "name": "Gemini flash_2.0",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "MCP Client1",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "version": 1.2
+    },
+    {
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Adult",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Images",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Text",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Quality",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Country",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler GTN/EAN",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    }
+  ],
+  "geminiNodes": [
+    {
+      "name": "Gemini Chat Model (RAG)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Embeddings (RAG)",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Model Learning",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini flash_2.0",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Adult",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Images",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Text",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Quality",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler Country",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    },
+    {
+      "name": "Gemini Error Handler GTN/EAN",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1
+    }
+  ],
+  "mcpNodes": [
+    {
+      "name": "MCP Client",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "version": 1.2
+    },
+    {
+      "name": "MCP Client1",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "version": 1.2
+    }
+  ],
+  "errorHandlers": [
+    {
+      "name": "Gemini Error Handler Adult",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1,
+      "hasCode": false,
+      "codeLength": 0
+    },
+    {
+      "name": "Gemini Error Handler Images",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1,
+      "hasCode": false,
+      "codeLength": 0
+    },
+    {
+      "name": "Gemini Error Handler Text",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1,
+      "hasCode": false,
+      "codeLength": 0
+    },
+    {
+      "name": "Gemini Error Handler Quality",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1,
+      "hasCode": false,
+      "codeLength": 0
+    },
+    {
+      "name": "Gemini Error Handler Country",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1,
+      "hasCode": false,
+      "codeLength": 0
+    },
+    {
+      "name": "Gemini Error Handler GTN/EAN",
+      "type": "n8n-nodes-base.googleGemini",
+      "version": 1,
+      "hasCode": false,
+      "codeLength": 0
+    }
+  ]
+}

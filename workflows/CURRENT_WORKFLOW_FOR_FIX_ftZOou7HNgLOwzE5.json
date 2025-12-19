@@ -19,8 +19,7 @@
         496,
         3984
       ],
-      "webhookId": "1bcc39ec-5b0a-4f6c-abf6-21235fcb6cb1",
-      "disabled": false
+      "webhookId": "1bcc39ec-5b0a-4f6c-abf6-21235fcb6cb1"
     },
     {
       "parameters": {
@@ -35,8 +34,7 @@
       "position": [
         720,
         3984
-      ],
-      "disabled": false
+      ]
     },
     {
       "parameters": {
@@ -56,8 +54,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -83,8 +80,7 @@
           "id": "f1qLUdIsbZ2A3wdC",
           "name": "Supabase-MySQL"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {},
@@ -101,8 +97,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -124,8 +119,7 @@
           "id": "pIp690wi4X79QCKb",
           "name": "Postgres account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -161,8 +155,7 @@
           "name": "Supabase-MySQL"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -178,8 +171,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -235,8 +227,7 @@
           "name": "Google Merchant_Center"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -253,8 +244,7 @@
       "webhookId": "77aa4d35-4b1e-410d-9f22-138e57a732c7",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -304,8 +294,7 @@
           "name": "Supabase-MySQL"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -487,8 +476,7 @@
           "name": "Google Sheets"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -510,8 +498,7 @@
           "id": "CefgWOY6zLuQ1eyX",
           "name": "Telegram account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -534,8 +521,7 @@
           "id": "piLkk7aEWM1RFevI",
           "name": "s24.mechtech@gmail.com"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -627,8 +613,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -644,8 +629,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -691,8 +675,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -739,8 +722,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -768,8 +750,7 @@
           "name": "s24.mechtech@gmail.com"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -785,8 +766,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -834,8 +814,7 @@
           "name": "Google Merchant_Center"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -852,8 +831,7 @@
       "webhookId": "03758724-2fd2-4cf0-bc96-1ba04b9fa35c",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -869,8 +847,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -922,8 +899,7 @@
           "name": "Google Merchant_Center"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -940,8 +916,7 @@
       "webhookId": "fade3537-0739-4667-80c9-7636461ed902",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -957,8 +932,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1022,8 +996,7 @@
       "alwaysOutputData": true,
       "retryOnFail": true,
       "waitBetweenTries": 3000,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1052,8 +1025,7 @@
           "name": "Google Merchant_Center"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1069,8 +1041,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1086,8 +1057,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1102,8 +1072,7 @@
       "position": [
         1824,
         3856
-      ],
-      "disabled": false
+      ]
     },
     {
       "parameters": {
@@ -1119,8 +1088,7 @@
       "id": "92b514de-5cd0-4f79-9857-123e685a1405",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1153,8 +1121,7 @@
           "name": "Google Merchant_Center"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1171,8 +1138,7 @@
       "webhookId": "rate-limit-merchant-webhook",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1188,8 +1154,7 @@
       "id": "40a1e96b-15f2-4eb0-bdad-bd7532b02a22",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1222,8 +1187,7 @@
           "name": "Google Merchant_Center"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1240,8 +1204,7 @@
       "webhookId": "rate-limit-country-webhook",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1409,8 +1372,7 @@
       "id": "d4b56adf-ee7f-4c31-91ff-22d64ef182a0",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1439,8 +1401,7 @@
           "name": "Google Merchant_Center"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1484,8 +1445,7 @@
       "alwaysOutputData": true,
       "waitBetweenTries": 3000,
       "continueOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1524,8 +1484,7 @@
       "retryOnFail": true,
       "alwaysOutputData": true,
       "continueOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1633,8 +1592,7 @@
           "name": "Google Sheets account"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1650,8 +1608,7 @@
       "id": "02c7b8d8-d36f-4ef9-866e-069bf77eddbf",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1672,8 +1629,7 @@
       "id": "f2b6a65c-9975-4082-afbc-91acf0a73604",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1693,8 +1649,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {},
@@ -1705,8 +1660,7 @@
         1968,
         4576
       ],
-      "id": "1faa2330-99e5-4acd-8253-a9d6dd30c5bd",
-      "disabled": false
+      "id": "1faa2330-99e5-4acd-8253-a9d6dd30c5bd"
     },
     {
       "parameters": {
@@ -1722,8 +1676,7 @@
       "id": "8bccc6c6-1e34-426d-80cb-90fadf6082e0",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1778,8 +1731,7 @@
           "name": "Google Sheets account"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1818,8 +1770,7 @@
       "retryOnFail": true,
       "alwaysOutputData": true,
       "continueOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1923,8 +1874,7 @@
         }
       },
       "continueOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1941,8 +1891,7 @@
       "alwaysOutputData": true,
       "retryOnFail": true,
       "waitBetweenTries": 3000,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1956,8 +1905,7 @@
         4240
       ],
       "id": "04a8f30d-72eb-494b-87ec-faff1ecf2a2b",
-      "name": "MCP Client",
-      "disabled": false
+      "name": "MCP Client"
     },
     {
       "parameters": {},
@@ -1968,8 +1916,7 @@
         3648
       ],
       "id": "c105a095-1fad-40c3-a323-e631b53cb6bd",
-      "name": "When clicking ‘Execute workflow’",
-      "disabled": false
+      "name": "When clicking ‘Execute workflow’"
     },
     {
       "parameters": {
@@ -1992,8 +1939,7 @@
       "name": "Schedule Trigger",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -2014,8 +1960,7 @@
       ],
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -2035,8 +1980,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2050,8 +1994,7 @@
         3760
       ],
       "id": "6a4002e5-0908-41de-bd03-1dc359e33cbe",
-      "name": "MCP Client1",
-      "disabled": false
+      "name": "MCP Client1"
     },
     {
       "parameters": {
@@ -2079,8 +2022,7 @@
           "id": "f1qLUdIsbZ2A3wdC",
           "name": "Supabase-MySQL"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2100,8 +2042,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2133,8 +2074,7 @@
           "name": "Google Merchant_Center"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -2151,8 +2091,7 @@
       "webhookId": "rate-limit-country-webhook",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -2168,8 +2107,7 @@
       "id": "f0a9ce99-2f4c-4baf-857a-02c81d0cae4d",
       "alwaysOutputData": true,
       "retryOnFail": true,
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -2351,8 +2289,7 @@
           "name": "Google Sheets"
         }
       },
-      "onError": "continueErrorOutput",
-      "disabled": false
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -2371,8 +2308,7 @@
           "id": "CdpePT9CweqekWEC",
           "name": "IMAP info@mechtech-support.com"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2391,8 +2327,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2411,8 +2346,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2431,8 +2365,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2451,8 +2384,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2471,8 +2403,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2491,8 +2422,7 @@
           "id": "iTt5j2CqCJvCx7sv",
           "name": "Google Gemini(PaLM) Api account"
         }
-      },
-      "disabled": false
+      }
     },
     {
       "parameters": {
@@ -2525,8 +2455,7 @@
       "id": "switch-action-adult-flags",
       "name": "Switch Action Handler Adult Flags",
       "alwaysOutputData": true,
-      "retryOnFail": true,
-      "disabled": false
+      "retryOnFail": true
     },
     {
       "parameters": {
@@ -2557,8 +2486,7 @@
         3392
       ],
       "id": "switch-action-images",
-      "name": "Switch Action Handler Images",
-      "disabled": false
+      "name": "Switch Action Handler Images"
     },
     {
       "parameters": {
@@ -2589,8 +2517,7 @@
         3600
       ],
       "id": "switch-action-text",
-      "name": "Switch Action Handler Text",
-      "disabled": false
+      "name": "Switch Action Handler Text"
     },
     {
       "parameters": {
@@ -2621,8 +2548,7 @@
         3792
       ],
       "id": "switch-action-merchant-quality",
-      "name": "Switch Action Handler Merchant Quality",
-      "disabled": false
+      "name": "Switch Action Handler Merchant Quality"
     },
     {
       "parameters": {
@@ -2653,8 +2579,7 @@
         4000
       ],
       "id": "switch-action-multi-country",
-      "name": "Switch Action Handler Multi Country",
-      "disabled": false
+      "name": "Switch Action Handler Multi Country"
     },
     {
       "parameters": {
@@ -2685,8 +2610,7 @@
         4192
       ],
       "id": "switch-action-gtn-ean",
-      "name": "Switch Action Handler GTN/EAN",
-      "disabled": false
+      "name": "Switch Action Handler GTN/EAN"
     }
   ],
   "connections": {

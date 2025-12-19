@@ -1,0 +1,89 @@
+{
+  "parameters": {
+    "rules": {
+      "values": [
+        {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "error-code-429-Adult",
+                "leftValue": "={{ $json.error?.code || $json.code }}",
+                "rightValue": 429,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "renameOutput": true,
+          "outputKey": "RETRY"
+        },
+        {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "error-code-400-Adult",
+                "leftValue": "={{ $json.error?.code || $json.code }}",
+                "rightValue": 400,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "renameOutput": true,
+          "outputKey": "REROUTE"
+        },
+        {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "error-code-500-Adult",
+                "leftValue": "={{ $json.error?.code || $json.code }}",
+                "rightValue": 500,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "renameOutput": true,
+          "outputKey": "SKIP"
+        }
+      ]
+    },
+    "options": {}
+  },
+  "id": "switch-error-adult-1766020145577-1z5kik69x",
+  "name": "Error Handler Adult",
+  "type": "n8n-nodes-base.switch",
+  "typeVersion": 3,
+  "position": [
+    2846,
+    3056
+  ]
+}
