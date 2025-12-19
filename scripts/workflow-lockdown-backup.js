@@ -14,6 +14,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execSync } = require('child_process');
+const { notifyRunning, notifyDone, notifyError } = require('./claude-direct-post');
 
 const WORKFLOW_ID = 'ftZOou7HNgLOwzE5';
 const WORKFLOW_FILE = path.join(__dirname, '..', 'workflows', `MERCHANT_CENTER_ADMIN_${WORKFLOW_ID}.json`);
@@ -174,6 +175,18 @@ async function lockdownBackup() {
     
     console.log('🎉 Lockdown backup completed!\n');
     
+    // POST an Claude: DONE
+    try {
+      await notifyDone(
+        'lockdown_backup',
+        'Workflow backup completed',
+        `Backup: ${backupSuccess ? 'SUCCESS' : 'FAILED'}, Changed: ${hasChanged ? 'YES' : 'NO'}`,
+        hasChanged ? `Workflow changed. New checksum: ${checksum.substring(0, 16)}...` : 'No changes detected'
+      );
+    } catch (e) {
+      console.log('⚠️  Could not notify Claude (continuing anyway):', e.message);
+    }
+    
     return {
       checksum,
       hasChanged,
@@ -186,6 +199,14 @@ async function lockdownBackup() {
       console.error(error.stack);
     }
     updateStatus(`❌ ERROR: ${error.message}`, 'ERROR');
+    
+    // POST an Claude: ERROR
+    try {
+      await notifyError('lockdown_backup', 'Workflow backup failed', error);
+    } catch (e) {
+      console.log('⚠️  Could not notify Claude about error:', e.message);
+    }
+    
     process.exit(1);
   }
 }

@@ -7,6 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { notifyRunning, notifyDone, notifyError } = require('./claude-direct-post');
 
 const WORKFLOW_ID = 'ftZOou7HNgLOwzE5';
 const N8N_URL = 'https://n8n.srv1091615.hstgr.cloud';
@@ -199,11 +200,31 @@ async function updateWorkflow() {
     
     console.log('🎉 All done! The workflow should now work without crashes.\n');
     
+    // POST an Claude: DONE
+    try {
+      await notifyDone(
+        'update_workflow',
+        'Workflow updated on n8n server',
+        `Workflow ${result.id} updated successfully. Nodes: ${result.nodes?.length || workflow.nodes.length}`,
+        `Updated workflow: ${result.name || workflow.name}`
+      );
+    } catch (e) {
+      console.log('⚠️  Could not notify Claude (continuing anyway):', e.message);
+    }
+    
   } catch (error) {
     console.error('\n❌ ERROR:', error.message);
     if (error.stack) {
       console.error(error.stack);
     }
+    
+    // POST an Claude: ERROR
+    try {
+      await notifyError('update_workflow', 'Workflow update failed', error);
+    } catch (e) {
+      console.log('⚠️  Could not notify Claude about error:', e.message);
+    }
+    
     process.exit(1);
   }
 }
