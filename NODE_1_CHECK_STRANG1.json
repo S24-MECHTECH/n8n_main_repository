@@ -1,0 +1,63 @@
+{
+  "node_check": {
+    "node_number": 1,
+    "node_name": "Check Last Run",
+    "node_id": "e217bdb8-8710-475d-acaa-c033d138c2cd",
+    "node_type": "n8n-nodes-base.supabase",
+    "type_version": "1",
+    "check_status": "GREEN",
+    "timestamp": "2025-12-19T06:38:32.021Z",
+    "checks": {
+      "configuration": {
+        "operation": "Select",
+        "table_name": "workflow_runs",
+        "table_exists": "MUST_VERIFY",
+        "credentials_present": true,
+        "credentials_id": "f1qLUdIsbZ2A3wdC",
+        "credentials_name": "Supabase-MySQL"
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      },
+      "settings": {
+        "alwaysOutputData": true,
+        "retryOnFail": true,
+        "waitBetweenTries": 3000,
+        "onError": "continueErrorOutput",
+        "disabled": false
+      },
+      "position": {
+        "x": 1072,
+        "y": 3360
+      },
+      "connections": {
+        "input_from": "Route Command (Switch Node)",
+        "output_to": [
+          "Get Merchant Products Shop2",
+          "Get Merchant Products2",
+          "Get Workflow Status REAL"
+        ]
+      },
+      "database_check": {
+        "supabase_url": "https://mxswxdnnjhhukovixzvb.supabase.co",
+        "table_required": "workflow_runs",
+        "status": "MUST_VERIFY_IN_SUPABASE"
+      }
+    },
+    "result": "✅ Node korrekt konfiguriert. Credentials vorhanden. ABER: Datenbank-Tabelle 'workflow_runs' muss in Supabase vorhanden sein!",
+    "issues": [
+      {
+        "severity": "WARNING",
+        "message": "Datenbank-Tabelle 'workflow_runs' muss existieren - muss in Supabase geprüft werden",
+        "action_required": "Prüfe ob Tabelle 'workflow_runs' in Supabase existiert"
+      }
+    ],
+    "recommendations": [
+      "Prüfe Supabase-Datenbank: Existiert Tabelle 'workflow_runs'?",
+      "Prüfe ob Credentials 'Supabase-MySQL' gültig sind"
+    ]
+  }
+}
