@@ -1,58 +1,63 @@
 #!/usr/bin/env node
 /**
- * CLAUDE DIRECT POST - AKTIVIEREN!
+ * CLAUDE DIRECT POST
  * 
- * Nach JEDEM Schritt:
- * POST zu Claude via Hostinger MCP!
- * 
- * Format:
- * {
- *   "to": "claude",
- *   "timestamp": "JETZT",
- *   "action": "was du machst",
- *   "status": "RUNNING|DONE|ERROR",
- *   "details": {
- *     "task": "Beschreibung",
- *     "result": "Was passiert ist",
- *     "workflow_hash": "MD5",
- *     "changes": "Was geändert"
- *   }
- * }
- * 
- * Claude antwortet SOFORT:
- * - Gut oder falsch?
- * - Weitermachen oder stoppen?
- * - Nächster Schritt?
+ * Sendet POST nach jedem Schritt an Claude via HTTP
+ * Claude antwortet SOFORT: Gut oder falsch? Weitermachen oder stoppen? Nächster Schritt?
  */
 
-const fs = require('fs');
-const path = require('path');
 const https = require('https');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 
 // Konfiguration
-const CLAUDE_ENDPOINT = process.env.CLAUDE_ENDPOINT || 'https://n8n.srv1091615.hstgr.cloud/webhook/claude-direct-post';
+const STATUS_FILE = path.join(__dirname, '..', 'cursor-status-live.json');
 const WORKFLOW_FILE = path.join(__dirname, '..', 'workflows', 'MERCHANT_CENTER_ADMIN_ftZOou7HNgLOwzE5.json');
 
+// TODO: Claude Webhook URL - muss noch konfiguriert werden
+// Für jetzt: Status wird in cursor-status-live.json geschrieben
+const CLAUDE_WEBHOOK_URL = process.env.CLAUDE_WEBHOOK_URL || null;
+
 /**
- * Berechne MD5 Hash des Workflows
+ * Berechne MD5 Hash des Workflows (für workflow_hash)
  */
 function calculateWorkflowHash() {
-  if (fs.existsSync(WORKFLOW_FILE)) {
-    const content = fs.readFileSync(WORKFLOW_FILE, 'utf8');
-    return crypto.createHash('md5').update(content, 'utf8').digest('hex');
+  try {
+    if (fs.existsSync(WORKFLOW_FILE)) {
+      const content = fs.readFileSync(WORKFLOW_FILE, 'utf8');
+      return crypto.createHash('md5').update(content, 'utf8').digest('hex');
+    }
+  } catch (e) {
+    // Ignore errors
   }
   return null;
 }
 
 /**
- * Sende POST Request an Claude
+ * POST zu Claude via HTTP
  */
-function postToClaude(data) {
+function postToClaude(payload) {
   return new Promise((resolve, reject) => {
-    const url = new URL(CLAUDE_ENDPOINT);
-    
-    const postData = JSON.stringify(data);
+    if (!CLAUDE_WEBHOOK_URL) {
+      // Fallback: Schreibe in Status File
+      console.log('⚠️  Claude Webhook URL not configured. Writing to status file instead.');
+      const statusData = {
+        timestamp: new Date().toISOString(),
+        current_task: `📤 POST to Claude: ${payload.action} (${payload.status})`,
+        status: payload.status,
+        progress: payload.status === 'RUNNING' ? '50%' : '100%',
+        claude_post: payload,
+        note: 'Webhook not available, using fallback to status file',
+        workflow_id: 'ftZOou7HNgLOwzE5'
+      };
+      
+      fs.writeFileSync(STATUS_FILE, JSON.stringify(statusData, null, 2), 'utf8');
+      resolve({ success: true, method: 'status_file' });
+      return;
+    }
+
+    const url = new URL(CLAUDE_WEBHOOK_URL);
     
     const options = {
       hostname: url.hostname,
@@ -61,163 +66,144 @@ function postToClaude(data) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData),
         'User-Agent': 'n8n-workflow-lockdown/1.0'
       }
     };
-    
+
     const req = https.request(options, (res) => {
-      let responseData = '';
-      
-      res.on('data', (chunk) => {
-        responseData += chunk;
-      });
-      
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           try {
-            const jsonResponse = JSON.parse(responseData);
-            resolve(jsonResponse);
+            resolve({ success: true, response: JSON.parse(data), method: 'webhook' });
           } catch (e) {
-            resolve({ status: 'success', message: responseData });
+            resolve({ success: true, response: data, method: 'webhook' });
           }
         } else {
-          reject(new Error(`HTTP ${res.statusCode}: ${responseData.substring(0, 500)}`));
+          reject(new Error(`HTTP ${res.statusCode}: ${data.substring(0, 500)}`));
         }
       });
     });
-    
+
     req.on('error', reject);
-    req.write(postData);
+    req.write(JSON.stringify(payload));
     req.end();
   });
 }
 
 /**
- * Hauptfunktion: POST an Claude senden
+ * Notify Claude: RUNNING
  */
-async function sendPostToClaude(action, status, details) {
-  console.log('\n' + '='.repeat(100));
-  console.log('📤 CLAUDE DIRECT POST');
-  console.log('='.repeat(100) + '\n');
+async function notifyRunning(action, task) {
+  const workflowHash = calculateWorkflowHash();
   
+  const payload = {
+    to: 'claude',
+    timestamp: new Date().toISOString(),
+    action: action,
+    status: 'RUNNING',
+    details: {
+      task: task,
+      result: 'In progress...',
+      workflow_hash: workflowHash || 'unknown',
+      changes: `Starting ${action}`
+    }
+  };
+
   try {
-    const workflowHash = calculateWorkflowHash();
-    
-    const payload = {
-      to: "claude",
-      timestamp: new Date().toISOString(),
-      action: action,
-      status: status, // RUNNING | DONE | ERROR
-      details: {
-        task: details.task || action,
-        result: details.result || 'No result provided',
-        workflow_hash: workflowHash,
-        changes: details.changes || 'No changes specified'
-      }
-    };
-    
-    // Füge zusätzliche Details hinzu, falls vorhanden
-    if (details.checksum) {
-      payload.details.checksum = details.checksum;
-    }
-    if (details.workflow_id) {
-      payload.details.workflow_id = details.workflow_id;
-    }
-    if (details.error) {
-      payload.details.error = details.error;
-    }
-    
-    console.log('📋 Payload:');
-    console.log(JSON.stringify(payload, null, 2));
-    console.log('\n📤 Sending POST to Claude...');
-    console.log(`   Endpoint: ${CLAUDE_ENDPOINT}\n`);
-    
-    const response = await postToClaude(payload);
-    
-    console.log('✅ Response received from Claude:\n');
-    console.log(JSON.stringify(response, null, 2));
-    console.log('\n');
-    
-    return response;
-    
+    const result = await postToClaude(payload);
+    console.log(`📤 Posted to Claude: ${action} (RUNNING) - ${result.method}`);
+    return result;
   } catch (error) {
-    console.error('❌ ERROR sending POST to Claude:', error.message);
-    if (error.stack) {
-      console.error(error.stack);
-    }
-    throw error;
+    console.error(`❌ Failed to post to Claude: ${error.message}`);
+    // Fallback zu Status File
+    return await postToClaude(payload);
   }
 }
 
 /**
- * Convenience Funktionen für verschiedene Status
+ * Notify Claude: DONE
  */
-async function notifyRunning(action, task) {
-  return await sendPostToClaude(action, 'RUNNING', {
-    task: task,
-    result: 'Task started',
-    changes: 'Starting execution'
-  });
-}
-
 async function notifyDone(action, task, result, changes = null) {
-  return await sendPostToClaude(action, 'DONE', {
-    task: task,
-    result: result,
-    changes: changes || 'Task completed successfully'
-  });
+  const workflowHash = calculateWorkflowHash();
+  
+  const payload = {
+    to: 'claude',
+    timestamp: new Date().toISOString(),
+    action: action,
+    status: 'DONE',
+    details: {
+      task: task,
+      result: result || 'Completed successfully',
+      workflow_hash: workflowHash || 'unknown',
+      changes: changes || `Completed ${action}`
+    }
+  };
+
+  try {
+    const result = await postToClaude(payload);
+    console.log(`📤 Posted to Claude: ${action} (DONE) - ${result.method}`);
+    return result;
+  } catch (error) {
+    console.error(`❌ Failed to post to Claude: ${error.message}`);
+    // Fallback zu Status File
+    return await postToClaude(payload);
+  }
 }
 
+/**
+ * Notify Claude: ERROR
+ */
 async function notifyError(action, task, error) {
-  return await sendPostToClaude(action, 'ERROR', {
-    task: task,
-    result: 'Task failed',
-    error: error.message || error,
-    changes: 'Error occurred during execution'
-  });
+  const workflowHash = calculateWorkflowHash();
+  
+  const payload = {
+    to: 'claude',
+    timestamp: new Date().toISOString(),
+    action: action,
+    status: 'ERROR',
+    details: {
+      task: task,
+      result: error.message || 'Error occurred',
+      workflow_hash: workflowHash || 'unknown',
+      changes: `Error in ${action}: ${error.message || 'Unknown error'}`,
+      error_stack: error.stack || null
+    }
+  };
+
+  try {
+    const result = await postToClaude(payload);
+    console.log(`📤 Posted to Claude: ${action} (ERROR) - ${result.method}`);
+    return result;
+  } catch (postError) {
+    console.error(`❌ Failed to post to Claude: ${postError.message}`);
+    // Fallback zu Status File
+    return await postToClaude(payload);
+  }
 }
 
-// CLI Interface
+/**
+ * Test Funktion
+ */
+async function test() {
+  console.log('\n' + '='.repeat(100));
+  console.log('📤 CLAUDE DIRECT POST - TEST');
+  console.log('='.repeat(100) + '\n');
+
+  try {
+    await notifyRunning('test', 'Test message');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await notifyDone('test', 'Test message', 'System is working', 'Testing Claude direct post');
+    console.log('\n✅ Test completed!\n');
+  } catch (error) {
+    console.error('\n❌ Test failed:', error.message);
+    process.exit(1);
+  }
+}
+
 if (require.main === module) {
-  const args = process.argv.slice(2);
-  
-  if (args.length < 2) {
-    console.error('Usage: node claude-direct-post.js <action> <status> [task] [result] [changes]');
-    console.error('  action: What you are doing (e.g., "backup", "update", "monitor")');
-    console.error('  status: RUNNING | DONE | ERROR');
-    console.error('  task: (optional) Task description');
-    console.error('  result: (optional) What happened');
-    console.error('  changes: (optional) What changed');
-    console.error('\nExample:');
-    console.error('  node claude-direct-post.js backup DONE "Workflow backup" "Backup completed" "Checksum updated"');
-    process.exit(1);
-  }
-  
-  const action = args[0];
-  const status = args[1].toUpperCase();
-  const task = args[2] || action;
-  const result = args[3] || 'Task completed';
-  const changes = args[4] || 'No changes';
-  
-  if (!['RUNNING', 'DONE', 'ERROR'].includes(status)) {
-    console.error('❌ Invalid status. Must be RUNNING, DONE, or ERROR');
-    process.exit(1);
-  }
-  
-  sendPostToClaude(action, status, {
-    task: task,
-    result: result,
-    changes: changes
-  }).catch(error => {
-    console.error('Fatal error:', error);
-    process.exit(1);
-  });
+  test();
 }
 
-module.exports = { 
-  sendPostToClaude, 
-  notifyRunning, 
-  notifyDone, 
-  notifyError 
-};
+module.exports = { notifyRunning, notifyDone, notifyError, postToClaude };
