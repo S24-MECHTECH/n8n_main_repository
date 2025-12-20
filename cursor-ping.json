@@ -1,0 +1,66 @@
+{
+  "scan_date": "2025-12-20T00:25:00.000Z",
+  "workflow_url": "https://n8n.srv1091615.hstgr.cloud/workflow/ftZOou7HNgLOwzE5",
+  "workflow": {
+    "id": "ftZOou7HNgLOwzE5",
+    "name": "***MECHTECH_MERCHANT_CENTER_ADMIN",
+    "active": true,
+    "updatedAt": "2025-12-20T00:20:30.797Z",
+    "createdAt": "2025-12-12T04:29:41.476Z"
+  },
+  "statistics": {
+    "total_nodes": 133,
+    "unique_node_names": 133,
+    "connection_source_nodes": 83,
+    "nodes_with_error_handling": 57,
+    "error_related_nodes": 22
+  },
+  "scan_mode": "READ_ONLY_ANALYSIS_ONLY",
+  "findings": {
+    "route_command": {
+      "node_id": "d12e359f-8345-4018-b1f7-6af5b5a3c32e",
+      "position": [32, 3312],
+      "status": "RED",
+      "problem": "53 Items am Error-Port im aktiven Workflow",
+      "onError_setting": "continueErrorOutput",
+      "error_connection_exists": true,
+      "error_connection_target": "Handle Workflow Errors",
+      "analysis": "Error-Verbindung vorhanden, aber Node sammelt trotzdem 53 Errors - möglicherweise Input-Problem oder Error-Handler wird nicht aufgerufen"
+    },
+    "format_status_response": {
+      "nodes": [
+        {
+          "node_id": "5aa7fac3-7581-410a-b8af-2411985ee943",
+          "position": [576, 3424],
+          "status": "RED",
+          "problem": "Keine Error-Verbindung, Error-Port ist LEER",
+          "onError_setting": "continueErrorOutput",
+          "error_connection_exists": false,
+          "has_debug_logging": false
+        }
+      ],
+      "analysis": "Format Status Response hat onError: continueErrorOutput, aber KEINE Error-Verbindung in Connections-Sektion"
+    },
+    "send_command_response": {
+      "nodes": [
+        {
+          "node_id": "6d44b185-6067-44b2-9176-21f8870f8b33",
+          "position": [880, 3344],
+          "status": "RED",
+          "problem": "Input verwendet Get Workflow Status REAL.error statt Format Status Response Output",
+          "subject": "=",
+          "message": "={{ $('Get Workflow Status REAL').item.json.error }}",
+          "analysis": "Sollte $json.response und $json.subject aus Format Status Response verwenden"
+        }
+      ]
+    }
+  },
+  "all_133_nodes_list": "Siehe separate Liste im Report",
+  "all_connections_analysis": "Connections-Sektion verwendet Node-Namen als Keys - 83 Source Nodes mit Connections definiert",
+  "recommendations": [
+    "1. Format Status Response Error-Verbindung zu Handle Workflow Errors hinzufügen",
+    "2. Send Command Response Input korrigieren (Verwende $json.response statt Get Workflow Status REAL.error)",
+    "3. Route Command 53 Errors analysieren - warum sammelt Node so viele Errors?"
+  ],
+  "note": "NUR SCAN - KEINE ÄNDERUNGEN DURCHGEFÜHRT"
+}
