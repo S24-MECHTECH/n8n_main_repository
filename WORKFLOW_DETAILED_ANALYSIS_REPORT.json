@@ -1,0 +1,163 @@
+{
+  "scan_date": "2025-12-20T06:16:28.810Z",
+  "workflow_id": "ftZOou7HNgLOwzE5",
+  "workflow_name": "***MECHTECH_MERCHANT_CENTER_ADMIN",
+  "total_nodes": 133,
+  "route_by_priority": {
+    "node_id": "106ca99d-46c0-481a-943b-6cb0fe0b75be",
+    "total_outputs": 7,
+    "conditions": [
+      {
+        "output_index": 0,
+        "output_key": "Adult Flags",
+        "condition": [
+          {
+            "leftValue": "={{ $json.output.priority }}",
+            "operator": "equals",
+            "rightValue": "adult_flags"
+          }
+        ],
+        "target_node": "No connection"
+      },
+      {
+        "output_index": 1,
+        "output_key": "Images",
+        "condition": [
+          {
+            "leftValue": "={{ $json.output.priority }}",
+            "operator": "equals",
+            "rightValue": "images"
+          }
+        ],
+        "target_node": "No connection"
+      },
+      {
+        "output_index": 2,
+        "output_key": "Text",
+        "condition": [
+          {
+            "leftValue": "={{ $json.output.priority }}",
+            "operator": "equals",
+            "rightValue": "text"
+          }
+        ],
+        "target_node": "No connection"
+      },
+      {
+        "output_index": 3,
+        "output_key": "Merchant Quality",
+        "condition": [
+          {
+            "leftValue": "={{ $json.output.priority }}",
+            "operator": "equals",
+            "rightValue": "merchant_quality"
+          }
+        ],
+        "target_node": "No connection"
+      },
+      {
+        "output_index": 4,
+        "output_key": "Multi Country",
+        "condition": [
+          {
+            "leftValue": "={{ $json.output.priority }}",
+            "operator": "equals",
+            "rightValue": "multi_country"
+          }
+        ],
+        "target_node": "No connection"
+      },
+      {
+        "output_index": 5,
+        "output_key": "Multi GTN/EAN",
+        "condition": [
+          {
+            "leftValue": "={{ $json.output.priority }}",
+            "operator": "equals",
+            "rightValue": "multi_gtn_ean"
+          }
+        ],
+        "target_node": "No connection"
+      },
+      {
+        "output_index": 6,
+        "output_key": "Händlerqualität",
+        "condition": [
+          {
+            "leftValue": "={{ $json.output.priority }}",
+            "operator": "equals",
+            "rightValue": "Händlerqualität"
+          }
+        ],
+        "target_node": "No connection"
+      }
+    ],
+    "has_error_connection": false,
+    "onError": "continueErrorOutput"
+  },
+  "error_handlers": [
+    {
+      "node_id": "a62e627d-e7aa-4978-b777-6e6f3a9b1438",
+      "node_name": "Gemini Error Handler Adult Flags",
+      "node_type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "has_inputs": false,
+      "input_connections": [],
+      "output_connections": 0,
+      "error_outputs": 0,
+      "onError": null,
+      "disabled": false,
+      "why_no_inputs": "Keine Verbindungen gefunden - möglicherweise nicht verbunden oder fehlende Connections"
+    },
+    {
+      "node_id": "3d047746-9904-4724-9330-5409910f1b7b",
+      "node_name": "Gemini Error Handler Images",
+      "node_type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "has_inputs": false,
+      "input_connections": [],
+      "output_connections": 0,
+      "error_outputs": 0,
+      "onError": null,
+      "disabled": false,
+      "why_no_inputs": "Keine Verbindungen gefunden - möglicherweise nicht verbunden oder fehlende Connections"
+    },
+    {
+      "node_id": "fff11989-e610-4ce4-877b-e562ef577b0e",
+      "node_name": "Gemini Error Handler Adult Flags1",
+      "node_type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "has_inputs": false,
+      "input_connections": [],
+      "output_connections": 0,
+      "error_outputs": 0,
+      "onError": null,
+      "disabled": false,
+      "why_no_inputs": "Keine Verbindungen gefunden - möglicherweise nicht verbunden oder fehlende Connections"
+    },
+    {
+      "node_id": "ad6c4700-81af-4c46-ad03-f00907fc2715",
+      "node_name": "Gemini Error Handler Merchant Quality",
+      "node_type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "has_inputs": false,
+      "input_connections": [],
+      "output_connections": 0,
+      "error_outputs": 0,
+      "onError": null,
+      "disabled": false,
+      "why_no_inputs": "Keine Verbindungen gefunden - möglicherweise nicht verbunden oder fehlende Connections"
+    },
+    {
+      "node_id": "eddc6736-cbf9-46e2-89b0-42c6f8f9252a",
+      "node_name": "Error Handler_Multi_Country",
+      "node_type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "has_inputs": false,
+      "input_connections": [],
+      "output_connections": 0,
+      "error_outputs": 0,
+      "onError": null,
+      "disabled": false,
+      "why_no_inputs": "Keine Verbindungen gefunden - möglicherweise nicht verbunden oder fehlende Connections"
+    }
+  ],
+  "shop_configuration": {
+    "error": "Not found"
+  }
+}
