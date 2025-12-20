@@ -60,7 +60,14 @@
 - **Rename Fallback:** `Fallback`
 
 ### **Connection-Status:**
-- ✅ **7 Main Outputs** verbunden
+- ✅ **7 Main Outputs** verbunden (in Connections-Sektion gefunden)
+  - Output 1 → `Prepare Products Loop`
+  - Output 2 → `Prepare Images Loop`
+  - Output 3 → `Prepare Text Loop`
+  - Output 4 → `Prepare Merchant Quality Loop`
+  - Output 5 → `Prepare Multi Country Loop`
+  - Output 6 → `Prepare GTN/EAN_Loop`
+  - Output 7 → `Handle Invalid Priority`
 - ❌ **Keine Error-Verbindung** vorhanden
 - ⚠️ **onError:** `continueErrorOutput` (sollte Error-Verbindung haben!)
 
