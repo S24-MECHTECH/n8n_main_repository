@@ -1,0 +1,3140 @@
+{
+  "updatedAt": "2025-12-15T20:56:12.886Z",
+  "createdAt": "2025-12-06T23:01:54.086Z",
+  "id": "SGZsBLlLh5V72GZj",
+  "name": "***MECHTECH_KI_KNOWLEDGE_BUILDER",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f50a4819-2e60-4041-8f93-ebc38ee42f45",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -1760,
+        800
+      ],
+      "webhookId": "knowledge-builder-chat-001",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "path": "mechtech-ki-knowledge-builder-mcp"
+      },
+      "id": "ab2faf3d-d9c0-478b-a02b-12e0716e4154",
+      "name": "MCP Server Trigger",
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "position": [
+        -1616,
+        976
+      ],
+      "webhookId": "mechtech-ki-knowledge-mcp-001",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "cb16e107-860b-46db-a1bc-0ed52328f22a",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -1680,
+        528
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "MECHTECH_LEXWARE_ABLAGE_FILES",
+        "returnAll": true,
+        "filter": {
+          "driveId": {
+            "__rl": true,
+            "value": "My Drive",
+            "mode": "list",
+            "cachedResultName": "My Drive",
+            "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+          }
+        },
+        "options": {}
+      },
+      "id": "237a2fe0-f5af-4a56-b1a0-2a58330ae955",
+      "name": "Search MECHTECH_LEXWARE_ABLAGE_FILES",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        -1440,
+        528
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "aeusyCZPpsvwg0b7",
+          "name": "Google Drive"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "text/plain",
+              "slidesToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "id": "e61f99a8-ae69-4092-946a-dfcbf7be7d78",
+      "name": "Download Files from GDrive",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        -1200,
+        528
+      ],
+      "typeVersion": 3,
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zz10b2AZS74uOND8",
+          "name": "Google Drive account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "application/pdf"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "pdf"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "text/csv"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "csv"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "application/json"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "json"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "or",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $binary.data.mimeType }}",
+                    "rightValue": "text"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $binary.data.fileName }}",
+                    "rightValue": ".txt"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "0ad95504-20ce-4688-8344-f7b458a328b7",
+      "name": "FileType Router",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        -928,
+        512
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "728e3fab-ad67-4aaa-8d77-8e3dde2204f4",
+      "name": "Extract from PDF",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        -720,
+        368
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {
+          "encoding": "utf-8",
+          "relaxQuotes": true,
+          "headerRow": false,
+          "includeEmptyCells": true
+        }
+      },
+      "id": "9b2c55a0-a8fb-4859-bc06-e55814260f6e",
+      "name": "Extract from CSV",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        -720,
+        528
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse JSON file content\nconst binaryData = $input.item.binary.data;\nconst jsonString = Buffer.from(binaryData.data, 'base64').toString('utf8');\nlet jsonContent;\ntry {\n  jsonContent = JSON.parse(jsonString);\n} catch(e) {\n  jsonContent = { raw: jsonString };\n}\n\nreturn {\n  json: {\n    content: JSON.stringify(jsonContent, null, 2),\n    text: JSON.stringify(jsonContent, null, 2),\n    type: 'json',\n    fileName: binaryData.fileName || 'unknown.json'\n  }\n};"
+      },
+      "id": "109a31f7-c30b-4593-abcc-a3764328e922",
+      "name": "Parse JSON File",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -720,
+        688
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract text content\nconst binaryData = $input.item.binary.data;\nconst textContent = Buffer.from(binaryData.data, 'base64').toString('utf8');\n\nreturn {\n  json: {\n    content: textContent,\n    text: textContent,\n    type: 'text',\n    fileName: binaryData.fileName || 'unknown.txt'\n  }\n};"
+      },
+      "id": "fa967c97-5a1b-4545-ab6d-e3d0a593045e",
+      "name": "Parse Text File",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -720,
+        848
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "content-001",
+              "name": "content",
+              "type": "string",
+              "value": "={{ $json.text || $json.content || '' }}"
+            },
+            {
+              "id": "filename-001",
+              "name": "fileName",
+              "type": "string",
+              "value": "={{ $json.fileName || $binary?.data?.fileName || 'unknown' }}"
+            },
+            {
+              "id": "type-001",
+              "name": "fileType",
+              "type": "string",
+              "value": "={{ $json.type || 'document' }}"
+            },
+            {
+              "id": "timestamp-001",
+              "name": "processedAt",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b0a94df0-d908-4963-bc27-79e5fa4fc938",
+      "name": "Normalize Content",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -480,
+        624
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "caseSensitive": false,
+                  "typeValidation": "loose"
+                },
+                "combinator": "or",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "workflow"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "n8n"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "\"nodes\":"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.content }}",
+                    "rightValue": "\"connections\":"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "workflows"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "caseSensitive": false,
+                  "typeValidation": "loose"
+                },
+                "combinator": "or",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "json"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "programming"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "code"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "ki"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "ai"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "api"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "programming"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "caseSensitive": false,
+                  "typeValidation": "loose"
+                },
+                "combinator": "or",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "buchhal"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "account"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "lexware"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "finanz"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "steuer"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "rechnung"
+                  },
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                    "rightValue": "invoice"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "accounting"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "e2d2e930-3673-40c6-a569-223204b2c960",
+      "name": "Knowledge Type Router",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        -432,
+        896
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "n8n_workflows_knowledge",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "c08792c4-78b8-45c8-a17f-caf3dd298ad4",
+      "name": "Insert n8n_workflows_knowledge",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "position": [
+        48,
+        368
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "json_programming_knowledge",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "62fe5c19-57ac-4ed2-a297-fed09b1b4de2",
+      "name": "Insert json_programming_knowledge",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "position": [
+        48,
+        608
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "accounting_knowledge",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "926c0a6a-5273-4328-9ca7-245b00d7bcb9",
+      "name": "Insert accounting_knowledge",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "position": [
+        48,
+        848
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "id": "96c7eee8-3a25-4011-842c-5f9cc72e6530",
+      "name": "Embeddings for Workflows",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        400,
+        416
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "r8M0d8DoTbboRjCe",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "id": "59cda2df-a6e7-4415-b04c-79202c10eed1",
+      "name": "Embeddings for Programming",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        400,
+        592
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "r8M0d8DoTbboRjCe",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "id": "40535187-edd5-44b0-8475-bb89269045ae",
+      "name": "Embeddings for Accounting",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        400,
+        848
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "r8M0d8DoTbboRjCe",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "id": "433919b2-fe5a-4471-95e0-3d9453837064",
+      "name": "Text Splitter Workflows",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "position": [
+        400,
+        240
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "id": "054db2b1-724d-4430-8756-0763058a9cc8",
+      "name": "Text Splitter Programming",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "position": [
+        400,
+        1040
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "id": "f7046039-d47d-4510-93be-6e2a52e44872",
+      "name": "Text Splitter Accounting",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "position": [
+        400,
+        1232
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "id": "fd1d069d-fc37-4035-bd0d-edaa0e192b9c",
+      "name": "Data Loader Workflows",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        48,
+        208
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "id": "57240c06-b60b-46bb-9b6d-dd13321b1d43",
+      "name": "Data Loader Programming",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        48,
+        1008
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "id": "53255782-0594-4370-a8ab-c3828ab84fa9",
+      "name": "Data Loader Accounting",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        48,
+        1168
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Du bist **LENA** - der **MECHTECH KI Knowledge Builder Assistant**.\n\nDeine Hauptaufgabe ist es, Wissen in 3 Supabase Vector Stores zu laden und zu verwalten:\n\n## 📚 Wissensdatenbanken:\n\n1. **n8n_workflows_knowledge** (für 1500+ Workflows)\n   - n8n Workflow JSON-Dateien\n   - Node-Konfigurationen und Verbindungen\n   - Automatisierungs-Templates\n\n2. **json_programming_knowledge** (Programmier-Wissen)\n   - JSON Strukturen und Schemas\n   - n8n Expressions und Code\n   - KI/ML Best Practices\n   - API-Dokumentationen\n\n3. **accounting_knowledge** (Buchhalter-Wissen)\n   - Lexware Dokumentation\n   - Buchhaltungsregeln und Kontenpläne\n   - Steuerliche Vorschriften\n   - Rechnungsvorlagen\n\n## 🔧 Verfügbare Befehle:\n\n- **'start loading'** - Starte das Laden aller Dateien aus Google Drive\n- **'load workflows'** - Lade nur n8n Workflows\n- **'load programming'** - Lade nur Programmier-Wissen\n- **'load accounting'** - Lade nur Buchhalter-Wissen\n- **'status'** - Zeige aktuellen Ladestatus\n- **'search [begriff]'** - Suche in allen Wissensdatenbanken\n- **'help'** - Zeige diese Hilfe\n\n## 🎯 Workflow:\n1. Dateien werden aus dem Google Drive Ordner `MECHTECH_LEXWARE_ABLAGE_FILES` geladen\n2. PDF, CSV, JSON und Text-Dateien werden automatisch geparsed\n3. OpenAI Embeddings (1536 Dimensionen) werden erstellt\n4. Dokumente werden basierend auf Dateinamen in die richtige Tabelle sortiert\n\nAntworte immer auf Deutsch und sei präzise!"
+        }
+      },
+      "id": "e07dd732-9cd1-417c-a5c2-427f4697a978",
+      "name": "Knowledge Builder Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -1232,
+        800
+      ],
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-haiku-4.5",
+        "options": {}
+      },
+      "id": "6c14373a-8d6b-4b8b-aabb-e6cfbbac4665",
+      "name": "OpenRouter Chat Model (Primary)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "position": [
+        -1360,
+        1088
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "openRouterApi": {
+          "id": "bIj5HneWre0QJt4y",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "716c6dfa-0654-463b-ac3c-da054ef16dfd",
+      "name": "OpenAI Chat Model (Fallback)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -1360,
+        1248
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "r8M0d8DoTbboRjCe",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "id": "a6a4b06d-9af9-4407-a75e-6440847ba3a2",
+      "name": "Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        -1200,
+        1088
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "description": "Use the tool to think about the user query and plan the next steps."
+      },
+      "id": "ce6efe9a-5c8d-4e62-8d67-c97ec18ea0c6",
+      "name": "Think",
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "position": [
+        -1040,
+        1088
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search_Query', `Suchbegriff für Google Drive`, 'string') }}",
+        "filter": {
+          "driveId": {
+            "mode": "list",
+            "value": "My Drive"
+          },
+          "whatToSearch": "files"
+        },
+        "options": {}
+      },
+      "id": "6cea1803-491d-42ef-9602-dc38850c8720",
+      "name": "Search Google Drive",
+      "type": "n8n-nodes-base.googleDriveTool",
+      "position": [
+        -1040,
+        1248
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zz10b2AZS74uOND8",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Suche in n8n Workflow Wissen - enthält 1500+ Workflows, Node-Konfigurationen und Automatisierungs-Templates",
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "n8n_workflows_knowledge"
+        },
+        "options": {}
+      },
+      "id": "8875244a-25c9-4afa-98f4-0eaf6a9cbcad",
+      "name": "Search Workflows Knowledge",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "position": [
+        -880,
+        1088
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Suche in JSON/Programming/KI Wissen - enthält Code-Beispiele, API-Docs und Best Practices",
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "json_programming_knowledge"
+        },
+        "options": {}
+      },
+      "id": "7b9bb793-82c6-4ab3-a2e9-247ceb7a01c3",
+      "name": "Search Programming Knowledge",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "position": [
+        -880,
+        1248
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Suche in Buchhalter/Lexware Wissen - enthält Buchhaltungsregeln, Steuerinfos und Lexware-Dokumentation",
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "accounting_knowledge"
+        },
+        "options": {}
+      },
+      "id": "b1f8e0c8-76f1-4701-8e3f-134185ed3de6",
+      "name": "Search Accounting Knowledge",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "position": [
+        -880,
+        1408
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "id": "52eef4b3-6fc7-485b-b132-afcc7703cdf0",
+      "name": "Embeddings for Search 1",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        -608,
+        1072
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "r8M0d8DoTbboRjCe",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "id": "316ff986-41dc-4723-ad2e-87d879934230",
+      "name": "Embeddings for Search 2",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        -608,
+        1248
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "r8M0d8DoTbboRjCe",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "id": "25007b90-1620-4127-8918-edf2c72a75c6",
+      "name": "Embeddings for Search 3",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        -608,
+        1408
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "r8M0d8DoTbboRjCe",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# 🧠 MECHTECH KI KNOWLEDGE BUILDER\n\n## Zweck:\nLädt Wissen aus Google Drive in 3 Supabase Vector Stores:\n\n1. **n8n_workflows_knowledge** - 1500+ Workflows\n2. **json_programming_knowledge** - n8n + JSON + KI\n3. **accounting_knowledge** - Buchhalter-Wissen\n\n## Start:\n- Klicke **'Execute workflow'** um alle Dateien zu laden\n- Oder nutze den **Chat** für gezielte Steuerung\n\n## Befehle im Chat:\n- `start loading` - Lade alle Dateien\n- `status` - Zeige Ladestatus\n- `search [begriff]` - Suche in DB",
+        "height": 768,
+        "width": 544,
+        "color": 3
+      },
+      "id": "a9cc5b9e-24bd-4e42-bb65-64080ff04397",
+      "name": "Sticky Note Intro",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2128,
+        304
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# 📁 Google Drive Integration\n\nDurchsucht den Ordner:\n`MECHTECH_LEXWARE_ABLAGE_FILES`\n\nUnterstützte Formate:\n- PDF\n- CSV\n- JSON\n- TXT",
+        "height": 432,
+        "width": 584,
+        "color": 5
+      },
+      "id": "4b545ea9-f627-4b00-bfc4-83bbf423194f",
+      "name": "Sticky Note GDrive",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1568,
+        304
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 📄 Document Parser\n\nVerarbeitet automatisch:\n- **PDF** → Text-Extraktion\n- **CSV** → Tabellen-Parse\n- **JSON** → Struktur-Parse\n- **Text** → Direkt-Import",
+        "height": 800,
+        "width": 472,
+        "color": 5
+      },
+      "id": "6a7708b5-bacb-467f-8a58-c255a89a491d",
+      "name": "Sticky Note Parser",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -960,
+        160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# 🗄️ Supabase Vector Stores\n\n#**3 Tabellen mit 1536-dim Embeddings:**\n\n# 1. `n8n_workflows_knowledge`\n  → Workflows & Automatisierung\n\n# 2. `json_programming_knowledge`\n   → Code & API-Wissen\n   \n# 3. `accounting_knowledge`\n   → Lexware & Buchhaltung",
+        "height": 1704,
+        "width": 976,
+        "color": 7
+      },
+      "id": "70d695c1-19bb-4d77-8c41-5723d90c030c",
+      "name": "Sticky Note Supabase",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -192,
+        -272
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 🔧 MCP Server Trigger\n\nExponiert als Tools für externe MCP Clients:\n\n**Endpoint:**\n`/mcp/mechtech-ki-knowledge-builder-mcp`\n\n**Tools:**\n- Search Workflows Knowledge\n- Search Programming Knowledge\n- Search Accounting Knowledge\n- Search Google Drive",
+        "height": 376,
+        "width": 392,
+        "color": 4
+      },
+      "id": "15526278-5bc7-491c-99f3-4edd00120f86",
+      "name": "Sticky Note MCP",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2128,
+        1088
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 🔄 OpenRouter (Primary)\n\nModel: `anthropic/claude-3.5-sonnet`\n\nFallback: OpenAI GPT-4o-mini (disabled)\n\nAktiviere OpenAI falls OpenRouter nicht verfügbar.",
+        "height": 264,
+        "width": 320,
+        "color": 6
+      },
+      "id": "00fb5cb7-a0ef-4359-90bb-9f1df3c97052",
+      "name": "Sticky Note LLM",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1440,
+        1424
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Status-Bericht generieren\nconst stats = {\n  totalProcessed: $('Normalize Content').all().length,\n  workflows: $('Insert n8n_workflows_knowledge').all().length,\n  programming: $('Insert json_programming_knowledge').all().length,\n  accounting: $('Insert accounting_knowledge').all().length,\n  timestamp: new Date().toISOString()\n};\n\nreturn {\n  json: {\n    message: `✅ Knowledge Builder Status:\\n\\n📊 Verarbeitet: ${stats.totalProcessed} Dateien\\n🔧 Workflows: ${stats.workflows}\\n💻 Programming: ${stats.programming}\\n📒 Accounting: ${stats.accounting}\\n\\n⏰ ${stats.timestamp}`,\n    stats\n  }\n};"
+      },
+      "id": "7bf184bb-ee55-439a-a020-687fbf5d5700",
+      "name": "Generate Status Report",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        560,
+        688
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "content": "## 📊 Lexware Integration\n\n**Community Node:** `n8n-nodes-lexware`\n\nInstallieren via:\n```\nnpm install n8n-nodes-lexware\n```\n\nOder in n8n Settings → Community Nodes\n\n**GitHub:**\nhttps://github.com/adrijanb/n8n-node-lexware  ",
+        "height": 320,
+        "width": 416,
+        "color": 2
+      },
+      "id": "5967c9a1-7b07-4d0e-a25e-8f81e46e9182",
+      "name": "Sticky Note Lexware",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -176,
+        1488
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Search MECHTECH_LEXWARE_ABLAGE_FILES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search MECHTECH_LEXWARE_ABLAGE_FILES": {
+      "main": [
+        [
+          {
+            "node": "Download Files from GDrive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Files from GDrive": {
+      "main": [
+        [
+          {
+            "node": "FileType Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FileType Router": {
+      "main": [
+        [
+          {
+            "node": "Extract from PDF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract from CSV",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse JSON File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse Text File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from PDF": {
+      "main": [
+        [
+          {
+            "node": "Normalize Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from CSV": {
+      "main": [
+        [
+          {
+            "node": "Normalize Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse JSON File": {
+      "main": [
+        [
+          {
+            "node": "Normalize Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Text File": {
+      "main": [
+        [
+          {
+            "node": "Normalize Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Content": {
+      "main": [
+        [
+          {
+            "node": "Knowledge Type Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Type Router": {
+      "main": [
+        [
+          {
+            "node": "Insert n8n_workflows_knowledge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert json_programming_knowledge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert accounting_knowledge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Status Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings for Workflows": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Insert n8n_workflows_knowledge",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings for Programming": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Insert json_programming_knowledge",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings for Accounting": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Insert accounting_knowledge",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Splitter Workflows": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Data Loader Workflows",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Splitter Programming": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Data Loader Programming",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Splitter Accounting": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Data Loader Accounting",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Loader Workflows": {
+      "ai_document": [
+        [
+          {
+            "node": "Insert n8n_workflows_knowledge",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Loader Programming": {
+      "ai_document": [
+        [
+          {
+            "node": "Insert json_programming_knowledge",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Loader Accounting": {
+      "ai_document": [
+        [
+          {
+            "node": "Insert accounting_knowledge",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Knowledge Builder Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model (Primary)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Knowledge Builder Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Knowledge Builder Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "Knowledge Builder Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Google Drive": {
+      "ai_tool": [
+        [
+          {
+            "node": "Knowledge Builder Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Workflows Knowledge": {
+      "ai_tool": [
+        [
+          {
+            "node": "Knowledge Builder Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Programming Knowledge": {
+      "ai_tool": [
+        [
+          {
+            "node": "Knowledge Builder Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Accounting Knowledge": {
+      "ai_tool": [
+        [
+          {
+            "node": "Knowledge Builder Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings for Search 1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Search Workflows Knowledge",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings for Search 2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Search Programming Knowledge",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings for Search 3": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Search Accounting Knowledge",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "b4c236a6-e79a-4464-8b89-487a7de7d794",
+  "activeVersionId": "b4c236a6-e79a-4464-8b89-487a7de7d794",
+  "versionCounter": 33,
+  "triggerCount": 2,
+  "shared": [
+    {
+      "updatedAt": "2025-12-06T23:01:54.091Z",
+      "createdAt": "2025-12-06T23:01:54.091Z",
+      "role": "workflow:owner",
+      "workflowId": "SGZsBLlLh5V72GZj",
+      "projectId": "eYBRLdtGaWLyIIOy",
+      "project": {
+        "updatedAt": "2025-11-06T02:18:23.292Z",
+        "createdAt": "2025-11-06T01:50:03.327Z",
+        "id": "eYBRLdtGaWLyIIOy",
+        "name": "Andree Schulz <info@mechtech-support.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "updatedAt": "2025-11-06T01:50:03.327Z",
+            "createdAt": "2025-11-06T01:50:03.327Z",
+            "userId": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+            "projectId": "eYBRLdtGaWLyIIOy",
+            "user": {
+              "updatedAt": "2025-12-19T23:00:26.000Z",
+              "createdAt": "2025-11-06T01:50:02.958Z",
+              "id": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+              "email": "info@mechtech-support.com",
+              "firstName": "Andree",
+              "lastName": "Schulz",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-11-06T02:19:06.535Z",
+                "personalization_survey_n8n_version": "1.118.2",
+                "companySize": "<20",
+                "companyType": "ecommerce",
+                "role": "business-owner",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "uok6olNDUiRKpaE8",
+                "userActivatedAt": 1764952348935,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1765239138708
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-12-19",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": {
+    "updatedAt": "2025-12-15T20:56:12.888Z",
+    "createdAt": "2025-12-15T20:56:12.888Z",
+    "versionId": "b4c236a6-e79a-4464-8b89-487a7de7d794",
+    "workflowId": "SGZsBLlLh5V72GZj",
+    "nodes": [
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "f50a4819-2e60-4041-8f93-ebc38ee42f45",
+        "name": "When chat message received",
+        "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+        "position": [
+          -1760,
+          800
+        ],
+        "webhookId": "knowledge-builder-chat-001",
+        "typeVersion": 1.1
+      },
+      {
+        "parameters": {
+          "path": "mechtech-ki-knowledge-builder-mcp"
+        },
+        "id": "ab2faf3d-d9c0-478b-a02b-12e0716e4154",
+        "name": "MCP Server Trigger",
+        "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+        "position": [
+          -1616,
+          976
+        ],
+        "webhookId": "mechtech-ki-knowledge-mcp-001",
+        "typeVersion": 1
+      },
+      {
+        "parameters": {},
+        "id": "cb16e107-860b-46db-a1bc-0ed52328f22a",
+        "name": "When clicking 'Execute workflow'",
+        "type": "n8n-nodes-base.manualTrigger",
+        "position": [
+          -1680,
+          528
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "resource": "fileFolder",
+          "queryString": "MECHTECH_LEXWARE_ABLAGE_FILES",
+          "returnAll": true,
+          "filter": {
+            "driveId": {
+              "__rl": true,
+              "value": "My Drive",
+              "mode": "list",
+              "cachedResultName": "My Drive",
+              "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+            }
+          },
+          "options": {}
+        },
+        "id": "237a2fe0-f5af-4a56-b1a0-2a58330ae955",
+        "name": "Search MECHTECH_LEXWARE_ABLAGE_FILES",
+        "type": "n8n-nodes-base.googleDrive",
+        "position": [
+          -1440,
+          528
+        ],
+        "typeVersion": 3,
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "aeusyCZPpsvwg0b7",
+            "name": "Google Drive"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "download",
+          "fileId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "={{ $json.id }}"
+          },
+          "options": {
+            "googleFileConversion": {
+              "conversion": {
+                "docsToFormat": "text/plain",
+                "slidesToFormat": "application/pdf"
+              }
+            }
+          }
+        },
+        "id": "e61f99a8-ae69-4092-946a-dfcbf7be7d78",
+        "name": "Download Files from GDrive",
+        "type": "n8n-nodes-base.googleDrive",
+        "position": [
+          -1200,
+          528
+        ],
+        "typeVersion": 3,
+        "retryOnFail": true,
+        "alwaysOutputData": true,
+        "waitBetweenTries": 3000,
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "zz10b2AZS74uOND8",
+            "name": "Google Drive account"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "version": 2,
+                    "caseSensitive": true,
+                    "typeValidation": "strict"
+                  },
+                  "combinator": "and",
+                  "conditions": [
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "leftValue": "={{ $binary.data.mimeType }}",
+                      "rightValue": "application/pdf"
+                    }
+                  ]
+                },
+                "renameOutput": true,
+                "outputKey": "pdf"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "version": 2,
+                    "caseSensitive": true,
+                    "typeValidation": "strict"
+                  },
+                  "combinator": "and",
+                  "conditions": [
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "leftValue": "={{ $binary.data.mimeType }}",
+                      "rightValue": "text/csv"
+                    }
+                  ]
+                },
+                "renameOutput": true,
+                "outputKey": "csv"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "version": 2,
+                    "caseSensitive": true,
+                    "typeValidation": "strict"
+                  },
+                  "combinator": "and",
+                  "conditions": [
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "leftValue": "={{ $binary.data.mimeType }}",
+                      "rightValue": "application/json"
+                    }
+                  ]
+                },
+                "renameOutput": true,
+                "outputKey": "json"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "version": 2,
+                    "caseSensitive": true,
+                    "typeValidation": "strict"
+                  },
+                  "combinator": "or",
+                  "conditions": [
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $binary.data.mimeType }}",
+                      "rightValue": "text"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $binary.data.fileName }}",
+                      "rightValue": ".txt"
+                    }
+                  ]
+                },
+                "renameOutput": true,
+                "outputKey": "text"
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "extra"
+          }
+        },
+        "id": "0ad95504-20ce-4688-8344-f7b458a328b7",
+        "name": "FileType Router",
+        "type": "n8n-nodes-base.switch",
+        "position": [
+          -928,
+          512
+        ],
+        "typeVersion": 3.2
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "options": {}
+        },
+        "id": "728e3fab-ad67-4aaa-8d77-8e3dde2204f4",
+        "name": "Extract from PDF",
+        "type": "n8n-nodes-base.extractFromFile",
+        "position": [
+          -720,
+          368
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "options": {
+            "encoding": "utf-8",
+            "relaxQuotes": true,
+            "headerRow": false,
+            "includeEmptyCells": true
+          }
+        },
+        "id": "9b2c55a0-a8fb-4859-bc06-e55814260f6e",
+        "name": "Extract from CSV",
+        "type": "n8n-nodes-base.extractFromFile",
+        "position": [
+          -720,
+          528
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "jsCode": "// Parse JSON file content\nconst binaryData = $input.item.binary.data;\nconst jsonString = Buffer.from(binaryData.data, 'base64').toString('utf8');\nlet jsonContent;\ntry {\n  jsonContent = JSON.parse(jsonString);\n} catch(e) {\n  jsonContent = { raw: jsonString };\n}\n\nreturn {\n  json: {\n    content: JSON.stringify(jsonContent, null, 2),\n    text: JSON.stringify(jsonContent, null, 2),\n    type: 'json',\n    fileName: binaryData.fileName || 'unknown.json'\n  }\n};"
+        },
+        "id": "109a31f7-c30b-4593-abcc-a3764328e922",
+        "name": "Parse JSON File",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          -720,
+          688
+        ],
+        "typeVersion": 2
+      },
+      {
+        "parameters": {
+          "jsCode": "// Extract text content\nconst binaryData = $input.item.binary.data;\nconst textContent = Buffer.from(binaryData.data, 'base64').toString('utf8');\n\nreturn {\n  json: {\n    content: textContent,\n    text: textContent,\n    type: 'text',\n    fileName: binaryData.fileName || 'unknown.txt'\n  }\n};"
+        },
+        "id": "fa967c97-5a1b-4545-ab6d-e3d0a593045e",
+        "name": "Parse Text File",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          -720,
+          848
+        ],
+        "typeVersion": 2
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "content-001",
+                "name": "content",
+                "type": "string",
+                "value": "={{ $json.text || $json.content || '' }}"
+              },
+              {
+                "id": "filename-001",
+                "name": "fileName",
+                "type": "string",
+                "value": "={{ $json.fileName || $binary?.data?.fileName || 'unknown' }}"
+              },
+              {
+                "id": "type-001",
+                "name": "fileType",
+                "type": "string",
+                "value": "={{ $json.type || 'document' }}"
+              },
+              {
+                "id": "timestamp-001",
+                "name": "processedAt",
+                "type": "string",
+                "value": "={{ $now.toISO() }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "b0a94df0-d908-4963-bc27-79e5fa4fc938",
+        "name": "Normalize Content",
+        "type": "n8n-nodes-base.set",
+        "position": [
+          -480,
+          624
+        ],
+        "typeVersion": 3.4
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "version": 2,
+                    "caseSensitive": false,
+                    "typeValidation": "loose"
+                  },
+                  "combinator": "or",
+                  "conditions": [
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "workflow"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "n8n"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.content }}",
+                      "rightValue": "\"nodes\":"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.content }}",
+                      "rightValue": "\"connections\":"
+                    }
+                  ]
+                },
+                "renameOutput": true,
+                "outputKey": "workflows"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "version": 2,
+                    "caseSensitive": false,
+                    "typeValidation": "loose"
+                  },
+                  "combinator": "or",
+                  "conditions": [
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "json"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "programming"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "code"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "ki"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "ai"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "api"
+                    }
+                  ]
+                },
+                "renameOutput": true,
+                "outputKey": "programming"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "version": 2,
+                    "caseSensitive": false,
+                    "typeValidation": "loose"
+                  },
+                  "combinator": "or",
+                  "conditions": [
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "buchhal"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "account"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "lexware"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "finanz"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "steuer"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "rechnung"
+                    },
+                    {
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "leftValue": "={{ $json.fileName.toLowerCase() }}",
+                      "rightValue": "invoice"
+                    }
+                  ]
+                },
+                "renameOutput": true,
+                "outputKey": "accounting"
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "extra"
+          }
+        },
+        "id": "e2d2e930-3673-40c6-a569-223204b2c960",
+        "name": "Knowledge Type Router",
+        "type": "n8n-nodes-base.switch",
+        "position": [
+          -432,
+          896
+        ],
+        "typeVersion": 3.2
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "tableName": {
+            "__rl": true,
+            "value": "n8n_workflows_knowledge",
+            "mode": "list"
+          },
+          "options": {}
+        },
+        "id": "c08792c4-78b8-45c8-a17f-caf3dd298ad4",
+        "name": "Insert n8n_workflows_knowledge",
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "position": [
+          48,
+          368
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "supabaseApi": {
+            "id": "f1qLUdIsbZ2A3wdC",
+            "name": "Supabase-MySQL"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "tableName": {
+            "__rl": true,
+            "value": "json_programming_knowledge",
+            "mode": "list"
+          },
+          "options": {}
+        },
+        "id": "62fe5c19-57ac-4ed2-a297-fed09b1b4de2",
+        "name": "Insert json_programming_knowledge",
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "position": [
+          48,
+          608
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "supabaseApi": {
+            "id": "f1qLUdIsbZ2A3wdC",
+            "name": "Supabase-MySQL"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "tableName": {
+            "__rl": true,
+            "value": "accounting_knowledge",
+            "mode": "list"
+          },
+          "options": {}
+        },
+        "id": "926c0a6a-5273-4328-9ca7-245b00d7bcb9",
+        "name": "Insert accounting_knowledge",
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "position": [
+          48,
+          848
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "supabaseApi": {
+            "id": "f1qLUdIsbZ2A3wdC",
+            "name": "Supabase-MySQL"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "dimensions": 1536
+          }
+        },
+        "id": "96c7eee8-3a25-4011-842c-5f9cc72e6530",
+        "name": "Embeddings for Workflows",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "position": [
+          400,
+          416
+        ],
+        "typeVersion": 1.2,
+        "credentials": {
+          "openAiApi": {
+            "id": "r8M0d8DoTbboRjCe",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "dimensions": 1536
+          }
+        },
+        "id": "59cda2df-a6e7-4415-b04c-79202c10eed1",
+        "name": "Embeddings for Programming",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "position": [
+          400,
+          592
+        ],
+        "typeVersion": 1.2,
+        "credentials": {
+          "openAiApi": {
+            "id": "r8M0d8DoTbboRjCe",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "dimensions": 1536
+          }
+        },
+        "id": "40535187-edd5-44b0-8475-bb89269045ae",
+        "name": "Embeddings for Accounting",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "position": [
+          400,
+          848
+        ],
+        "typeVersion": 1.2,
+        "credentials": {
+          "openAiApi": {
+            "id": "r8M0d8DoTbboRjCe",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chunkOverlap": 200,
+          "options": {}
+        },
+        "id": "433919b2-fe5a-4471-95e0-3d9453837064",
+        "name": "Text Splitter Workflows",
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "position": [
+          400,
+          240
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "chunkOverlap": 200,
+          "options": {}
+        },
+        "id": "054db2b1-724d-4430-8756-0763058a9cc8",
+        "name": "Text Splitter Programming",
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "position": [
+          400,
+          1040
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "chunkOverlap": 200,
+          "options": {}
+        },
+        "id": "f7046039-d47d-4510-93be-6e2a52e44872",
+        "name": "Text Splitter Accounting",
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "position": [
+          400,
+          1232
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "dataType": "binary",
+          "textSplittingMode": "custom",
+          "options": {}
+        },
+        "id": "fd1d069d-fc37-4035-bd0d-edaa0e192b9c",
+        "name": "Data Loader Workflows",
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "position": [
+          48,
+          208
+        ],
+        "typeVersion": 1.1
+      },
+      {
+        "parameters": {
+          "dataType": "binary",
+          "textSplittingMode": "custom",
+          "options": {}
+        },
+        "id": "57240c06-b60b-46bb-9b6d-dd13321b1d43",
+        "name": "Data Loader Programming",
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "position": [
+          48,
+          1008
+        ],
+        "typeVersion": 1.1
+      },
+      {
+        "parameters": {
+          "dataType": "binary",
+          "textSplittingMode": "custom",
+          "options": {}
+        },
+        "id": "53255782-0594-4370-a8ab-c3828ab84fa9",
+        "name": "Data Loader Accounting",
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "position": [
+          48,
+          1168
+        ],
+        "typeVersion": 1.1
+      },
+      {
+        "parameters": {
+          "options": {
+            "systemMessage": "Du bist **LENA** - der **MECHTECH KI Knowledge Builder Assistant**.\n\nDeine Hauptaufgabe ist es, Wissen in 3 Supabase Vector Stores zu laden und zu verwalten:\n\n## 📚 Wissensdatenbanken:\n\n1. **n8n_workflows_knowledge** (für 1500+ Workflows)\n   - n8n Workflow JSON-Dateien\n   - Node-Konfigurationen und Verbindungen\n   - Automatisierungs-Templates\n\n2. **json_programming_knowledge** (Programmier-Wissen)\n   - JSON Strukturen und Schemas\n   - n8n Expressions und Code\n   - KI/ML Best Practices\n   - API-Dokumentationen\n\n3. **accounting_knowledge** (Buchhalter-Wissen)\n   - Lexware Dokumentation\n   - Buchhaltungsregeln und Kontenpläne\n   - Steuerliche Vorschriften\n   - Rechnungsvorlagen\n\n## 🔧 Verfügbare Befehle:\n\n- **'start loading'** - Starte das Laden aller Dateien aus Google Drive\n- **'load workflows'** - Lade nur n8n Workflows\n- **'load programming'** - Lade nur Programmier-Wissen\n- **'load accounting'** - Lade nur Buchhalter-Wissen\n- **'status'** - Zeige aktuellen Ladestatus\n- **'search [begriff]'** - Suche in allen Wissensdatenbanken\n- **'help'** - Zeige diese Hilfe\n\n## 🎯 Workflow:\n1. Dateien werden aus dem Google Drive Ordner `MECHTECH_LEXWARE_ABLAGE_FILES` geladen\n2. PDF, CSV, JSON und Text-Dateien werden automatisch geparsed\n3. OpenAI Embeddings (1536 Dimensionen) werden erstellt\n4. Dokumente werden basierend auf Dateinamen in die richtige Tabelle sortiert\n\nAntworte immer auf Deutsch und sei präzise!"
+          }
+        },
+        "id": "e07dd732-9cd1-417c-a5c2-427f4697a978",
+        "name": "Knowledge Builder Agent",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "position": [
+          -1232,
+          800
+        ],
+        "typeVersion": 2.1
+      },
+      {
+        "parameters": {
+          "model": "anthropic/claude-haiku-4.5",
+          "options": {}
+        },
+        "id": "6c14373a-8d6b-4b8b-aabb-e6cfbbac4665",
+        "name": "OpenRouter Chat Model (Primary)",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "position": [
+          -1360,
+          1088
+        ],
+        "typeVersion": 1,
+        "credentials": {
+          "openRouterApi": {
+            "id": "bIj5HneWre0QJt4y",
+            "name": "OpenRouter account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4o-mini"
+          },
+          "options": {}
+        },
+        "id": "716c6dfa-0654-463b-ac3c-da054ef16dfd",
+        "name": "OpenAI Chat Model (Fallback)",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "position": [
+          -1360,
+          1248
+        ],
+        "typeVersion": 1.2,
+        "credentials": {
+          "openAiApi": {
+            "id": "r8M0d8DoTbboRjCe",
+            "name": "OpenAi account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {},
+        "id": "a6a4b06d-9af9-4407-a75e-6440847ba3a2",
+        "name": "Memory",
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "position": [
+          -1200,
+          1088
+        ],
+        "typeVersion": 1.3
+      },
+      {
+        "parameters": {
+          "description": "Use the tool to think about the user query and plan the next steps."
+        },
+        "id": "ce6efe9a-5c8d-4e62-8d67-c97ec18ea0c6",
+        "name": "Think",
+        "type": "@n8n/n8n-nodes-langchain.toolThink",
+        "position": [
+          -1040,
+          1088
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "resource": "fileFolder",
+          "queryString": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search_Query', `Suchbegriff für Google Drive`, 'string') }}",
+          "filter": {
+            "driveId": {
+              "mode": "list",
+              "value": "My Drive"
+            },
+            "whatToSearch": "files"
+          },
+          "options": {}
+        },
+        "id": "6cea1803-491d-42ef-9602-dc38850c8720",
+        "name": "Search Google Drive",
+        "type": "n8n-nodes-base.googleDriveTool",
+        "position": [
+          -1040,
+          1248
+        ],
+        "typeVersion": 3,
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "zz10b2AZS74uOND8",
+            "name": "Google Drive account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "retrieve-as-tool",
+          "toolDescription": "Suche in n8n Workflow Wissen - enthält 1500+ Workflows, Node-Konfigurationen und Automatisierungs-Templates",
+          "tableName": {
+            "__rl": true,
+            "mode": "list",
+            "value": "n8n_workflows_knowledge"
+          },
+          "options": {}
+        },
+        "id": "8875244a-25c9-4afa-98f4-0eaf6a9cbcad",
+        "name": "Search Workflows Knowledge",
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "position": [
+          -880,
+          1088
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "supabaseApi": {
+            "id": "f1qLUdIsbZ2A3wdC",
+            "name": "Supabase-MySQL"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "retrieve-as-tool",
+          "toolDescription": "Suche in JSON/Programming/KI Wissen - enthält Code-Beispiele, API-Docs und Best Practices",
+          "tableName": {
+            "__rl": true,
+            "mode": "list",
+            "value": "json_programming_knowledge"
+          },
+          "options": {}
+        },
+        "id": "7b9bb793-82c6-4ab3-a2e9-247ceb7a01c3",
+        "name": "Search Programming Knowledge",
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "position": [
+          -880,
+          1248
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "supabaseApi": {
+            "id": "f1qLUdIsbZ2A3wdC",
+            "name": "Supabase-MySQL"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "retrieve-as-tool",
+          "toolDescription": "Suche in Buchhalter/Lexware Wissen - enthält Buchhaltungsregeln, Steuerinfos und Lexware-Dokumentation",
+          "tableName": {
+            "__rl": true,
+            "mode": "list",
+            "value": "accounting_knowledge"
+          },
+          "options": {}
+        },
+        "id": "b1f8e0c8-76f1-4701-8e3f-134185ed3de6",
+        "name": "Search Accounting Knowledge",
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "position": [
+          -880,
+          1408
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "supabaseApi": {
+            "id": "f1qLUdIsbZ2A3wdC",
+            "name": "Supabase-MySQL"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "dimensions": 1536
+          }
+        },
+        "id": "52eef4b3-6fc7-485b-b132-afcc7703cdf0",
+        "name": "Embeddings for Search 1",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "position": [
+          -608,
+          1072
+        ],
+        "typeVersion": 1.2,
+        "credentials": {
+          "openAiApi": {
+            "id": "r8M0d8DoTbboRjCe",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "dimensions": 1536
+          }
+        },
+        "id": "316ff986-41dc-4723-ad2e-87d879934230",
+        "name": "Embeddings for Search 2",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "position": [
+          -608,
+          1248
+        ],
+        "typeVersion": 1.2,
+        "credentials": {
+          "openAiApi": {
+            "id": "r8M0d8DoTbboRjCe",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "dimensions": 1536
+          }
+        },
+        "id": "25007b90-1620-4127-8918-edf2c72a75c6",
+        "name": "Embeddings for Search 3",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "position": [
+          -608,
+          1408
+        ],
+        "typeVersion": 1.2,
+        "credentials": {
+          "openAiApi": {
+            "id": "r8M0d8DoTbboRjCe",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "# 🧠 MECHTECH KI KNOWLEDGE BUILDER\n\n## Zweck:\nLädt Wissen aus Google Drive in 3 Supabase Vector Stores:\n\n1. **n8n_workflows_knowledge** - 1500+ Workflows\n2. **json_programming_knowledge** - n8n + JSON + KI\n3. **accounting_knowledge** - Buchhalter-Wissen\n\n## Start:\n- Klicke **'Execute workflow'** um alle Dateien zu laden\n- Oder nutze den **Chat** für gezielte Steuerung\n\n## Befehle im Chat:\n- `start loading` - Lade alle Dateien\n- `status` - Zeige Ladestatus\n- `search [begriff]` - Suche in DB",
+          "height": 768,
+          "width": 544,
+          "color": 3
+        },
+        "id": "a9cc5b9e-24bd-4e42-bb65-64080ff04397",
+        "name": "Sticky Note Intro",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -2128,
+          304
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "# 📁 Google Drive Integration\n\nDurchsucht den Ordner:\n`MECHTECH_LEXWARE_ABLAGE_FILES`\n\nUnterstützte Formate:\n- PDF\n- CSV\n- JSON\n- TXT",
+          "height": 432,
+          "width": 584,
+          "color": 5
+        },
+        "id": "4b545ea9-f627-4b00-bfc4-83bbf423194f",
+        "name": "Sticky Note GDrive",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -1568,
+          304
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "## 📄 Document Parser\n\nVerarbeitet automatisch:\n- **PDF** → Text-Extraktion\n- **CSV** → Tabellen-Parse\n- **JSON** → Struktur-Parse\n- **Text** → Direkt-Import",
+          "height": 800,
+          "width": 472,
+          "color": 5
+        },
+        "id": "6a7708b5-bacb-467f-8a58-c255a89a491d",
+        "name": "Sticky Note Parser",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -960,
+          160
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "# 🗄️ Supabase Vector Stores\n\n#**3 Tabellen mit 1536-dim Embeddings:**\n\n# 1. `n8n_workflows_knowledge`\n  → Workflows & Automatisierung\n\n# 2. `json_programming_knowledge`\n   → Code & API-Wissen\n   \n# 3. `accounting_knowledge`\n   → Lexware & Buchhaltung",
+          "height": 1704,
+          "width": 976,
+          "color": 7
+        },
+        "id": "70d695c1-19bb-4d77-8c41-5723d90c030c",
+        "name": "Sticky Note Supabase",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -192,
+          -272
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "## 🔧 MCP Server Trigger\n\nExponiert als Tools für externe MCP Clients:\n\n**Endpoint:**\n`/mcp/mechtech-ki-knowledge-builder-mcp`\n\n**Tools:**\n- Search Workflows Knowledge\n- Search Programming Knowledge\n- Search Accounting Knowledge\n- Search Google Drive",
+          "height": 376,
+          "width": 392,
+          "color": 4
+        },
+        "id": "15526278-5bc7-491c-99f3-4edd00120f86",
+        "name": "Sticky Note MCP",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -2128,
+          1088
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "## 🔄 OpenRouter (Primary)\n\nModel: `anthropic/claude-3.5-sonnet`\n\nFallback: OpenAI GPT-4o-mini (disabled)\n\nAktiviere OpenAI falls OpenRouter nicht verfügbar.",
+          "height": 264,
+          "width": 320,
+          "color": 6
+        },
+        "id": "00fb5cb7-a0ef-4359-90bb-9f1df3c97052",
+        "name": "Sticky Note LLM",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -1440,
+          1424
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "jsCode": "// Status-Bericht generieren\nconst stats = {\n  totalProcessed: $('Normalize Content').all().length,\n  workflows: $('Insert n8n_workflows_knowledge').all().length,\n  programming: $('Insert json_programming_knowledge').all().length,\n  accounting: $('Insert accounting_knowledge').all().length,\n  timestamp: new Date().toISOString()\n};\n\nreturn {\n  json: {\n    message: `✅ Knowledge Builder Status:\\n\\n📊 Verarbeitet: ${stats.totalProcessed} Dateien\\n🔧 Workflows: ${stats.workflows}\\n💻 Programming: ${stats.programming}\\n📒 Accounting: ${stats.accounting}\\n\\n⏰ ${stats.timestamp}`,\n    stats\n  }\n};"
+        },
+        "id": "7bf184bb-ee55-439a-a020-687fbf5d5700",
+        "name": "Generate Status Report",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          560,
+          688
+        ],
+        "typeVersion": 2
+      },
+      {
+        "parameters": {
+          "content": "## 📊 Lexware Integration\n\n**Community Node:** `n8n-nodes-lexware`\n\nInstallieren via:\n```\nnpm install n8n-nodes-lexware\n```\n\nOder in n8n Settings → Community Nodes\n\n**GitHub:**\nhttps://github.com/adrijanb/n8n-node-lexware  ",
+          "height": 320,
+          "width": 416,
+          "color": 2
+        },
+        "id": "5967c9a1-7b07-4d0e-a25e-8f81e46e9182",
+        "name": "Sticky Note Lexware",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -176,
+          1488
+        ],
+        "typeVersion": 1
+      }
+    ],
+    "connections": {
+      "When clicking 'Execute workflow'": {
+        "main": [
+          [
+            {
+              "node": "Search MECHTECH_LEXWARE_ABLAGE_FILES",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search MECHTECH_LEXWARE_ABLAGE_FILES": {
+        "main": [
+          [
+            {
+              "node": "Download Files from GDrive",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Download Files from GDrive": {
+        "main": [
+          [
+            {
+              "node": "FileType Router",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FileType Router": {
+        "main": [
+          [
+            {
+              "node": "Extract from PDF",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Extract from CSV",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Parse JSON File",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Parse Text File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from PDF": {
+        "main": [
+          [
+            {
+              "node": "Normalize Content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from CSV": {
+        "main": [
+          [
+            {
+              "node": "Normalize Content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse JSON File": {
+        "main": [
+          [
+            {
+              "node": "Normalize Content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Parse Text File": {
+        "main": [
+          [
+            {
+              "node": "Normalize Content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Normalize Content": {
+        "main": [
+          [
+            {
+              "node": "Knowledge Type Router",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Knowledge Type Router": {
+        "main": [
+          [
+            {
+              "node": "Insert n8n_workflows_knowledge",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Insert json_programming_knowledge",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Insert accounting_knowledge",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Generate Status Report",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings for Workflows": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Insert n8n_workflows_knowledge",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings for Programming": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Insert json_programming_knowledge",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings for Accounting": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Insert accounting_knowledge",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Text Splitter Workflows": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Data Loader Workflows",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Text Splitter Programming": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Data Loader Programming",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Text Splitter Accounting": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Data Loader Accounting",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Data Loader Workflows": {
+        "ai_document": [
+          [
+            {
+              "node": "Insert n8n_workflows_knowledge",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Data Loader Programming": {
+        "ai_document": [
+          [
+            {
+              "node": "Insert json_programming_knowledge",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Data Loader Accounting": {
+        "ai_document": [
+          [
+            {
+              "node": "Insert accounting_knowledge",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When chat message received": {
+        "main": [
+          [
+            {
+              "node": "Knowledge Builder Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter Chat Model (Primary)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Knowledge Builder Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "Knowledge Builder Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Think": {
+        "ai_tool": [
+          [
+            {
+              "node": "Knowledge Builder Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Google Drive": {
+        "ai_tool": [
+          [
+            {
+              "node": "Knowledge Builder Agent",
+              "type": "ai_tool",
+              "index": 0
+            },
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Workflows Knowledge": {
+        "ai_tool": [
+          [
+            {
+              "node": "Knowledge Builder Agent",
+              "type": "ai_tool",
+              "index": 0
+            },
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Programming Knowledge": {
+        "ai_tool": [
+          [
+            {
+              "node": "Knowledge Builder Agent",
+              "type": "ai_tool",
+              "index": 0
+            },
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Accounting Knowledge": {
+        "ai_tool": [
+          [
+            {
+              "node": "Knowledge Builder Agent",
+              "type": "ai_tool",
+              "index": 0
+            },
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings for Search 1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Search Workflows Knowledge",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings for Search 2": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Search Programming Knowledge",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings for Search 3": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Search Accounting Knowledge",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Andree Schulz",
+    "name": null,
+    "description": null,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2025-12-15T20:56:12.941Z",
+        "id": 123,
+        "workflowId": "SGZsBLlLh5V72GZj",
+        "versionId": "b4c236a6-e79a-4464-8b89-487a7de7d794",
+        "event": "activated",
+        "userId": "905b93e2-2ccd-4e6b-a613-4d01485a9251"
+      }
+    ]
+  },
+  "_backup_metadata": {
+    "version": 1,
+    "backup_date": "2025-12-20T22:00:11.425Z",
+    "workflow_id": "SGZsBLlLh5V72GZj",
+    "workflow_name": "***MECHTECH_KI_KNOWLEDGE_BUILDER",
+    "original_name": "***MECHTECH_KI_KNOWLEDGE_BUILDER",
+    "sanitized_name": "MECHTECH_KI_KNOWLEDGE_BUILDER"
+  }
+}

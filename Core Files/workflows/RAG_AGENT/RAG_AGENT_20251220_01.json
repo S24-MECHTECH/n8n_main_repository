@@ -1,0 +1,619 @@
+{
+  "updatedAt": "2025-11-26T14:30:13.000Z",
+  "createdAt": "2025-11-26T14:28:58.646Z",
+  "id": "QlLn49IpmEVIQzEr",
+  "name": "RAG agent",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=**Rolle:**  \nDu bist der interne RAG-Agent der **Beispiel GmbH**. Deine einzige Wissensquelle ist die interne Knowledge Base (Vector Store). Du beantwortest Fragen ausschließlich auf Basis dieser Inhalte. Du darfst niemals halluzinieren oder Vermutungen anstellen.\n\n**Tools:**  \n- `KnowledgeBase` → VectorStore-Tool für semantische Suche und Kontextabruf.  \n- `AddQuestions` → Google-Sheets-Tool zum Protokollieren unbeantworteter Fragen.\n\n**Verhaltensregeln (streng verpflichtend):**  \n1. **Keine Halluzinationen:** Antworte nur, wenn du dir sicher bist, dass die Information in der Knowledge Base vorhanden ist.  \n2. **Ehrlichkeit:** Wenn du keine klare Antwort findest, sag das offen und nutze `AddQuestions`.  \n3. **Keine Spekulationen:** Wenn du nicht genügend Kontext hast, rate nicht, formuliere keine Hypothesen.  \n4. **Immer Suche ausführen:** Bei jeder Nutzerfrage wird das Tool `KnowledgeBase` aufgerufen.  \n5. **Neutralität:** Verwende keine Meinungen, Bewertungen oder Vermutungen.  \n\n**Ablauf pro Anfrage:**  \n1. **Analyse:** Verstehe die Frage, identifiziere Thema und Suchkontext.  \n2. **Retrieval:** Führe immer eine semantische Suche mit dem Tool `KnowledgeBase` durch. Hole mindestens die Top-6 relevanten Ergebnisse.  \n3. **Bewertung:** Prüfe, ob die gefundenen Inhalte konsistent und relevant sind.  \n4. **Antwort:**  \n   - Wenn die Inhalte eine klare, eindeutige Antwort ermöglichen → formuliere sie präzise, sachlich und vollständig.  \n   - Wenn nicht genügend Informationen vorhanden sind → sage dem Nutzer freundlich, dass du es aktuell nicht beantworten kannst, und logge die Frage über das Tool `AddQuestions`.  \n\n**Vorgehen bei fehlender Information:**  \nWenn du keine belastbare Antwort geben kannst, sag:  \n> \"Sorry, dazu finde ich in unserer Knowledge Base derzeit keine verlässlichen Informationen. Ich habe die Frage in unserer internen Datenbank hinterlegt, damit sie ergänzt werden kann.\"\n\nFühre dann automatisch das Tool `AddQuestions` aus mit folgenden Parametern:  \n- `question`: Originalfrage des Nutzers  \n- `reason`: Grund für fehlende Antwort (z. B. „keine Quelle“, „unklarer Kontext“, „Daten fehlen“)  \n- `timestamp`: aktuelles Datum im ISO-Format  \n- `confidence`: 0  \n- `tags`: Stichworte aus der Frage, wenn erkennbar  \n\n**Format der Antworten:**  \n- Verwende eine klare, professionelle und faktenbasierte Sprache.  \n- Antworte zuerst kurz und direkt, danach mit Details in Stichpunkten oder Absätzen.  \n- Nenne **keine Quellen oder Dateinamen**.  \n- Gib keine internen Prozessschritte oder Toolnamen in der Antwort aus.  \n\n**Zusatzregeln:**  \n- Wenn der Nutzer eine Frage stellt, die mehrere Themen betrifft, fasse sie intern zusammen und suche nacheinander für jeden Teilbereich.  \n- Bei Widersprüchen im Wissen nenne die konservativste, eindeutig belegbare Information.  \n- Der Agent darf niemals außerhalb der Knowledge Base argumentieren oder hypothetische Antworten bilden.  \n- Wenn Informationen unklar oder unvollständig sind, melde das über `AddQuestions`.  \n\n**Beispiel-Antwort, wenn Information vorhanden:**  \n> Die Backup-Strategie sieht stündliche inkrementelle Sicherungen und tägliche Vollbackups vor. Die Wiederherstellungszeit beträgt maximal vier Stunden bei einem Recovery Point von einer Stunde.\n\n**Beispiel-Antwort, wenn Information fehlt:**  \n> Sorry, dazu finde ich in unserer Knowledge Base derzeit keine verlässlichen Informationen. Ich habe die Frage in unserer internen Datenbank hinterlegt, damit sie ergänzt werden kann.\n\n\nWICHTIG:\nadd_questions wird nur aktiviert, wenn du die NAtwort auf die Frage nicht kennst\nUND ES WIRD IMMER UNAUFGEFORDERT AKTIVIERT, WENN DIE INFOMATION NICHT IN DER KONWLEDGE BASE ZU FINDEN IST.\n\n\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        64,
+        240
+      ],
+      "id": "dfa33ef6-bc9f-42c5-b8aa-bb90c6b81326",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -64,
+        448
+      ],
+      "id": "7ab74693-a95f-4ed7-bebd-8097b5d8c608",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        16,
+        560
+      ],
+      "id": "4f515c98-79ac-4772-9f9b-08463986a8ec",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "beispielgmbhkb",
+          "mode": "list",
+          "cachedResultName": "beispielgmbhkb"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        720
+      ],
+      "id": "57577803-7746-4134-bfc8-5821c868ac11",
+      "name": "Pinecone Vector Store"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-nano",
+          "mode": "list",
+          "cachedResultName": "gpt-5-nano"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        720
+      ],
+      "id": "314f9f43-b2ea-4621-b13b-130fd465baf4",
+      "name": "OpenAI Chat Model1"
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-large",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -32,
+        928
+      ],
+      "id": "d024d640-3cc5-4e41-9f37-a3ccf4cf790f",
+      "name": "Embeddings OpenAI"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Dieses Tool wird nur genutzt, wenn der Agent eine FRage nicht beantworten konnte. Dann fügt er diese Frage in der Sheets Tabelle ein",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1dnc1FNuD7IlqkyjCTaOZpm-1upnNKQDac3P5lelW0vI",
+          "mode": "list",
+          "cachedResultName": "Ticket System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dnc1FNuD7IlqkyjCTaOZpm-1upnNKQDac3P5lelW0vI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Tabellenblatt1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dnc1FNuD7IlqkyjCTaOZpm-1upnNKQDac3P5lelW0vI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Fragen": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Fragen', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Fragen",
+              "displayName": "Fragen",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Antwort",
+              "displayName": "Antwort",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        448
+      ],
+      "id": "bf06e418-ced3-4f8c-a7f1-95ef846bf557",
+      "name": "add_question"
+    },
+    {
+      "parameters": {
+        "description": "Interne Unternehmensdokumentation der Beispiel GmbH mit Informationen zu IT-Architektur, Datenmanagement, Sicherheit und RAG-Agent-Prozessen."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1.1,
+      "position": [
+        144,
+        448
+      ],
+      "id": "cb887c40-229e-447d-8e98-5a822de4fd82",
+      "name": "Knowledge Base"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -256,
+        272
+      ],
+      "id": "af345411-9c08-4d1b-87e3-29ef2dcc08b1",
+      "name": "When chat message received",
+      "webhookId": "a75148a5-7b4a-4c74-8b59-a67b70969dc1"
+    },
+    {
+      "parameters": {
+        "content": "## Schritt 2: Wissen abrufen (RAG AGENT)\n\n",
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "39ccd6f1-ebd8-486d-bd62-660609f3a7c0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Schritt 1: Dokumente hochladen\n",
+        "width": 352,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1232,
+        16
+      ],
+      "typeVersion": 1,
+      "id": "e28d6f0d-2031-41c6-a0ad-c0f81ff1aca7",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "driveId": {
+            "__rl": true,
+            "value": "My Drive",
+            "mode": "list",
+            "cachedResultName": "My Drive",
+            "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+          },
+          "folderId": {
+            "__rl": true,
+            "value": "1jLmZYQiYlB6Pm7AxkMTnXZQzOLuMdmR1",
+            "mode": "list",
+            "cachedResultName": "Intesoma 12",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1jLmZYQiYlB6Pm7AxkMTnXZQzOLuMdmR1"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1504,
+        336
+      ],
+      "id": "ed0e1023-325e-4a9e-ab58-b7771669cbe8",
+      "name": "Google Drive"
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        592
+      ],
+      "id": "fc29da3b-d317-4edf-9b5d-e3c830a68bbd",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        800
+      ],
+      "id": "28e65d6c-a685-4a5a-9632-9b162506459a",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1712,
+        336
+      ],
+      "id": "9afab9e6-92f1-4ab7-b99c-67908e9c545d",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1312,
+        336
+      ],
+      "id": "0798a2e3-81f8-4d37-a126-b57b32f43602",
+      "name": "Google Drive I",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1104,
+        336
+      ],
+      "id": "194e1a27-3f13-4312-b8a0-78fe5bd538a6",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "intesoma",
+          "mode": "list",
+          "cachedResultName": "intesoma"
+        },
+        "options": {
+          "pineconeNamespace": "KnowledgeBase"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.1,
+      "position": [
+        -848,
+        352
+      ],
+      "id": "02a7c33a-1f8d-4f54-9532-560d3b3c8cac",
+      "name": "Pinecone Vector Store1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1056,
+        688
+      ],
+      "id": "38faff1c-5af1-4350-a951-7a236c4e8162",
+      "name": "Embeddings OpenAI1"
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Knowledge Base",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add_question": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Google Drive I",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive I": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "5bd81ab5-e4f7-42c8-9aea-642232feed40",
+  "activeVersionId": null,
+  "versionCounter": 3,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-26T14:28:58.648Z",
+      "createdAt": "2025-11-26T14:28:58.648Z",
+      "role": "workflow:owner",
+      "workflowId": "QlLn49IpmEVIQzEr",
+      "projectId": "eYBRLdtGaWLyIIOy",
+      "project": {
+        "updatedAt": "2025-11-06T02:18:23.292Z",
+        "createdAt": "2025-11-06T01:50:03.327Z",
+        "id": "eYBRLdtGaWLyIIOy",
+        "name": "Andree Schulz <info@mechtech-support.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "updatedAt": "2025-11-06T01:50:03.327Z",
+            "createdAt": "2025-11-06T01:50:03.327Z",
+            "userId": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+            "projectId": "eYBRLdtGaWLyIIOy",
+            "user": {
+              "updatedAt": "2025-12-19T23:00:26.000Z",
+              "createdAt": "2025-11-06T01:50:02.958Z",
+              "id": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+              "email": "info@mechtech-support.com",
+              "firstName": "Andree",
+              "lastName": "Schulz",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-11-06T02:19:06.535Z",
+                "personalization_survey_n8n_version": "1.118.2",
+                "companySize": "<20",
+                "companyType": "ecommerce",
+                "role": "business-owner",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "uok6olNDUiRKpaE8",
+                "userActivatedAt": 1764952348935,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1765239138708
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-12-19",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null,
+  "_backup_metadata": {
+    "version": 1,
+    "backup_date": "2025-12-20T22:00:11.411Z",
+    "workflow_id": "QlLn49IpmEVIQzEr",
+    "workflow_name": "RAG agent",
+    "original_name": "RAG agent",
+    "sanitized_name": "RAG_AGENT"
+  }
+}

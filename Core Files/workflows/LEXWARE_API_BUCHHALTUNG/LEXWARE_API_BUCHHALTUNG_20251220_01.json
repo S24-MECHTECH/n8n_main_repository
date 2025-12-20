@@ -1,0 +1,1051 @@
+{
+  "updatedAt": "2025-11-24T01:18:32.000Z",
+  "createdAt": "2025-11-21T23:49:13.869Z",
+  "id": "9r6FXKMoS0JX1oD3",
+  "name": "Lexware_API_Buchhaltung",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hallo! Ich bin Ihr KI Buchhalter. Ich kann Ihnen bei Rechnungen, Bilanzen und Buchungsabfragen helfen.",
+        "options": {}
+      },
+      "id": "85b0c397-8dc2-4086-b155-33fef6b9505a",
+      "name": "Chat mit KI Buchhalter",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        208
+      ],
+      "webhookId": "74f6a2fb-b73b-4534-9834-a4eb9df76ef4"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyWeek"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "https://drive.google.com/drive/folders/1eVzVjx-9l5v73QvZdfxhC-HxwDFAZYb4",
+          "mode": "url"
+        },
+        "event": "fileCreated",
+        "options": {
+          "fileType": "all"
+        }
+      },
+      "id": "2b632270-6677-4b78-a3ee-6b36fea837cd",
+      "name": "PDF via Google Drive",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        736
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zz10b2AZS74uOND8",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "3d331f55-392e-43b0-82f2-8dce864b4ee3",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -128,
+        -112
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "424fa50a-5888-459e-951b-c5ad84c62448",
+      "name": "Merge PDF Sources",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        96,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "d59a5fd3-4a8e-452b-9a47-32aacb6b7a37",
+      "name": "Extract PDF Content",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        320,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "documentId",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "receivedDate",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "source",
+              "value": "={{ $json.source || 'email' }}",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "status",
+              "value": "pending",
+              "type": "string"
+            },
+            {
+              "id": "id-5",
+              "name": "extractedText",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "3a9307c3-a63e-4dff-b99e-ab9373a9172b",
+      "name": "Prepare Document Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        544,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1q5CM9LclvUNnB9iMkGIKNeh7cgVAu18Yv5UQbgHIQ3U/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "KI_AGENT_LOG_TRACKING_SHEET",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1q5CM9LclvUNnB9iMkGIKNeh7cgVAu18Yv5UQbgHIQ3U/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "documentId": "={{ $json.documentId }}",
+            "receivedDate": "={{ $json.receivedDate }}",
+            "source": "={{ $json.source }}",
+            "status": "={{ $json.status }}",
+            "extractedText": "={{ $json.extractedText }}"
+          },
+          "matchingColumns": [
+            "documentId"
+          ],
+          "schema": [
+            {
+              "id": "documentId",
+              "displayName": "documentId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "receivedDate",
+              "displayName": "receivedDate",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "extractedText",
+              "displayName": "extractedText",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "24b3df8b-1989-4232-bdbb-d2e35aa10f63",
+      "name": "Log to Tracking Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        768,
+        640
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pbNsBLFTIuL9ArMn",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Extract text content from the previous node\nconst extractedText = $input.item.json.text || $input.item.json.content || '';\n\n// Initialize result object\nconst result = {\n  invoiceNumber: null,\n  invoiceDate: null,\n  amount: null,\n  vendor: null,\n  taxAmount: null,\n  invoiceType: null,\n  validationStatus: 'needs_review',\n  extractedText: extractedText,\n  missingFields: []\n};\n\n// Regex patterns for extracting invoice fields\nconst patterns = {\n  // Invoice number patterns (various formats)\n  invoiceNumber: /(?:invoice|rechnung|rechnungs?[-\\s]?(?:nr|nummer|number|no))[:\\s#]*([A-Z0-9\\-\\/]+)/i,\n  \n  // Date patterns (DD.MM.YYYY, DD/MM/YYYY, YYYY-MM-DD)\n  date: /(?:date|datum|rechnungsdatum)[:\\s]*([0-3]?[0-9][.\\/\\-][0-1]?[0-9][.\\/\\-](?:20)?[0-9]{2,4})|([0-3]?[0-9][.\\/\\-][0-1]?[0-9][.\\/\\-](?:20)?[0-9]{2,4})/i,\n  \n  // Amount patterns (with currency symbols)\n  amount: /(?:total|gesamt|betrag|summe)[:\\s]*€?\\s*([0-9]{1,3}(?:[.,][0-9]{3})*[.,][0-9]{2})|€\\s*([0-9]{1,3}(?:[.,][0-9]{3})*[.,][0-9]{2})/i,\n  \n  // Vendor/Supplier patterns\n  vendor: /(?:from|von|supplier|lieferant|vendor)[:\\s]*([A-Za-zäöüÄÖÜß\\s&.,-]+?)(?:\\n|$)/i,\n  \n  // Tax amount patterns\n  taxAmount: /(?:vat|mwst|ust|tax|steuer)[:\\s]*€?\\s*([0-9]{1,3}(?:[.,][0-9]{3})*[.,][0-9]{2})|(?:19%|7%)[:\\s]*€?\\s*([0-9]{1,3}(?:[.,][0-9]{3})*[.,][0-9]{2})/i,\n  \n  // Invoice type patterns\n  invoiceType: /(?:invoice type|rechnungsart|type)[:\\s]*(\\w+)|\\b(credit note|gutschrift|invoice|rechnung|proforma)\\b/i\n};\n\n// Extract invoice number\nconst invoiceNumberMatch = extractedText.match(patterns.invoiceNumber);\nif (invoiceNumberMatch) {\n  result.invoiceNumber = invoiceNumberMatch[1].trim();\n}\n\n// Extract date\nconst dateMatch = extractedText.match(patterns.date);\nif (dateMatch) {\n  result.invoiceDate = (dateMatch[1] || dateMatch[2]).trim();\n}\n\n// Extract amount\nconst amountMatch = extractedText.match(patterns.amount);\nif (amountMatch) {\n  const amountStr = (amountMatch[1] || amountMatch[2]).replace(/\\./g, '').replace(',', '.');\n  result.amount = parseFloat(amountStr);\n}\n\n// Extract vendor\nconst vendorMatch = extractedText.match(patterns.vendor);\nif (vendorMatch) {\n  result.vendor = vendorMatch[1].trim();\n} else {\n  // Try to extract from first few lines if pattern doesn't match\n  const lines = extractedText.split('\\n').filter(line => line.trim().length > 0);\n  if (lines.length > 0) {\n    result.vendor = lines[0].trim();\n  }\n}\n\n// Extract tax amount\nconst taxMatch = extractedText.match(patterns.taxAmount);\nif (taxMatch) {\n  const taxStr = (taxMatch[1] || taxMatch[2]).replace(/\\./g, '').replace(',', '.');\n  result.taxAmount = parseFloat(taxStr);\n}\n\n// Extract invoice type\nconst typeMatch = extractedText.match(patterns.invoiceType);\nif (typeMatch) {\n  result.invoiceType = (typeMatch[1] || typeMatch[2]).trim().toLowerCase();\n} else {\n  result.invoiceType = 'invoice'; // Default to invoice\n}\n\n// Validation logic - check required fields\nconst requiredFields = ['invoiceNumber', 'invoiceDate', 'amount', 'vendor'];\nconst missingFields = [];\n\nfor (const field of requiredFields) {\n  if (!result[field]) {\n    missingFields.push(field);\n  }\n}\n\nresult.missingFields = missingFields;\n\n// Set validation status\nif (missingFields.length === 0) {\n  result.validationStatus = 'valid';\n} else {\n  result.validationStatus = 'needs_review';\n}\n\n// Return the structured result\nreturn result;"
+      },
+      "id": "509d9ca4-12ee-4c1c-805c-e86eec45b7fb",
+      "name": "Analyze Invoice Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        992,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $('Analyze Invoice Data').item.json.validationStatus }}",
+              "rightValue": "valid",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2ae59f5c-2080-420b-bc0b-b415d14d8dc4",
+      "name": "Check Validation Status",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1216,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "<__PLACEHOLDER_VALUE__Lexware API Endpoint for Bookings__>",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "<__PLACEHOLDER_VALUE__Lexware API Key__>"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "invoiceNumber",
+              "value": "={{ $('Analyze Invoice Data').item.json.invoiceNumber }}"
+            },
+            {
+              "name": "date",
+              "value": "={{ $('Analyze Invoice Data').item.json.date }}"
+            },
+            {
+              "name": "amount",
+              "value": "={{ $('Analyze Invoice Data').item.json.amount }}"
+            },
+            {
+              "name": "vendor",
+              "value": "={{ $('Analyze Invoice Data').item.json.vendor }}"
+            },
+            {
+              "name": "tax",
+              "value": "={{ $('Analyze Invoice Data').item.json.tax }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5b1eb4bd-5cab-4708-b6c2-0de07f1cf2e2",
+      "name": "Post to Lexware API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1440,
+        544
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "status",
+              "value": "needs_review",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "reviewReason",
+              "value": "={{ $json.validationErrors || 'Incomplete data' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "be6414a1-7e96-4e50-a027-b75e01dedd16",
+      "name": "Mark as Needs Review",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        736
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "<__PLACEHOLDER_VALUE__Google Sheets Tracking Document ID__>"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Rechnungen"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "documentId": "={{ $json.documentId }}",
+            "status": "={{ $json.status }}"
+          },
+          "matchingColumns": [
+            "documentId"
+          ],
+          "schema": [
+            {
+              "id": "documentId",
+              "displayName": "documentId",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e180d207-3340-41af-99e0-da1d39f0e9f3",
+      "name": "Update Status in Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1664,
+        640
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pbNsBLFTIuL9ArMn",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Du bist ein professioneller KI Buchhalter. Du hilfst bei der Verwaltung von Rechnungen, Bilanzen und Buchungen in Lexware. Du kannst Google Sheets durchsuchen und Lexware API aufrufen. Antworte präzise und professionell auf Deutsch."
+        }
+      },
+      "id": "8f72f027-d43a-4e9e-8914-91819e1ca784",
+      "name": "KI Buchhalter Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gpt-4o"
+        },
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "43a7dd39-2320-45c8-98cd-fce4ecd2d989",
+      "name": "OpenAI GPT-4",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        432
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "PvDQceOUxHFQUe1k",
+          "name": "ChatGPT"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "6dc2af9f-80c2-45eb-8c55-70e649270215",
+      "name": "Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Durchsuche und lese Rechnungsdaten aus dem Google Sheets Tracking-Dokument. Nutze dies um Rechnungsstatus, Beträge und Details abzufragen.",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1-flfBsxVLgyZlhtKeFkNBnT1Zabfi-V-Sb_opNnXdrw/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "KI_AGENT_AUFTRAGS_SHEET",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-flfBsxVLgyZlhtKeFkNBnT1Zabfi-V-Sb_opNnXdrw/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "e0d1acce-0689-4697-8360-387c69f4b87f",
+      "name": "Google Sheets Tool",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        432
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pbNsBLFTIuL9ArMn",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Rufe die Lexware API auf um als Buchhalter, nach Buchhaltungsregelwerken, Buchungen nach Dokument-Vorlage, zu erstellen, Bilanzen abzurufen, Bilanzen vergleichen und erstellen, auch aus vorgänger Jahren, Kontenabgleichungen, Kontostände zu prüfen. Nutze dies für alle Lexware-bezogenen Operationen.",
+        "method": "POST",
+        "url": "QngDj27nQ9tbqhqzwVg3pqBSI_sWGpOPcABRM6UFiJBY.XRr QngDj27nQ9tbqhqzwVg3pqBSI_sWGpOPcABRM6UFiJBY.XRr",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $credentials.lexwareApiKey }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "02fc8f1e-f68c-455d-bc3b-34b00a3e15ca",
+      "name": "Lexware API Tool",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        544,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "INBOX"
+          ],
+          "q": "has:attachment filename:pdf",
+          "readStatus": "unread"
+        }
+      },
+      "id": "8363f7e3-c13f-4fcc-85f8-14dafabbfe93",
+      "name": "PDF via s24.mechtech@gmail.com",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -128,
+        544
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "piLkk7aEWM1RFevI",
+          "name": "s24.mechtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "files"
+      },
+      "type": "CUSTOM.lexware",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -112
+      ],
+      "id": "d4e17c1f-0cb8-4f0a-8ad4-27823e64beb0",
+      "name": "Upload a file",
+      "credentials": {
+        "lexwareApi": {
+          "id": "ZtL0D4HEsHDVgMTz",
+          "name": "Lexware account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "files",
+        "operation": "download"
+      },
+      "type": "CUSTOM.lexware",
+      "typeVersion": 1,
+      "position": [
+        160,
+        -112
+      ],
+      "id": "f011024a-b3ef-49ee-8bf7-d3861a776357",
+      "name": "Download a file",
+      "credentials": {
+        "lexwareApi": {
+          "id": "ZtL0D4HEsHDVgMTz",
+          "name": "Lexware account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        80
+      ],
+      "id": "73953938-d04d-4647-aa88-b73eeb003576",
+      "name": "Create a row in Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1248,
+        -320
+      ],
+      "id": "216cbac8-08ab-426c-8cb8-ccf52300bc7f",
+      "name": "SB_Retrieve_Doc_Vector_1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1248,
+        -496
+      ],
+      "id": "b4760075-bd97-410d-a4c7-dcb9f4ca1847",
+      "name": "SB_ Retrieve Docs (for_KI)",
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "update",
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        848,
+        -128
+      ],
+      "id": "7400e386-d9e1-45b4-8f17-d4bf2f1fda7b",
+      "name": "SB_Update Docs",
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "load",
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        848,
+        -320
+      ],
+      "id": "8a130f42-1e43-404b-8b44-bdae16c4e241",
+      "name": "SB_Vector_Store_Get_Many",
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        80
+      ],
+      "id": "265949c3-1ff9-4591-8e6a-35866c0351b6",
+      "name": "SB_Get_many_rows",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        848,
+        80
+      ],
+      "id": "e4ea430b-1028-47d7-8e95-bf509efd9b5d",
+      "name": "SB_Vector Store_Insert_Docs",
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "load",
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        848,
+        -512
+      ],
+      "id": "d5b28f26-00b0-4f62-a59f-fa1c499820bc",
+      "name": "SB_VS_Get_Ranked_Doc_Many",
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Chat mit KI Buchhalter": {
+      "main": [
+        [
+          {
+            "node": "KI Buchhalter Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDF via Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Merge PDF Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge PDF Sources": {
+      "main": [
+        [
+          {
+            "node": "Extract PDF Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract PDF Content": {
+      "main": [
+        [
+          {
+            "node": "Prepare Document Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Document Data": {
+      "main": [
+        [
+          {
+            "node": "Log to Tracking Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log to Tracking Sheet": {
+      "main": [
+        [
+          {
+            "node": "Analyze Invoice Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Invoice Data": {
+      "main": [
+        [
+          {
+            "node": "Check Validation Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Validation Status": {
+      "main": [
+        [
+          {
+            "node": "Post to Lexware API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark as Needs Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to Lexware API": {
+      "main": [
+        [
+          {
+            "node": "Update Status in Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as Needs Review": {
+      "main": [
+        [
+          {
+            "node": "Update Status in Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI GPT-4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "KI Buchhalter Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "KI Buchhalter Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "KI Buchhalter Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lexware API Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "KI Buchhalter Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDF via s24.mechtech@gmail.com": {
+      "main": [
+        [
+          {
+            "node": "Merge PDF Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload a file": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "e36127e4-04d0-44e7-a5be-6cf20ad3fbec",
+  "activeVersionId": null,
+  "versionCounter": 25,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-21T23:49:13.880Z",
+      "createdAt": "2025-11-21T23:49:13.880Z",
+      "role": "workflow:owner",
+      "workflowId": "9r6FXKMoS0JX1oD3",
+      "projectId": "eYBRLdtGaWLyIIOy",
+      "project": {
+        "updatedAt": "2025-11-06T02:18:23.292Z",
+        "createdAt": "2025-11-06T01:50:03.327Z",
+        "id": "eYBRLdtGaWLyIIOy",
+        "name": "Andree Schulz <info@mechtech-support.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "updatedAt": "2025-11-06T01:50:03.327Z",
+            "createdAt": "2025-11-06T01:50:03.327Z",
+            "userId": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+            "projectId": "eYBRLdtGaWLyIIOy",
+            "user": {
+              "updatedAt": "2025-12-19T23:00:26.000Z",
+              "createdAt": "2025-11-06T01:50:02.958Z",
+              "id": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+              "email": "info@mechtech-support.com",
+              "firstName": "Andree",
+              "lastName": "Schulz",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-11-06T02:19:06.535Z",
+                "personalization_survey_n8n_version": "1.118.2",
+                "companySize": "<20",
+                "companyType": "ecommerce",
+                "role": "business-owner",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "uok6olNDUiRKpaE8",
+                "userActivatedAt": 1764952348935,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1765239138708
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-12-19",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null,
+  "_backup_metadata": {
+    "version": 1,
+    "backup_date": "2025-12-20T22:00:11.372Z",
+    "workflow_id": "9r6FXKMoS0JX1oD3",
+    "workflow_name": "Lexware_API_Buchhaltung",
+    "original_name": "Lexware_API_Buchhaltung",
+    "sanitized_name": "LEXWARE_API_BUCHHALTUNG"
+  }
+}

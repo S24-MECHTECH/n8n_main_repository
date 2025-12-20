@@ -1,0 +1,174 @@
+{
+  "backup_date": "2025-12-20T22:00:11.490Z",
+  "total_workflows": 21,
+  "backups": [
+    {
+      "workflow_id": "077bV810y5Q4jUZ5",
+      "workflow_name": "67-Automatic_Shopify_Order_Fulfillment_Process",
+      "sanitized_name": "67-AUTOMATIC_SHOPIFY_ORDER_FULFILLMENT_PROCESS",
+      "version": 1,
+      "file_name": "67-AUTOMATIC_SHOPIFY_ORDER_FULFILLMENT_PROCESS_20251220_01.json",
+      "relative_path": "Core Files/workflows/67-AUTOMATIC_SHOPIFY_ORDER_FULFILLMENT_PROCESS/67-AUTOMATIC_SHOPIFY_ORDER_FULFILLMENT_PROCESS_20251220_01.json"
+    },
+    {
+      "workflow_id": "0aWdCuqrqJEfmvgX",
+      "workflow_name": "84-Gmail_MCP_Server___Your_All_in_One_AI_Email_Toolkit",
+      "sanitized_name": "84-GMAIL_MCP_SERVER_YOUR_ALL_IN_ONE_AI_EMAIL_TOOLKIT",
+      "version": 1,
+      "file_name": "84-GMAIL_MCP_SERVER_YOUR_ALL_IN_ONE_AI_EMAIL_TOOLKIT_20251220_01.json",
+      "relative_path": "Core Files/workflows/84-GMAIL_MCP_SERVER_YOUR_ALL_IN_ONE_AI_EMAIL_TOOLKIT/84-GMAIL_MCP_SERVER_YOUR_ALL_IN_ONE_AI_EMAIL_TOOLKIT_20251220_01.json"
+    },
+    {
+      "workflow_id": "0e2A4TO397RymeD5",
+      "workflow_name": "MECHTECH_MCP_SERVER_BASIS_AUS",
+      "sanitized_name": "MECHTECH_MCP_SERVER_BASIS_AUS",
+      "version": 1,
+      "file_name": "MECHTECH_MCP_SERVER_BASIS_AUS_20251220_01.json",
+      "relative_path": "Core Files/workflows/MECHTECH_MCP_SERVER_BASIS_AUS/MECHTECH_MCP_SERVER_BASIS_AUS_20251220_01.json"
+    },
+    {
+      "workflow_id": "1IJXHarZxpepGKOV",
+      "workflow_name": "My xxxxxxxn8n_cloude_version_merchant",
+      "sanitized_name": "MY_XXXXXXXN8N_CLOUDE_VERSION_MERCHANT",
+      "version": 1,
+      "file_name": "MY_XXXXXXXN8N_CLOUDE_VERSION_MERCHANT_20251220_01.json",
+      "relative_path": "Core Files/workflows/MY_XXXXXXXN8N_CLOUDE_VERSION_MERCHANT/MY_XXXXXXXN8N_CLOUDE_VERSION_MERCHANT_20251220_01.json"
+    },
+    {
+      "workflow_id": "2vsMJm8sVOmqtBjR",
+      "workflow_name": "9-Automate_Blog_Content_Creation_with_Notion_MCP__DeepSeek_AI__and_WordPress",
+      "sanitized_name": "9-AUTOMATE_BLOG_CONTENT_CREATION_WITH_NOTION_MCP_DEEPSEEK_AI_AND_WORDPRESS",
+      "version": 1,
+      "file_name": "9-AUTOMATE_BLOG_CONTENT_CREATION_WITH_NOTION_MCP_DEEPSEEK_AI_AND_WORDPRESS_20251220_01.json",
+      "relative_path": "Core Files/workflows/9-AUTOMATE_BLOG_CONTENT_CREATION_WITH_NOTION_MCP_DEEPSEEK_AI_AND_WORDPRESS/9-AUTOMATE_BLOG_CONTENT_CREATION_WITH_NOTION_MCP_DEEPSEEK_AI_AND_WORDPRESS_20251220_01.json"
+    },
+    {
+      "workflow_id": "3T4zuEH0Ysf6mThU",
+      "workflow_name": "81-Control_your_discord_server_with_natural_language_via_GPT4o_and_MCP_Client",
+      "sanitized_name": "81-CONTROL_YOUR_DISCORD_SERVER_WITH_NATURAL_LANGUAGE_VIA_GPT4O_AND_MCP_CLIENT",
+      "version": 1,
+      "file_name": "81-CONTROL_YOUR_DISCORD_SERVER_WITH_NATURAL_LANGUAGE_VIA_GPT4O_AND_MCP_CLIENT_20251220_01.json",
+      "relative_path": "Core Files/workflows/81-CONTROL_YOUR_DISCORD_SERVER_WITH_NATURAL_LANGUAGE_VIA_GPT4O_AND_MCP_CLIENT/81-CONTROL_YOUR_DISCORD_SERVER_WITH_NATURAL_LANGUAGE_VIA_GPT4O_AND_MCP_CLIENT_20251220_01.json"
+    },
+    {
+      "workflow_id": "4Bs80edTasB3Dwxy",
+      "workflow_name": "79-Automate_LinkedIn_Candidates_Sourcing_with_Google_X_ray_Boolean_Search",
+      "sanitized_name": "79-AUTOMATE_LINKEDIN_CANDIDATES_SOURCING_WITH_GOOGLE_X_RAY_BOOLEAN_SEARCH",
+      "version": 1,
+      "file_name": "79-AUTOMATE_LINKEDIN_CANDIDATES_SOURCING_WITH_GOOGLE_X_RAY_BOOLEAN_SEARCH_20251220_01.json",
+      "relative_path": "Core Files/workflows/79-AUTOMATE_LINKEDIN_CANDIDATES_SOURCING_WITH_GOOGLE_X_RAY_BOOLEAN_SEARCH/79-AUTOMATE_LINKEDIN_CANDIDATES_SOURCING_WITH_GOOGLE_X_RAY_BOOLEAN_SEARCH_20251220_01.json"
+    },
+    {
+      "workflow_id": "5yT59vlUFcfPQLUV",
+      "workflow_name": "MECHTECH_MERCHANT_CENTER_COMPLETE_ALL",
+      "sanitized_name": "MECHTECH_MERCHANT_CENTER_COMPLETE_ALL",
+      "version": 1,
+      "file_name": "MECHTECH_MERCHANT_CENTER_COMPLETE_ALL_20251220_01.json",
+      "relative_path": "Core Files/workflows/MECHTECH_MERCHANT_CENTER_COMPLETE_ALL/MECHTECH_MERCHANT_CENTER_COMPLETE_ALL_20251220_01.json"
+    },
+    {
+      "workflow_id": "62MN6oqxOs3levjh",
+      "workflow_name": "15-AI_Youtube_Trend_Finder_Based_On_Niche",
+      "sanitized_name": "15-AI_YOUTUBE_TREND_FINDER_BASED_ON_NICHE",
+      "version": 1,
+      "file_name": "15-AI_YOUTUBE_TREND_FINDER_BASED_ON_NICHE_20251220_01.json",
+      "relative_path": "Core Files/workflows/15-AI_YOUTUBE_TREND_FINDER_BASED_ON_NICHE/15-AI_YOUTUBE_TREND_FINDER_BASED_ON_NICHE_20251220_01.json"
+    },
+    {
+      "workflow_id": "99yXL5T7suCrTvYB",
+      "workflow_name": "35-ai-agent-google-calendar-assistant-using-openai",
+      "sanitized_name": "35-AI-AGENT-GOOGLE-CALENDAR-ASSISTANT-USING-OPENAI",
+      "version": 1,
+      "file_name": "35-AI-AGENT-GOOGLE-CALENDAR-ASSISTANT-USING-OPENAI_20251220_01.json",
+      "relative_path": "Core Files/workflows/35-AI-AGENT-GOOGLE-CALENDAR-ASSISTANT-USING-OPENAI/35-AI-AGENT-GOOGLE-CALENDAR-ASSISTANT-USING-OPENAI_20251220_01.json"
+    },
+    {
+      "workflow_id": "9r6FXKMoS0JX1oD3",
+      "workflow_name": "Lexware_API_Buchhaltung",
+      "sanitized_name": "LEXWARE_API_BUCHHALTUNG",
+      "version": 1,
+      "file_name": "LEXWARE_API_BUCHHALTUNG_20251220_01.json",
+      "relative_path": "Core Files/workflows/LEXWARE_API_BUCHHALTUNG/LEXWARE_API_BUCHHALTUNG_20251220_01.json"
+    },
+    {
+      "workflow_id": "EeroWXsAytgZm3ee",
+      "workflow_name": "33-Automate Multi-Platform Social Media Content Creation",
+      "sanitized_name": "33-AUTOMATE_MULTI-PLATFORM_SOCIAL_MEDIA_CONTENT_CREATION",
+      "version": 1,
+      "file_name": "33-AUTOMATE_MULTI-PLATFORM_SOCIAL_MEDIA_CONTENT_CREATION_20251220_01.json",
+      "relative_path": "Core Files/workflows/33-AUTOMATE_MULTI-PLATFORM_SOCIAL_MEDIA_CONTENT_CREATION/33-AUTOMATE_MULTI-PLATFORM_SOCIAL_MEDIA_CONTENT_CREATION_20251220_01.json"
+    },
+    {
+      "workflow_id": "OiHsGnrs0QJyemfO",
+      "workflow_name": "26-ask-questions-about-a-pdf-using-ai",
+      "sanitized_name": "26-ASK-QUESTIONS-ABOUT-A-PDF-USING-AI",
+      "version": 1,
+      "file_name": "26-ASK-QUESTIONS-ABOUT-A-PDF-USING-AI_20251220_01.json",
+      "relative_path": "Core Files/workflows/26-ASK-QUESTIONS-ABOUT-A-PDF-USING-AI/26-ASK-QUESTIONS-ABOUT-A-PDF-USING-AI_20251220_01.json"
+    },
+    {
+      "workflow_id": "QlLn49IpmEVIQzEr",
+      "workflow_name": "RAG agent",
+      "sanitized_name": "RAG_AGENT",
+      "version": 1,
+      "file_name": "RAG_AGENT_20251220_01.json",
+      "relative_path": "Core Files/workflows/RAG_AGENT/RAG_AGENT_20251220_01.json"
+    },
+    {
+      "workflow_id": "RY4pqeL1z0ix3wmf",
+      "workflow_name": "***MECHTECH_KI_KNOWLEDGE_BUILDER_00",
+      "sanitized_name": "MECHTECH_KI_KNOWLEDGE_BUILDER_00",
+      "version": 1,
+      "file_name": "MECHTECH_KI_KNOWLEDGE_BUILDER_00_20251220_01.json",
+      "relative_path": "Core Files/workflows/MECHTECH_KI_KNOWLEDGE_BUILDER_00/MECHTECH_KI_KNOWLEDGE_BUILDER_00_20251220_01.json"
+    },
+    {
+      "workflow_id": "SGZsBLlLh5V72GZj",
+      "workflow_name": "***MECHTECH_KI_KNOWLEDGE_BUILDER",
+      "sanitized_name": "MECHTECH_KI_KNOWLEDGE_BUILDER",
+      "version": 1,
+      "file_name": "MECHTECH_KI_KNOWLEDGE_BUILDER_20251220_01.json",
+      "relative_path": "Core Files/workflows/MECHTECH_KI_KNOWLEDGE_BUILDER/MECHTECH_KI_KNOWLEDGE_BUILDER_20251220_01.json"
+    },
+    {
+      "workflow_id": "T3VNbFLsRZEQjhAo",
+      "workflow_name": "64-Integrating_AI_with_Open_Meteo_API_for_Enhanced_Weather_Forecasting",
+      "sanitized_name": "64-INTEGRATING_AI_WITH_OPEN_METEO_API_FOR_ENHANCED_WEATHER_FORECASTING",
+      "version": 1,
+      "file_name": "64-INTEGRATING_AI_WITH_OPEN_METEO_API_FOR_ENHANCED_WEATHER_FORECASTING_20251220_01.json",
+      "relative_path": "Core Files/workflows/64-INTEGRATING_AI_WITH_OPEN_METEO_API_FOR_ENHANCED_WEATHER_FORECASTING/64-INTEGRATING_AI_WITH_OPEN_METEO_API_FOR_ENHANCED_WEATHER_FORECASTING_20251220_01.json"
+    },
+    {
+      "workflow_id": "Wh6EoSl8lQCqbajd",
+      "workflow_name": "***MECHTECH_BASIS_RAG__LEXWARE",
+      "sanitized_name": "MECHTECH_BASIS_RAG_LEXWARE",
+      "version": 1,
+      "file_name": "MECHTECH_BASIS_RAG_LEXWARE_20251220_01.json",
+      "relative_path": "Core Files/workflows/MECHTECH_BASIS_RAG_LEXWARE/MECHTECH_BASIS_RAG_LEXWARE_20251220_01.json"
+    },
+    {
+      "workflow_id": "X0uSjcINb8pNndoU",
+      "workflow_name": "32-notion-ai-assistant-generator",
+      "sanitized_name": "32-NOTION-AI-ASSISTANT-GENERATOR",
+      "version": 1,
+      "file_name": "32-NOTION-AI-ASSISTANT-GENERATOR_20251220_01.json",
+      "relative_path": "Core Files/workflows/32-NOTION-AI-ASSISTANT-GENERATOR/32-NOTION-AI-ASSISTANT-GENERATOR_20251220_01.json"
+    },
+    {
+      "workflow_id": "bTiwxsf3heQmsDcA",
+      "workflow_name": "95-build-custom-workflows-automatically-with-gpt-4o,-rag,-and-web-search",
+      "sanitized_name": "95-BUILD-CUSTOM-WORKFLOWS-AUTOMATICALLY-WITH-GPT-4O_-RAG_-AND-WEB-SEARCH",
+      "version": 1,
+      "file_name": "95-BUILD-CUSTOM-WORKFLOWS-AUTOMATICALLY-WITH-GPT-4O_-RAG_-AND-WEB-SEARCH_20251220_01.json",
+      "relative_path": "Core Files/workflows/95-BUILD-CUSTOM-WORKFLOWS-AUTOMATICALLY-WITH-GPT-4O_-RAG_-AND-WEB-SEARCH/95-BUILD-CUSTOM-WORKFLOWS-AUTOMATICALLY-WITH-GPT-4O_-RAG_-AND-WEB-SEARCH_20251220_01.json"
+    },
+    {
+      "workflow_id": "ftZOou7HNgLOwzE5",
+      "workflow_name": "***MECHTECH_MERCHANT_CENTER_ADMIN",
+      "sanitized_name": "MECHTECH_MERCHANT_CENTER_ADMIN",
+      "version": 1,
+      "file_name": "MECHTECH_MERCHANT_CENTER_ADMIN_20251220_01.json",
+      "relative_path": "Core Files/workflows/MECHTECH_MERCHANT_CENTER_ADMIN/MECHTECH_MERCHANT_CENTER_ADMIN_20251220_01.json"
+    }
+  ]
+}

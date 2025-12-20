@@ -1,0 +1,957 @@
+{
+  "updatedAt": "2025-12-13T21:08:15.000Z",
+  "createdAt": "2025-12-10T03:41:45.976Z",
+  "id": "0e2A4TO397RymeD5",
+  "name": "MECHTECH_MCP_SERVER_BASIS_AUS",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "c8608713-c52f-4e9f-9407-bb716a2d49ff"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        -1632,
+        -224
+      ],
+      "id": "31bf8b82-e79b-42c4-8130-15deb3110b29",
+      "name": "MCP Server Trigger",
+      "webhookId": "c8608713-c52f-4e9f-9407-bb716a2d49ff",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1632,
+        -496
+      ],
+      "id": "72e1348f-a339-4286-9e44-826f790bb0ec",
+      "name": "When chat message received",
+      "webhookId": "213af432-a6c1-456e-aa0b-0c045fb25075"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://n8n.srv1091615.hstgr.cloud/mcp/c8608713-c52f-4e9f-9407-bb716a2d49ff",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        -528,
+        -544
+      ],
+      "id": "a16f299e-d9a8-4aa1-b250-3ade1caedb63",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -1024,
+        -496
+      ],
+      "id": "51b0c9d0-8940-49b2-bb3d-5a12bf7c160a",
+      "name": "AI Agent",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -1248,
+        -208
+      ],
+      "id": "93c0143c-da7c-43aa-b15f-324999b02a80",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "r8M0d8DoTbboRjCe",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "siteId": "68d2fd81a3e41128755efbe7",
+        "collectionId": "68d361b0271a5d106adb4d4a",
+        "itemId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', ``, 'string') }}",
+        "live": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Live', ``, 'boolean') }}",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "seo-title",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues0_Field_Value', ``, 'string') }}"
+            },
+            {
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues1_Field_Value', ``, 'string') }}"
+            },
+            {
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues2_Field_Value', ``, 'string') }}"
+            },
+            {
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues3_Field_Value', ``, 'string') }}"
+            },
+            {
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues4_Field_Value', ``, 'string') }}"
+            },
+            {
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues5_Field_Value', ``, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.webflowTool",
+      "typeVersion": 2,
+      "position": [
+        -1856,
+        240
+      ],
+      "id": "c46f1e01-e794-4c1c-b530-35adb493a486",
+      "name": "Update an item in Webflow",
+      "credentials": {
+        "webflowOAuth2Api": {
+          "id": "BwcrDGgXEibxrcSj",
+          "name": "Webflow account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -2144,
+        240
+      ],
+      "id": "7fc9394a-4844-48a3-81db-30c0236c2092",
+      "name": "Get Gmail",
+      "webhookId": "8c54e255-956a-49ec-b386-54b108e6d881",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "piLkk7aEWM1RFevI",
+          "name": "s24.mechtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -2288,
+        240
+      ],
+      "id": "c92112ba-1c8b-4090-8fa9-01d9d9bd0edf",
+      "name": "Send Gmail",
+      "webhookId": "6acef8b5-57bd-4224-adf4-878133858deb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "piLkk7aEWM1RFevI",
+          "name": "s24.mechtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "s24.mechtech@gmail.com",
+          "mode": "list",
+          "cachedResultName": "s24.mechtech@gmail.com"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {
+          "fields": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Fields', ``, 'string') }}",
+          "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+          "updatedMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Updated_Min', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -2000,
+        240
+      ],
+      "id": "1318e720-dab9-4657-b66d-ed577795c56e",
+      "name": "Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "SONFk0j0c775SMFD",
+          "name": "Google Calendar"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "connectionType": "http"
+      },
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        -1536,
+        240
+      ],
+      "id": "fe501683-3f69-4285-9c7c-70e5c67d809c",
+      "name": "MCP List_Tools"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-pro-latest",
+          "mode": "list",
+          "cachedResultName": "models/gemini-pro-latest"
+        },
+        "messages": {
+          "values": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGeminiTool",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        -208
+      ],
+      "id": "68668607-4abc-4014-92a9-7365349609bc",
+      "name": "Message a model in Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "iTt5j2CqCJvCx7sv",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "d266596f-b2af-4224-8c07-02b0a8210b2f",
+      "name": "Postgres Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "position": [
+        -1072,
+        -208
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "postgres": {
+          "id": "pIp690wi4X79QCKb",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "M1k6lIvz8bT2JPdG",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/M1k6lIvz8bT2JPdG",
+          "cachedResultName": "***MECHTECH_WEBFLOW_MCP"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -528,
+        208
+      ],
+      "id": "688eefe7-7d28-4b6f-b532-d5a56455a24f",
+      "name": "SEO_WEBFLOW"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Wh6EoSl8lQCqbajd",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Wh6EoSl8lQCqbajd",
+          "cachedResultName": "***MECHTECH_BASIS_RAG__LEXWARE"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "operation",
+              "displayName": "operation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "folderId",
+              "displayName": "folderId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "fileId",
+              "displayName": "fileId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -528,
+        32
+      ],
+      "id": "31bbd3f9-df45-445c-b9a0-1e79c235f712",
+      "name": "LEXWARE_DATA"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "SGZsBLlLh5V72GZj",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/SGZsBLlLh5V72GZj",
+          "cachedResultName": "***MECHTECH_KI_KNOWLEDGE_BUILDER"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -528,
+        -176
+      ],
+      "id": "06b3273a-bd3a-4718-9fb0-421b88e87943",
+      "name": "KNOWLEDGE_BASE"
+    },
+    {
+      "parameters": {
+        "url": "https://merchantapi.googleapis.com/shops/v1/products",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        -1696,
+        240
+      ],
+      "id": "27836792-c055-4a19-945b-d06082e2eeb7",
+      "name": "Google_Merchant",
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "OFpjIV18thb8kzda",
+          "name": "Google Merchant_Center"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-exp-1206",
+          "mode": "list",
+          "cachedResultName": "models/gemini-exp-1206"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are a very good proffessional helper and wait for my instructions"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGeminiTool",
+      "typeVersion": 1,
+      "position": [
+        -1360,
+        240
+      ],
+      "id": "fc4c43fe-38c6-41b8-94b0-fc22d3959952",
+      "name": "Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "iTt5j2CqCJvCx7sv",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "query",
+        "projectId": "=merchant-center-1559947636006",
+        "database": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Database', ``, 'string') }}",
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query_JSON', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}"
+      },
+      "type": "n8n-nodes-base.googleFirebaseCloudFirestoreTool",
+      "typeVersion": 1.1,
+      "position": [
+        -1168,
+        240
+      ],
+      "id": "ab9a0ca7-b4b8-4cdf-892f-7f075e040970",
+      "name": "Google_Firestore_DB",
+      "credentials": {
+        "googleApi": {
+          "id": "eJvwwImRmEyGQ1LX",
+          "name": "Google Service Admin"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Name', ``, 'string') }}",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Name', ``, 'string') }}",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Name', ``, 'string') }}",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {},
+        "optimizeResponse": true,
+        "dataField": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Field_Containing_Data', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        -528,
+        -384
+      ],
+      "id": "b6b37702-eb78-4fc3-bd02-b0edb981b8a8",
+      "name": "Google_Merchant_01",
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "OFpjIV18thb8kzda",
+          "name": "Google Merchant_Center"
+        },
+        "googleApi": {
+          "id": "ZyZC3w7hfJ55uqot",
+          "name": "Google_mechtech-merchant_http"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Operation', ``, 'string') }}",
+        "documentId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Document_ID', ``, 'string') }}",
+        "sheetName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sheet_Name', ``, 'string') }}",
+        "options": {},
+        "startIndex": "A"
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -1840,
+        0
+      ],
+      "id": "fa87f97f-be92-4e89-b321-b4cd9c00b7a7",
+      "name": "Google Sheets Tool",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "cztAb4CKfRPRO8KX",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "drive",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTool",
+      "typeVersion": 3,
+      "position": [
+        -1648,
+        0
+      ],
+      "id": "7da3b712-5b51-4efb-9822-486cba2a68e0",
+      "name": "Google Drive Tool",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zz10b2AZS74uOND8",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://admin.googleapis.com/admin/directory/v1/users",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "domain",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Domain', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        -1504,
+        0
+      ],
+      "id": "078e29bb-f9d2-4fe9-a399-c955c3c14e98",
+      "name": "Google Workspace Admin",
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "OFpjIV18thb8kzda",
+          "name": "Google Merchant_Center"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://analyticsdata.googleapis.com/v1beta/properties/{{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Property_ID', ``, 'string') }}:runReport",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        -1360,
+        0
+      ],
+      "id": "86a607a7-c01c-451c-8d72-afeae64378ec",
+      "name": "Google Analytics",
+      "credentials": {
+        "googleOAuth2Api": {
+          "id": "OFpjIV18thb8kzda",
+          "name": "Google Merchant_Center"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "user",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/S24-MECHTECH/S24-Modul-kompiling/commits?author=S24-MECHTECH",
+          "mode": "url"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        -2288,
+        -32
+      ],
+      "id": "80386c0c-7ef1-42e0-9343-6128761dd1c6",
+      "name": "GitHub API",
+      "webhookId": "8395f09c-2e75-4f40-bb86-e3896b7a4353",
+      "credentials": {
+        "githubApi": {
+          "id": "2WFw9vUtTtwFpvIv",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update an item in Webflow": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP List_Tools": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model in Google Gemini1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO_WEBFLOW": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LEXWARE_DATA": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "KNOWLEDGE_BASE": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google_Merchant": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google_Firestore_DB": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google_Merchant_01": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Workspace Admin": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Analytics": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "235a01ed-6973-4ed7-8376-56eda56ddcb8",
+  "activeVersionId": null,
+  "versionCounter": 18,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-10T03:41:45.984Z",
+      "createdAt": "2025-12-10T03:41:45.984Z",
+      "role": "workflow:owner",
+      "workflowId": "0e2A4TO397RymeD5",
+      "projectId": "eYBRLdtGaWLyIIOy",
+      "project": {
+        "updatedAt": "2025-11-06T02:18:23.292Z",
+        "createdAt": "2025-11-06T01:50:03.327Z",
+        "id": "eYBRLdtGaWLyIIOy",
+        "name": "Andree Schulz <info@mechtech-support.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "updatedAt": "2025-11-06T01:50:03.327Z",
+            "createdAt": "2025-11-06T01:50:03.327Z",
+            "userId": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+            "projectId": "eYBRLdtGaWLyIIOy",
+            "user": {
+              "updatedAt": "2025-12-19T23:00:26.000Z",
+              "createdAt": "2025-11-06T01:50:02.958Z",
+              "id": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+              "email": "info@mechtech-support.com",
+              "firstName": "Andree",
+              "lastName": "Schulz",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-11-06T02:19:06.535Z",
+                "personalization_survey_n8n_version": "1.118.2",
+                "companySize": "<20",
+                "companyType": "ecommerce",
+                "role": "business-owner",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "uok6olNDUiRKpaE8",
+                "userActivatedAt": 1764952348935,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1765239138708
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-12-19",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null,
+  "_backup_metadata": {
+    "version": 1,
+    "backup_date": "2025-12-20T22:00:11.305Z",
+    "workflow_id": "0e2A4TO397RymeD5",
+    "workflow_name": "MECHTECH_MCP_SERVER_BASIS_AUS",
+    "original_name": "MECHTECH_MCP_SERVER_BASIS_AUS",
+    "sanitized_name": "MECHTECH_MCP_SERVER_BASIS_AUS"
+  }
+}
