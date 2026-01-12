@@ -1,0 +1,51 @@
+{
+  "node_check": {
+    "node_number": 2,
+    "node_name": "Get Workflow Status REAL",
+    "node_id": "24dfb842-786a-45ed-89bf-a8cf8b2b15af",
+    "node_type": "n8n-nodes-base.httpRequest",
+    "type_version": "4.2",
+    "check_status": "GREEN",
+    "timestamp": "2025-12-19T06:38:32.021Z",
+    "checks": {
+      "configuration": {
+        "url": "https://mxswxdnnjhhukovixzvb.supabase.co/rest/v1/workflow_runs?select=*&order=created_at.desc&limit=100",
+        "url_template": "Supabase REST API",
+        "authentication": "predefinedCredentialType",
+        "credential_type": "supabaseApi",
+        "table_name": "workflow_runs",
+        "fix_applied": "workflow_status → workflow_runs (bereits gefixt)"
+      },
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      },
+      "settings": {
+        "alwaysOutputData": true,
+        "retryOnFail": true,
+        "waitBetweenTries": 3000,
+        "continueOnFail": true,
+        "onError": "continueErrorOutput",
+        "disabled": false
+      },
+      "position": {
+        "x": 1344,
+        "y": 3248
+      },
+      "connections": {
+        "input_from": "Check Last Run (Route Command)",
+        "output_to": "Format Status Response"
+      },
+      "database_check": {
+        "supabase_url": "https://mxswxdnnjhhukovixzvb.supabase.co",
+        "table_required": "workflow_runs",
+        "fix_status": "✅ Fixed - verwendet jetzt workflow_runs statt workflow_status"
+      }
+    },
+    "result": "✅ Node korrekt konfiguriert. URL verwendet korrekte Tabelle 'workflow_runs' (Fix bereits angewendet). Credentials vorhanden.",
+    "issues": [],
+    "recommendations": []
+  }
+}

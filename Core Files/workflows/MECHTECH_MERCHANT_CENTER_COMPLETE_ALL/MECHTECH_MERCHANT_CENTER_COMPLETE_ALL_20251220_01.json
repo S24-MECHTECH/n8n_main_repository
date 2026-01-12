@@ -1,0 +1,1404 @@
+{
+  "updatedAt": "2025-12-14T03:57:29.000Z",
+  "createdAt": "2025-12-14T00:54:02.698Z",
+  "id": "5yT59vlUFcfPQLUV",
+  "name": "MECHTECH_MERCHANT_CENTER_COMPLETE_ALL",
+  "description": null,
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🎯 MECHTECH MERCHANT CENTER\n\n**HAUPT-WORKFLOW:**\n1. Manual Trigger (Test)\n2. Shop Configuration\n3. Get Merchant Products (250)\n4. Analyze Products\n5. Gemini Decision (dein Befehl!)\n6. Check Priority\n7. Prepare Loop\n8. Set Adult Flag\n9. Wait 2s (Rate Limit)\n10. Log to Sheets\n\n**CREDENTIALS:**\n- Google Merchant API\n- Google Sheets\n- Google Gemini API\n\n**START:**\nKlick Manual Trigger → Execute!",
+        "height": 400,
+        "width": 300,
+        "color": 4
+      },
+      "name": "Info",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        592,
+        -240
+      ],
+      "id": "30972485-bb56-4a43-b5cd-f2770da915ef"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extract Article Count').item.json.telegram_chat_id || $('Telegram Command Trigger').item.json.message.chat.id }}",
+        "text": "=✅ *SEO Artikel erfolgreich veröffentlicht!*\n\n📊 *Details:*\n• Titel: {{ $json.seo_title || $json.title }}\n• Slug: {{ $json.slug }}\n• Quality Score: {{ $json.quality_score || 'N/A' }}/100\n• Webflow Item ID: {{ $json.webflow_item_id || 'N/A' }}\n• Tracking ID: {{ $json.tracking_id || 'N/A' }}\n• Operation: {{ $json.operation_type || 'N/A' }}\n• Sync Status: {{ $json.sync_status || 'N/A' }}\n\n🌐 *Veröffentlichungen:*\n• Webflow CMS: {{ $json.posted_to_webflow ? '✓' : '✗' }}\n• Classified Sites: {{ $json.posted_to_classifieds ? '✓' : '✗' }}\n• Gesamt Postings: {{ $json.total_postings || 1 }}\n\n⏰ Zeitstempel: {{ $json.success_timestamp }}\n🔗 Execution ID: {{ $json.workflow_execution_id }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "039275b3-5713-44aa-b324-1e5a897c1919",
+      "name": "Telegram Success Notification1",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3104,
+        912
+      ],
+      "webhookId": "df384b28-cd3a-4bb2-8ade-316c3c8afea4",
+      "alwaysOutputData": false,
+      "retryOnFail": false,
+      "credentials": {
+        "telegramApi": {
+          "id": "CefgWOY6zLuQ1eyX",
+          "name": "Telegram account"
+        }
+      },
+      "disabled": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 2 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        1856,
+        336
+      ],
+      "id": "f7142991-821d-4ed5-842d-0ca60d22b322"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "shop1_id",
+              "name": "shop1_id",
+              "value": "5339977843",
+              "type": "string"
+            },
+            {
+              "id": "shop1_name",
+              "name": "shop1_name",
+              "value": "Siliconedolls24",
+              "type": "string"
+            },
+            {
+              "id": "shop2_id",
+              "name": "shop2_id",
+              "value": "124485833",
+              "type": "string"
+            },
+            {
+              "id": "shop2_name",
+              "name": "shop2_name",
+              "value": "DreamDoll",
+              "type": "string"
+            },
+            {
+              "id": "google_sheet_id",
+              "name": "google_sheet_id",
+              "value": "1FuWn5ID8VNHlFNxCdwY_6fuWJ1QbjYSXuaBXx4MOrAE",
+              "type": "string"
+            },
+            {
+              "id": "id-6",
+              "name": "supabase_url",
+              "value": "<__PLACEHOLDER_VALUE__Supabase Project URL__>",
+              "type": "string"
+            },
+            {
+              "id": "id-7",
+              "name": "supabase_key",
+              "value": "<__PLACEHOLDER_VALUE__Supabase API Key__>",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "name": "Shop Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2656,
+        336
+      ],
+      "id": "f55b6957-119b-4b7b-a613-9e8d7fb057bd"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.googleapis.com/content/v2.1/{{ $('Shop Configuration').item.json.shop1_id }}/products?maxResults=100",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "name": "Get Merchant Products",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3104,
+        464
+      ],
+      "id": "43b7224d-5b77-4583-9901-0a5b437aecd5",
+      "credentials": {
+        "googleApi": {
+          "id": "ZyZC3w7hfJ55uqot",
+          "name": "Google_mechtech-merchant_http"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 🎯 MECHTECH MERCHANT CENTER WORKFLOW\n\n**Status:** ✅ Workflow Complete - Ready for Setup\n\n## **Setup Instructions:**\n## 1. ✅ Connect Google Merchant Center API credentials\n## 2. ✅ Connect Google Sheets OAuth2 credentials\n## 3. ⚙️ Configure Supabase:\n##  - Add Supabase URL to Shop Configuration\n##   - Add Supabase API Key to Shop Configuration\n##   - Create `workflow_runs` table with required fields\n## 4. ✅ Connect Gemini API credentials to Gemini Model node\n## 5. ⚙️ Add Telegram Bot Token and Chat ID for notifications\n\n## **Workflow Features:**\n## - Daily automated runs at 2 AM\n## - AI-powered decision making with Gemini\n## - Product optimization (adult flags, images, text)\n## - Comprehensive logging to Google Sheets & Supabase\n## - Telegram notifications for daily reports\n##- Error handling and alerts\n\n## **Sheet ID:** 1FuWn5ID8VNHlFNxCdwY_6fuWJ1QbjYSXuaBXx4MOrAE",
+        "height": 892,
+        "width": 832,
+        "color": 4
+      },
+      "name": "Sticky Note - Instructions",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        304
+      ],
+      "id": "d32eae6e-6785-454d-a5e9-9acb169059d1"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "workflow_runs",
+        "limit": 1,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "shop_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Shop Configuration').item.json.shop1_id }}"
+            }
+          ]
+        }
+      },
+      "id": "a3c9ec49-a4c8-400a-a04e-d00871fbaea1",
+      "name": "Check Last Run",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2896,
+        336
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const products = $input.item.json.resources || [];\nconst productsNeedingFix = products.filter(p => !p.adult);\nconst disapproved = products.filter(p => p.issues && p.issues.length > 0).length;\nconst approved = products.length - disapproved;\nconst approvalRate = products.length > 0 ? ((approved / products.length) * 100).toFixed(2) : 0;\n\nreturn [{\n  json: {\n    products_needing_fix: productsNeedingFix.slice(0, 100),\n    current_approval_rate: approvalRate,\n    total_products: products.length,\n    approved_count: approved,\n    disapproved_count: disapproved\n  }\n}];"
+      },
+      "id": "b058729f-aead-4dd4-9e38-81534d84c6c0",
+      "name": "Analyze Products",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3104,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Current Approval Rate: {{ $json.current_approval_rate }}%. Products needing fix: {{ $json.products_needing_fix.length }}. Total products: {{ $json.total_products }}. Approved: {{ $json.approved_count }}. Disapproved: {{ $json.disapproved_count }}.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an AI optimization strategist for Google Merchant Center.\n\nYour task is to analyze the current product approval status and decide the daily priority action.\n\nAvailable actions:\n1. adult_flags - Set adult content flags on products (fastest, highest impact)\n2. images - Optimize product images (medium effort)\n3. text - Sanitize product descriptions (lowest priority)\n\nConstraints:\n- Budget: €0 (use only free Google API calls)\n- Max 100 products per day\n- Goal: Increase approval rate from current to 95%\n\nAnalyze the data and return your decision as JSON with:\n- priority: Which action to take today\n- reasoning: Why this action is most important now\n- products_to_process: How many products to process (max 100)\n\nPrioritize actions that will have the biggest impact on approval rate."
+        }
+      },
+      "id": "e118c44e-c5e4-4b01-a7cd-ddaa47d4090f",
+      "name": "Gemini Daily Decision",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        3392,
+        240
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "id": "a0e7c939-1829-4c16-b53a-ff32b64caf99",
+      "name": "Gemini Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3344,
+        480
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "iTt5j2CqCJvCx7sv",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"priority\": {\n\t\t\t\"type\": \"string\",\n\t\t\t\"enum\": [\"adult_flags\", \"images\", \"text\"]\n\t\t},\n\t\t\"reasoning\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"products_to_process\": {\n\t\t\t\"type\": \"number\"\n\t\t}\n\t},\n\t\"required\": [\"priority\", \"reasoning\", \"products_to_process\"]\n}"
+      },
+      "id": "5eb463b9-d4a1-4dac-84bd-05634d7689f3",
+      "name": "JSON Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3568,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.priority }}",
+                    "rightValue": "adult_flags",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Adult Flags"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.priority }}",
+                    "rightValue": "images",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Images"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.priority }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Fallback"
+        }
+      },
+      "id": "63937a8e-265d-4c34-9805-d0f1a21dafe4",
+      "name": "Route by Priority",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2192,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const context = getWorkflowStaticData('node');\n\nif (!context.initialized) {\n  context.products = $input.item.json.products_needing_fix || [];\n  context.processed = [];\n  context.failed = [];\n  context.index = 0;\n  context.initialized = true;\n}\n\nif (context.index < context.products.length && context.index < ($input.item.json.products_to_process || 100)) {\n  const product = context.products[context.index];\n  context.index++;\n  return [{ json: { product: product, index: context.index, total: Math.min(context.products.length, $input.item.json.products_to_process || 100) } }];\n} else {\n  const result = {\n    processed_count: context.processed.length,\n    failed_count: context.failed.length,\n    processed: context.processed,\n    failed: context.failed\n  };\n  context.initialized = false;\n  return [null, { json: result }];\n}"
+      },
+      "id": "38f66744-b198-4888-9d95-4cc54d0e5c19",
+      "name": "Prepare Products Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://www.googleapis.com/content/v2.1/{{ $('Shop Configuration').item.json.shop1_id }}/products/{{ $json.product.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "adult",
+              "value": "true"
+            },
+            {
+              "name": "ageGroup",
+              "value": "adult"
+            },
+            {
+              "name": "googleProductCategory",
+              "value": "778"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "69095aa1-ccdc-4f10-88d0-dce32efd67ac",
+      "name": "Update Product Adult Flag",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2656,
+        544
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "ZyZC3w7hfJ55uqot",
+          "name": "Google_mechtech-merchant_http"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "98341eae-0e07-443f-ac0f-00f1f72f3553",
+      "name": "Rate Limiting",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2880,
+        624
+      ],
+      "webhookId": "77aa4d35-4b1e-410d-9f22-138e57a732c7"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst processedCount = items.filter(i => i.json.processed_count !== undefined).reduce((sum, i) => sum + i.json.processed_count, 0);\nconst failedCount = items.filter(i => i.json.failed_count !== undefined).reduce((sum, i) => sum + i.json.failed_count, 0);\nconst config = $('Shop Configuration').item.json;\nconst analysis = $('Analyze Products').item.json;\nconst decision = $('Gemini Daily Decision').item.json;\n\nreturn [{\n  json: {\n    shop_id: config.shop1_id,\n    shop_name: config.shop1_name,\n    run_date: new Date().toISOString(),\n    phase: decision.priority || 'adult_flags',\n    products_processed: processedCount,\n    success_count: processedCount,\n    failed_count: failedCount,\n    approval_rate_before: analysis.current_approval_rate,\n    approval_rate_after: analysis.current_approval_rate,\n    reasoning: decision.reasoning || 'Processing products',\n    status: failedCount === 0 ? 'success' : 'partial_success'\n  }\n}];"
+      },
+      "id": "d6cf773e-33fd-4d93-966d-4e29c1afd4a4",
+      "name": "Aggregate Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2656,
+        1392
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "workflow_runs",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "run_date",
+              "fieldValue": "={{ $json.run_date }}"
+            },
+            {
+              "fieldId": "shop_id",
+              "fieldValue": "={{ $json.shop_id }}"
+            },
+            {
+              "fieldId": "phase",
+              "fieldValue": "={{ $json.phase }}"
+            },
+            {
+              "fieldId": "products_processed",
+              "fieldValue": "={{ $json.products_processed }}"
+            },
+            {
+              "fieldId": "success_count",
+              "fieldValue": "={{ $json.success_count }}"
+            },
+            {
+              "fieldId": "approval_rate_after",
+              "fieldValue": "={{ $json.approval_rate_after }}"
+            }
+          ]
+        }
+      },
+      "id": "334e7c0a-8da7-4f9d-8169-298607352b57",
+      "name": "Save Workflow Run",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2880,
+        1392
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "f1qLUdIsbZ2A3wdC",
+          "name": "Supabase-MySQL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1FuWn5ID8VNHlFNxCdwY_6fuWJ1QbjYSXuaBXx4MOrAE"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "📝 Daily_Log"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [
+            "Timestamp"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Shop",
+              "displayName": "Shop",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phase",
+              "displayName": "Phase",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Action",
+              "displayName": "Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Products Processed",
+              "displayName": "Products Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Success Count",
+              "displayName": "Success Count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Failed Count",
+              "displayName": "Failed Count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Details",
+              "displayName": "Details",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappings": [
+            {
+              "column": "Timestamp",
+              "value": "={{ $json.run_date }}"
+            },
+            {
+              "column": "Shop",
+              "value": "={{ $json.shop_name }}"
+            },
+            {
+              "column": "Phase",
+              "value": "={{ $json.phase }}"
+            },
+            {
+              "column": "Action",
+              "value": "Daily Run"
+            },
+            {
+              "column": "Products Processed",
+              "value": "={{ $json.products_processed }}"
+            },
+            {
+              "column": "Success Count",
+              "value": "={{ $json.success_count }}"
+            },
+            {
+              "column": "Failed Count",
+              "value": "={{ $json.failed_count }}"
+            },
+            {
+              "column": "Status",
+              "value": "={{ $json.status }}"
+            },
+            {
+              "column": "Details",
+              "value": "={{ $json.reasoning }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f8d1dc44-7167-4ce0-bc97-26a20457f747",
+      "name": "Log Results to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        3104,
+        1392
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pbNsBLFTIuL9ArMn",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "dc484a5d-aac4-4d5f-a1d7-13ced010afd6",
+        "text": "=🤖 GEMINI DAILY REPORT - {{ $json.shop_name }}\n\n📊 Phase: {{ $json.phase }}\n✅ Verarbeitet: {{ $json.success_count }}\n❌ Fehler: {{ $json.failed_count }}\n📈 Approval Rate: {{ $json.approval_rate_after }}%\n\n💡 Reasoning: {{ $json.reasoning }}\n\nAlles OK? 👍",
+        "additionalFields": {}
+      },
+      "id": "57b612e4-7949-4099-9c87-68da3f797463",
+      "name": "Send Daily Report",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3104,
+        1152
+      ],
+      "webhookId": "b5c4cc7d-d366-4cd7-ac2c-0a91ed811e96",
+      "credentials": {
+        "telegramApi": {
+          "id": "CefgWOY6zLuQ1eyX",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.to }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "id": "004c5b97-4f85-452c-99a9-c940e6651e66",
+      "name": "Export Report to Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3600,
+        1024
+      ],
+      "webhookId": "da822d06-d1b7-4cfe-804f-5e778bedbac4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "piLkk7aEWM1RFevI",
+          "name": "s24.mechtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "recipientPhoneNumber": "<__PLACEHOLDER_VALUE__Expert WhatsApp Number__>",
+        "textBody": "=🚨 EXPERT ALERT - MECHTECH Merchant Center\n\nShop: {{ $json.shop_name }}\nPhase: {{ $json.phase }}\n\n⚠️ CRITICAL ISSUES:\n❌ Failed: {{ $json.failed_count }}\n📉 Approval Rate: {{ $json.approval_rate_after }}%\n\nImmediate action required!\n\nDetails: {{ $json.reasoning }}",
+        "additionalFields": {}
+      },
+      "id": "31c11db9-883b-483a-8a51-e908d24121e7",
+      "name": "Send WhatsApp Expert Alert",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        3600,
+        1232
+      ],
+      "webhookId": "fd8ea9df-d0d5-4e11-a0df-a43a8e68297e"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.item.json; const html = `<h2>🤖 MECHTECH Merchant Center Daily Report</h2><h3>Shop: ${data.shop_name}</h3><table border='1' cellpadding='10'><tr><th>Metric</th><th>Value</th></tr><tr><td>Phase</td><td>${data.phase}</td></tr><tr><td>Products Processed</td><td>${data.products_processed}</td></tr><tr><td>Success Count</td><td>${data.success_count}</td></tr><tr><td>Failed Count</td><td>${data.failed_count}</td></tr><tr><td>Approval Rate</td><td>${data.approval_rate_after}%</td></tr><tr><td>Status</td><td>${data.status}</td></tr></table><p><strong>Reasoning:</strong> ${data.reasoning}</p><p><em>Generated: ${data.run_date}</em></p>`; return [{ json: { subject: `Daily Report - ${data.shop_name} - ${data.phase}`, html: html, to: '<__PLACEHOLDER_VALUE__Report Email Address__>' } }];"
+      },
+      "id": "fb46d2e5-8ac3-43e6-823a-adcf84957aed",
+      "name": "Format Report for Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3328,
+        1024
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.failed_count }}",
+              "rightValue": "10",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            },
+            {
+              "id": "id-2",
+              "leftValue": "={{ $json.approval_rate_after }}",
+              "rightValue": "50",
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "985c45f5-8831-462b-95f7-742b7973b71a",
+      "name": "Check if Expert Needed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3328,
+        1248
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const context = getWorkflowStaticData('node');\n\nif (!context.initialized) {\n  context.products = $input.item.json.products_needing_fix || [];\n  context.processed = [];\n  context.failed = [];\n  context.index = 0;\n  context.initialized = true;\n}\n\nif (context.index < context.products.length && context.index < ($input.item.json.products_to_process || 100)) {\n  const product = context.products[context.index];\n  context.index++;\n  return [{ json: { product: product, index: context.index, total: Math.min(context.products.length, $input.item.json.products_to_process || 100) } }];\n} else {\n  const result = {\n    processed_count: context.processed.length,\n    failed_count: context.failed.length,\n    processed: context.processed,\n    failed: context.failed\n  };\n  context.initialized = false;\n  return [null, { json: result }];\n}"
+      },
+      "id": "07e21cec-6ab6-4d7b-a833-66c558e45d98",
+      "name": "Prepare Images Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        864
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://www.googleapis.com/content/v2.1/{{ $('Shop Configuration').item.json.shop1_id }}/products/{{ $json.product.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "imageLink",
+              "value": "={{ $json.product.imageLink }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f200344c-b297-45af-afba-66baddbc1770",
+      "name": "Update Product Images",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2656,
+        800
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "ZyZC3w7hfJ55uqot",
+          "name": "Google_mechtech-merchant_http"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "9352d066-3c39-4fff-ab00-22c4b64b27a0",
+      "name": "Rate Limiting Images",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2880,
+        864
+      ],
+      "webhookId": "03758724-2fd2-4cf0-bc96-1ba04b9fa35c"
+    },
+    {
+      "parameters": {
+        "jsCode": "const context = getWorkflowStaticData('node');\n\nif (!context.initialized) {\n  context.products = $input.item.json.products_needing_fix || [];\n  context.processed = [];\n  context.failed = [];\n  context.index = 0;\n  context.initialized = true;\n}\n\nif (context.index < context.products.length && context.index < ($input.item.json.products_to_process || 100)) {\n  const product = context.products[context.index];\n  context.index++;\n  return [{ json: { product: product, index: context.index, total: Math.min(context.products.length, $input.item.json.products_to_process || 100) } }];\n} else {\n  const result = {\n    processed_count: context.processed.length,\n    failed_count: context.failed.length,\n    processed: context.processed,\n    failed: context.failed\n  };\n  context.initialized = false;\n  return [null, { json: result }];\n}"
+      },
+      "id": "8432cb64-ffcf-41d5-95f6-425c5ce46ec9",
+      "name": "Prepare Text Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        1152
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://www.googleapis.com/content/v2.1/{{ $('Shop Configuration').item.json.shop1_id }}/products/{{ $json.product.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "={{ $json.product.title }}"
+            },
+            {
+              "name": "description",
+              "value": "={{ $json.product.description }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bf9d332b-0ef3-422c-8532-d053e1d78923",
+      "name": "Update Product Text",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2656,
+        1088
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "ZyZC3w7hfJ55uqot",
+          "name": "Google_mechtech-merchant_http"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "3253891b-f591-458d-b328-1bcbbc8fc856",
+      "name": "Rate Limiting Text",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2880,
+        1152
+      ],
+      "webhookId": "fade3537-0739-4667-80c9-7636461ed902"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.item.json;\nconst invalidPriority = input.priority || 'unknown';\nconst reasoning = input.reasoning || 'No reasoning provided';\n\nconst errorResult = {\n  processed_count: 0,\n  failed_count: 0,\n  error: 'Invalid priority received from Gemini',\n  invalid_priority: invalidPriority,\n  gemini_reasoning: reasoning,\n  timestamp: new Date().toISOString(),\n  debug_info: {\n    expected_priorities: ['adult_flags', 'images', 'text'],\n    received_priority: invalidPriority,\n    full_gemini_response: input\n  }\n};\n\nreturn [{ json: errorResult }];"
+      },
+      "id": "8a4218cb-c859-4c16-82d7-23a284c231b4",
+      "name": "Handle Invalid Priority",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        1392
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        1504,
+        464
+      ],
+      "id": "09fd226e-3d00-4760-bbcb-e89fafe18092",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        3616,
+        816
+      ],
+      "id": "6f0d8ec3-b53c-4220-a2bb-71b1a68a6e3e",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://n8n.srv1091615.hstgr.cloud/mcp/c8608713-c52f-4e9f-9407-bb716a2d49ff",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        3760,
+        816
+      ],
+      "id": "7adcfd74-0814-4743-9754-1cd235ed195c",
+      "name": "MCP Client"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Shop Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shop Configuration": {
+      "main": [
+        [
+          {
+            "node": "Get Merchant Products",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check Last Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Merchant Products": {
+      "main": [
+        [
+          {
+            "node": "Analyze Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Last Run": {
+      "main": [
+        [
+          {
+            "node": "Get Merchant Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Products": {
+      "main": [
+        [
+          {
+            "node": "Gemini Daily Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Daily Decision": {
+      "main": [
+        [
+          {
+            "node": "Route by Priority",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Gemini Daily Decision",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Gemini Daily Decision",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Priority": {
+      "main": [
+        [
+          {
+            "node": "Prepare Products Loop",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Images Loop",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Text Loop",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Invalid Priority",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Products Loop": {
+      "main": [
+        [
+          {
+            "node": "Update Product Adult Flag",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Aggregate Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Product Adult Flag": {
+      "main": [
+        [
+          {
+            "node": "Rate Limiting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rate Limiting": {
+      "main": [
+        [
+          {
+            "node": "Prepare Products Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Results": {
+      "main": [
+        [
+          {
+            "node": "Save Workflow Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Workflow Run": {
+      "main": [
+        [
+          {
+            "node": "Log Results to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Results to Sheets": {
+      "main": [
+        [
+          {
+            "node": "Send Daily Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Daily Report": {
+      "main": [
+        [
+          {
+            "node": "Format Report for Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check if Expert Needed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Report for Email": {
+      "main": [
+        [
+          {
+            "node": "Export Report to Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Expert Needed": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp Expert Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Images Loop": {
+      "main": [
+        [
+          {
+            "node": "Update Product Images",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Product Images": {
+      "main": [
+        [
+          {
+            "node": "Rate Limiting Images",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rate Limiting Images": {
+      "main": [
+        [
+          {
+            "node": "Prepare Images Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Text Loop": {
+      "main": [
+        [
+          {
+            "node": "Update Product Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Product Text": {
+      "main": [
+        [
+          {
+            "node": "Rate Limiting Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rate Limiting Text": {
+      "main": [
+        [
+          {
+            "node": "Prepare Text Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Invalid Priority": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Shop Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Gemini Daily Decision",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "Gemini Daily Decision",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "f4848466-a2ba-4c6e-ae35-c771746fff07",
+  "activeVersionId": null,
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-14T00:54:02.705Z",
+      "createdAt": "2025-12-14T00:54:02.705Z",
+      "role": "workflow:owner",
+      "workflowId": "5yT59vlUFcfPQLUV",
+      "projectId": "eYBRLdtGaWLyIIOy",
+      "project": {
+        "updatedAt": "2025-11-06T02:18:23.292Z",
+        "createdAt": "2025-11-06T01:50:03.327Z",
+        "id": "eYBRLdtGaWLyIIOy",
+        "name": "Andree Schulz <info@mechtech-support.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "updatedAt": "2025-11-06T01:50:03.327Z",
+            "createdAt": "2025-11-06T01:50:03.327Z",
+            "userId": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+            "projectId": "eYBRLdtGaWLyIIOy",
+            "user": {
+              "updatedAt": "2025-12-19T23:00:26.000Z",
+              "createdAt": "2025-11-06T01:50:02.958Z",
+              "id": "905b93e2-2ccd-4e6b-a613-4d01485a9251",
+              "email": "info@mechtech-support.com",
+              "firstName": "Andree",
+              "lastName": "Schulz",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-11-06T02:19:06.535Z",
+                "personalization_survey_n8n_version": "1.118.2",
+                "companySize": "<20",
+                "companyType": "ecommerce",
+                "role": "business-owner",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "uok6olNDUiRKpaE8",
+                "userActivatedAt": 1764952348935,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1765239138708
+                }
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2025-12-19",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null,
+  "_backup_metadata": {
+    "version": 1,
+    "backup_date": "2025-12-20T22:00:11.345Z",
+    "workflow_id": "5yT59vlUFcfPQLUV",
+    "workflow_name": "MECHTECH_MERCHANT_CENTER_COMPLETE_ALL",
+    "original_name": "MECHTECH_MERCHANT_CENTER_COMPLETE_ALL",
+    "sanitized_name": "MECHTECH_MERCHANT_CENTER_COMPLETE_ALL"
+  }
+}

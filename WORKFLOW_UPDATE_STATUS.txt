@@ -1,0 +1,9 @@
+﻿Das Problem: Der MCP_API_KEY ist nur fÃ¼r MCP Gateway, nicht fÃ¼r n8n HTTP API.
+
+LÃ–SUNG: Du musst einen echten n8n API Key erstellen:
+1. Ã–ffne: https://n8n.srv1091615.hstgr.cloud
+2. Settings â†’ API â†’ Create API Key
+3. Scopes: workflow:read, workflow:write, workflow:execute
+4. Key kopieren und dann kann ich das Script ausfÃ¼hren
+
+ODER: Workflow manuell in n8n importieren (Import from File)

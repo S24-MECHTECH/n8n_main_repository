@@ -1,0 +1,46 @@
+{
+  "node_check": {
+    "node_number": 3,
+    "node_name": "Format Status Response",
+    "node_id": "4bd56d4b-4f4e-4696-b41b-e9937892618d",
+    "node_type": "n8n-nodes-base.code",
+    "type_version": "2",
+    "check_status": "GREEN",
+    "timestamp": "2025-12-19T06:38:32.021Z",
+    "checks": {
+      "configuration": {
+        "jsCode_present": true,
+        "debug_logging_active": true,
+        "handles_array_and_object": true,
+        "filters_by_created_at": true,
+        "calculates_aggregates": true,
+        "formats_response_text": true
+      },
+      "jsCode_features": {
+        "debug_logging": "✅ Aktiv - loggt Input, Response, Decisions, Output",
+        "input_handling": "✅ Unterstützt Array und Object",
+        "data_extraction": "✅ Filtert nach created_at",
+        "aggregation": "✅ Berechnet Totals und Success Rate",
+        "output_format": "✅ Formatiert Status-Text für E-Mail"
+      },
+      "settings": {
+        "alwaysOutputData": true,
+        "retryOnFail": true,
+        "waitBetweenTries": 3000,
+        "onError": "continueErrorOutput",
+        "disabled": false
+      },
+      "position": {
+        "x": 1616,
+        "y": 3232
+      },
+      "connections": {
+        "input_from": "Get Workflow Status REAL",
+        "output_to": "Send Command Response"
+      }
+    },
+    "result": "✅ Node korrekt konfiguriert. JavaScript-Code vorhanden. Debug-Logging aktiviert. Verarbeitet Daten korrekt.",
+    "issues": [],
+    "recommendations": []
+  }
+}

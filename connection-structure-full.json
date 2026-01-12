@@ -1,0 +1,1306 @@
+{
+  "Chat Trigger (RAG Query)": {
+    "main": [
+      [
+        {
+          "node": "Chat Agent (RAG)",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Gemini Chat Model (RAG)": {
+    "ai_languageModel": [
+      [
+        {
+          "node": "Chat Agent (RAG)",
+          "type": "ai_languageModel",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Gemini Embeddings (RAG)": {
+    "ai_embedding": [
+      [
+        {
+          "node": "Supabase Vector Store (Retrieve)",
+          "type": "ai_embedding",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Postgres Chat Memory": {
+    "ai_memory": [
+      [
+        {
+          "node": "Chat Agent (RAG)",
+          "type": "ai_memory",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Check Last Run": {
+    "main": [
+      [
+        {
+          "node": "Get Merchant Products Shop2",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Get Merchant Products2",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Get Workflow Status REAL",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Prepare Products Loop": {
+    "main": [
+      [
+        {
+          "node": "Prepare Images Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Update Product Adult Flag",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Update Product Adult Flag": {
+    "main": [
+      [
+        {
+          "node": "Rate Limiting",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Rate Limiting": {
+    "main": [
+      [
+        {
+          "node": "Prepare Products Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results_Sheets_01",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Save to Supabase Products",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results to Sheets",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Aggregate Results2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Save Workflow Run": {
+    "main": [
+      [
+        {
+          "node": "Log Results to Sheets",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Log Results to Sheets": {
+    "main": [
+      [
+        {
+          "node": "Send Daily Report",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Save to Supabase Products",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Send Daily Report": {
+    "main": [
+      [
+        {
+          "node": "Format Report for Email",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Check if Expert Needed",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Import Commands from Gmail": {
+    "main": [
+      [
+        {
+          "node": "Parse Command Input",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Import Commands from WhatsApp": {
+    "main": [
+      [
+        {
+          "node": "Parse Command Input",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Format Report for Email": {
+    "main": [
+      [
+        {
+          "node": "Export Report to Gmail",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Parse Command Input": {
+    "main": [
+      [
+        {
+          "node": "Route Command",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Check if Expert Needed": {
+    "main": [
+      [
+        {
+          "node": "Send WhatsApp Expert Alert",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Route Command": {
+    "main": [
+      [
+        {
+          "node": "Shop Configuration2",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Get Workflow Status REAL",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "Send Command Response",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Prepare Images Loop": {
+    "main": [
+      [
+        {
+          "node": "Prepare Text Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Update Product Images",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Update Product Images": {
+    "main": [
+      [
+        {
+          "node": "Rate Limiting Images",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Rate Limiting Images": {
+    "main": [
+      [
+        {
+          "node": "Prepare Images Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Aggregate Results2",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results_Sheets_01",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Save to Supabase Products",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results to Sheets",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Prepare Text Loop": {
+    "main": [
+      [
+        {
+          "node": "Prepare Merchant Quality Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Update Product Text",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Update Product Text": {
+    "main": [
+      [
+        {
+          "node": "Rate Limiting Text",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Rate Limiting Text": {
+    "main": [
+      [
+        {
+          "node": "Prepare Text Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Aggregate Results2",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results_Sheets_01",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Save to Supabase Products",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results to Sheets",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Handle Invalid Priority": {
+    "main": [
+      [
+        {
+          "node": "Aggregate Results2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Shop Configuration2": {
+    "main": [
+      [
+        {
+          "node": "Check Last Run",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Get Merchant Products Shop2",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Get Merchant Products2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Get Merchant Products2": {
+    "main": [
+      [
+        {
+          "node": "Analyze Products2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Analyze Products2": {
+    "main": [
+      [
+        {
+          "node": "Gemini Daily Decision",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Aggregate Results2": {
+    "main": [
+      [
+        {
+          "node": "Save Workflow Run",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Get Human Instructions",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Get Workflow Status REAL",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "JSON Output Parser1": {
+    "ai_outputParser": [
+      [
+        {
+          "node": "Gemini Daily Decision",
+          "type": "ai_outputParser",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Prepare Merchant Quality Loop": {
+    "main": [
+      [
+        {
+          "node": "Prepare Multi Country Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Update Merchant Settings",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Update Merchant Settings": {
+    "main": [
+      [
+        {
+          "node": "Rate Limiting Merchant",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Prepare Multi Country Loop": {
+    "main": [
+      [
+        {
+          "node": "Prepare GTN/EAN_Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Update Country Feeds",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Update Country Feeds": {
+    "main": [
+      [
+        {
+          "node": "Rate Limiting Country",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Rate Limiting Merchant": {
+    "main": [
+      [
+        {
+          "node": "Prepare Merchant Quality Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Aggregate Results2",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Save to Supabase Products",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results to Sheets",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results_Sheets_01",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Rate Limiting Country": {
+    "main": [
+      [
+        {
+          "node": "Prepare Multi Country Loop",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Aggregate Results2",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results_Sheets_01",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Save to Supabase Products",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results to Sheets",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Route by Priority": {
+    "main": [
+      [
+        {
+          "node": "Prepare Products Loop",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "Prepare Images Loop",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "Prepare Text Loop",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "Prepare Merchant Quality Loop",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "Prepare Multi Country Loop",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "Prepare GTN/EAN_Loop",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "Handle Invalid Priority",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Get Merchant Products Shop2": {
+    "main": [
+      [
+        {
+          "node": "Analyze Products2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Save to Supabase Products": {
+    "main": [
+      [
+        {
+          "node": "Update Optimization Patterns",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Update Optimization Patterns": {
+    "main": [
+      [
+        {
+          "node": "Aggregate Results2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Get Human Instructions": {
+    "main": [
+      [
+        {
+          "node": "Filter Unprocessed Instructions",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Filter Unprocessed Instructions": {
+    "main": [
+      [
+        {
+          "node": "Process Instructions with Gemini",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Process Instructions with Gemini": {
+    "main": [
+      [
+        {
+          "node": "Apply to Similar Products",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Gemini Model Learning": {
+    "ai_languageModel": [
+      [
+        {
+          "node": "Process Instructions with Gemini",
+          "type": "ai_languageModel",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "JSON Parser Learning": {
+    "ai_outputParser": [
+      [
+        {
+          "node": "Process Instructions with Gemini",
+          "type": "ai_outputParser",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Apply to Similar Products": {
+    "main": [
+      [
+        {
+          "node": "Update Sheet with AI Response",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Update Sheet with AI Response": {
+    "main": [
+      [
+        {
+          "node": "Save Learning to Supabase",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Save Learning to Supabase": {
+    "main": [
+      [
+        {
+          "node": "Send Daily Report",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Format Report for Email",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Get Workflow Status REAL": {
+    "main": [
+      [
+        {
+          "node": "Format Status Response",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Format Status Response": {
+    "main": [
+      [
+        {
+          "node": "Send Command Response",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      []
+    ]
+  },
+  "Chat Agent (RAG)": {
+    "main": [
+      []
+    ]
+  },
+  "Supabase Vector Store (Retrieve)": {
+    "ai_vectorStore": [
+      []
+    ]
+  },
+  "MCP Client": {
+    "ai_tool": [
+      [
+        {
+          "node": "Chat Agent (RAG)",
+          "type": "ai_tool",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "When clicking ‘Execute workflow’": {
+    "main": [
+      [
+        {
+          "node": "Shop Configuration2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Schedule Trigger": {
+    "main": [
+      [
+        {
+          "node": "Shop Configuration2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Gemini Daily Decision": {
+    "main": [
+      [
+        {
+          "node": "Route by Priority",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Gemini flash_2.0": {
+    "ai_languageModel": [
+      [
+        {
+          "node": "Gemini Daily Decision",
+          "type": "ai_languageModel",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "MCP Client1": {
+    "ai_tool": [
+      [
+        {
+          "node": "Gemini Daily Decision",
+          "type": "ai_tool",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Supabase RAG Context": {
+    "ai_tool": [
+      [
+        {
+          "node": "Gemini Daily Decision",
+          "type": "ai_tool",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Google Gemini Chat Model": {
+    "ai_languageModel": [
+      [
+        {
+          "node": "JSON Output Parser1",
+          "type": "ai_languageModel",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Update GTN/EAN": {
+    "main": [
+      [
+        {
+          "node": "Rate Limiting GTN/EAN",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "AI Error Handler",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Rate Limiting GTN/EAN": {
+    "main": [
+      [
+        {
+          "node": "Aggregate Results2",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results_Sheets_01",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      []
+    ]
+  },
+  "Prepare GTN/EAN_Loop": {
+    "main": [
+      [
+        {
+          "node": "Update GTN/EAN",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Send Command Response": {
+    "main": [
+      [],
+      []
+    ]
+  },
+  "2d6517f1-ebbc-48fd-894c-287420175a7a": {
+    "main": [
+      [
+        {
+          "node": "9bf990d0-1d87-4bbb-9153-46146b506ae6",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "9bf990d0-1d87-4bbb-9153-46146b506ae6": {
+    "main": [
+      [
+        {
+          "node": "3245d64d-7810-44de-beaa-f97d55eb2274",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "3245d64d-7810-44de-beaa-f97d55eb2274": {
+    "main": [
+      [
+        {
+          "node": "92b514de-5cd0-4f79-9857-123e685a1405",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "39d79c98-55c7-418a-8c36-bce59d3efd3f": {
+    "main": [
+      [
+        {
+          "node": "40a1e96b-15f2-4eb0-bdad-bd7532b02a22",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "40a1e96b-15f2-4eb0-bdad-bd7532b02a22": {
+    "main": [
+      [
+        {
+          "node": "f0a9ce99-2f4c-4baf-857a-02c81d0cae4d",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "f0a9ce99-2f4c-4baf-857a-02c81d0cae4d": {
+    "main": [
+      [
+        {
+          "node": "09ba4846-6da9-425c-a762-4f9f4bc1b4e6",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "f49cb6b3-195b-42f6-a025-a0e78d62cfca": {
+    "main": [
+      [
+        {
+          "node": "2d6517f1-ebbc-48fd-894c-287420175a7a",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "92b514de-5cd0-4f79-9857-123e685a1405": {
+    "main": [
+      [
+        {
+          "node": "40a1e96b-15f2-4eb0-bdad-bd7532b02a22",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Log Results_Sheets_01": {
+    "main": [
+      [
+        {
+          "node": "Send WhatsApp Expert Alert",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "Log Results to Sheets",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Email Trigger (IMAP)1": {
+    "main": [
+      [
+        {
+          "node": "Shop Configuration2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "AI Error Handler": {
+    "main": [
+      [
+        {
+          "node": "Retry Queue",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "Retry Queue": {
+    "main": [
+      [
+        {
+          "node": "Expression Repair",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  },
+  "main": [
+    [
+      [
+        {
+          "node": "7a01b7e8-3184-4982-92f4-a0ba03f781a4",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "errorHandler-1766014501177-9ez5es86k",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "errorHandler-1766014501177-9ez5es86k",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "4c9f8649-a6b7-45dd-9ed9-b9134be84018",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "4c9f8649-a6b7-45dd-9ed9-b9134be84018",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "c0c41789-4c7d-4efc-861f-885743a1aff8",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "errorHandler-1766014501177-9ez5es86k",
+          "type": "main",
+          "index": 1
+        },
+        {
+          "node": "80b0ee00-87d9-44ec-8b62-8c86eda7737b",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "7a01b7e8-3184-4982-92f4-a0ba03f781a4",
+          "type": "main",
+          "index": 1
+        },
+        {
+          "node": "65ca06d9-ae1b-4669-ba03-4418312d0442",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "c0c41789-4c7d-4efc-861f-885743a1aff8",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "7a01b7e8-3184-4982-92f4-a0ba03f781a4",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "15586a83-cda8-4ac9-9826-9ed77f24fa1c",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "ai-error-handler-adult-1766019421751-xxxuhgnln",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "ai-error-handler-adult-1766019421751-xxxuhgnln",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "retry-queue-adult-1766019421751-10y8tihcx",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "retry-queue-adult-1766019421751-10y8tihcx",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "expression-repair-adult-1766019421752-5eytl5tjg",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "expression-repair-adult-1766019421752-5eytl5tjg",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "15586a83-cda8-4ac9-9826-9ed77f24fa1c",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "34310e5a-2422-4ce3-a615-5b8f911b5407",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "ai-error-handler-text-1766019421752-tx9bpgxr6",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "ai-error-handler-text-1766019421752-tx9bpgxr6",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "retry-queue-text-1766019421752-b389yhp5y",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "retry-queue-text-1766019421752-b389yhp5y",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "expression-repair-text-1766019421752-rngvhbii6",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "expression-repair-text-1766019421752-rngvhbii6",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "34310e5a-2422-4ce3-a615-5b8f911b5407",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "15586a83-cda8-4ac9-9826-9ed77f24fa1c",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "switch-error-adult-1766020145577-1z5kik69x",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "3c250fa7-ca68-49fa-869d-1d0b1761a4b1",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "switch-error-images-1766020145577-usxay7zyf",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "34310e5a-2422-4ce3-a615-5b8f911b5407",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "switch-error-text-1766020145577-vzdrg84ao",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "3ad28c6f-6828-483e-a696-c83bd1382966",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "switch-error-quality-1766020145577-655zat5q2",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "3c873a42-3df1-4f70-89a4-08a7391cf78e",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "switch-error-country-1766020145577-qhicv39dk",
+          "type": "main",
+          "index": 0
+        }
+      ],
+      [
+        {
+          "node": "7a01b7e8-3184-4982-92f4-a0ba03f781a4",
+          "type": "main",
+          "index": 0
+        },
+        {
+          "node": "switch-error-gtn-ean-1766020145577-yqn2df6i2",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  ],
+  "Expression Repair": {
+    "main": [
+      [
+        {
+          "node": "Prepare GTN/EAN_Loop",
+          "type": "main",
+          "index": 0
+        }
+      ]
+    ]
+  }
+}
