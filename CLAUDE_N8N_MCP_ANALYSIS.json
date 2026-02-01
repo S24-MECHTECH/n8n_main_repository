@@ -1,0 +1,245 @@
+{
+  "timestamp": "2026-02-01T00:00:00Z",
+  "analysis_title": "n8n MCP Integration - Claude Zugriff Analyse",
+  "summary": "Vollständige Übersicht des MCP-Server-Zugangs für Claude auf n8n Hostinger & Contabo",
+  
+  "mcp_servers_status": {
+    "user-n8n-contabo": {
+      "status": "✅ AKTIV",
+      "type": "Workflow Execution API",
+      "url": "https://vmd188735.contaboserver.net",
+      "tools": [
+        "search_workflows",
+        "get_workflow_details",
+        "execute_workflow"
+      ],
+      "test_result": "ERFOLGREICH - 2 Workflows gefunden"
+    },
+    "user-n8n-contabo-api": {
+      "status": "✅ AKTIV",
+      "type": "Node & Template API",
+      "url": "https://vmd188735.contaboserver.net",
+      "tools": [
+        "search_nodes",
+        "search_templates",
+        "validate_workflow",
+        "validate_node",
+        "tools_documentation"
+      ],
+      "test_result": "ERFOLGREICH - Webhook-Nodes gefunden"
+    },
+    "user-n8n-postgres": {
+      "status": "✅ AKTIV",
+      "type": "PostgreSQL Database Access",
+      "connection": "postgresql://root:rootpassword@62.171.136.239:5432/n8n",
+      "tools": ["query"],
+      "test_result": "ERFOLGREICH - 20 Tabellen aufgelistet"
+    },
+    "user-webflow": {
+      "status": "⚠️ EINGESCHRÄNKT",
+      "type": "Webflow API",
+      "issue": "OAuth Token fehlende Scopes: 'sites:read'",
+      "token_present": true,
+      "needs_fix": "Webflow Token mit erweiterten Scopes regenerieren"
+    },
+    "user-hostinger-mcp": {
+      "status": "✅ VERFÜGBAR",
+      "type": "Hostinger VPS API",
+      "tools": "39 Tools für VPS Management",
+      "note": "SSH über VPS möglich, aber PostgreSQL DB Access reicht aus"
+    }
+  },
+
+  "n8n_database_structure": {
+    "host": "62.171.136.239:5432",
+    "database": "n8n",
+    "tables_found": 20,
+    "key_tables": {
+      "workflow_entity": {
+        "description": "Alle n8n Workflows",
+        "test_query": "SELECT id, name FROM workflow_entity LIMIT 5",
+        "result": "5 Workflows gefunden (2 MECHTECH-Workflows aktiv)"
+      },
+      "credentials_entity": {
+        "description": "Authentifizierungsdaten für integrations",
+        "columns": ["id", "name", "type", "data", "createdAt", "updatedAt"]
+      },
+      "execution_entity": {
+        "description": "Workflow-Ausführungslogs",
+        "columns": ["id", "workflowId", "data", "status", "startedAt", "stoppedAt"]
+      },
+      "processed_data": {
+        "description": "Verarbeitete Daten aus Workflows",
+        "test_result": "0 Items vorhanden - Tabelle leer oder wird nicht verwendet"
+      },
+      "shared_credentials": {
+        "description": "Geteilte Credentials zwischen Projekten",
+        "columns": ["credentialsId", "projectId", "role", "createdAt", "updatedAt"]
+      }
+    }
+  },
+
+  "active_workflows_found": [
+    {
+      "id": "8qDodKRje2MQOE1o",
+      "name": "***MECHTECH_CONTABO_BASIC_MCP",
+      "status": "AKTIV",
+      "created": "2026-01-29T15:03:20.607Z",
+      "updated": "2026-01-30T03:43:09.616Z",
+      "trigger_count": 2,
+      "key_nodes": [
+        "WEBFLOW_ITEM (Webflow Tool)",
+        "Google Sheets Tool",
+        "Google Drive Tool",
+        "Google Firestore DB",
+        "Postgres Chat Memory",
+        "OpenAI Chat Model",
+        "MCP CLIENT TOOLS (3x)",
+        "Gmail Tools (Get & Send)",
+        "Google Gemini (2x)",
+        "GitHub Integration (2x)",
+        "GitLab Integration"
+      ]
+    },
+    {
+      "id": "z1zggfMufL0gwm5S",
+      "name": "MECHTECH_LEXWARE_WISSEN_RANDY",
+      "status": "AKTIV",
+      "created": "2026-01-26T23:23:43.058Z",
+      "updated": "2026-01-31T05:32:16.657Z",
+      "trigger_count": 3,
+      "description": "Lexware Knowledge Base Integration mit Vector Store & Embeddings",
+      "key_nodes": [
+        "Supabase Vector Store (Multiple)",
+        "Ollama Embeddings (22x)",
+        "Postgres Integration",
+        "Google Drive Integration",
+        "PDF/CSV Parser",
+        "Knowledge Agent"
+      ]
+    }
+  ],
+
+  "webflow_node_configuration": {
+    "workflow_id": "8qDodKRje2MQOE1o",
+    "node_name": "WEBFLOW_ITEM",
+    "operation": "update",
+    "site_id": "68d2fd81a3e41128755efbe7",
+    "collection_id": "68d361b0271a5d106adb4d4a",
+    "parameters": {
+      "itemId": "PLACEHOLDER - $fromAI('Item_ID')",
+      "live": "PLACEHOLDER - $fromAI('Live')",
+      "fields": [
+        "seo-title",
+        "fieldValue1",
+        "fieldValue2",
+        "fieldValue3",
+        "fieldValue4",
+        "fieldValue5"
+      ]
+    },
+    "issue": "Slug-Mapping Problem - Felder nicht alle definiert"
+  },
+
+  "claude_capabilities_with_mcp": {
+    "direct_n8n_access": [
+      "✅ Workflows suchen & ausführen",
+      "✅ Workflow-Details abrufen",
+      "✅ n8n Nodes recherchieren",
+      "✅ Workflow-Validierung"
+    ],
+    "database_access": [
+      "✅ n8n PostgreSQL direkt abfragen",
+      "✅ Workflow-Konfiguration analysieren",
+      "✅ Execution-Logs prüfen",
+      "✅ Custom SQL-Queries ausführen"
+    ],
+    "integrations_available": [
+      "✅ Google Services (Sheets, Drive, Calendar, etc.)",
+      "✅ Webflow (mit Token - aber Scopes fehlen)",
+      "✅ GitHub / GitLab",
+      "✅ Lexware (via n8n Vectorization)",
+      "✅ Supabase / Postgres",
+      "✅ Hostinger SSH / VPS"
+    ],
+    "automation_possible": [
+      "✅ n8n Workflows triggern & monitoren",
+      "✅ 3 Test-Items von Lexware → Webflow publishen",
+      "✅ Slug-Mapping debuggen",
+      "✅ Datenbank-Struktur analysieren",
+      "✅ Fehler-Reports generieren"
+    ]
+  },
+
+  "next_steps_for_claude": {
+    "immediate": [
+      "1. Webflow Token scopes erweitern: sites:read, collections:read/write, items:read/write",
+      "2. 3 Test-Items aus n8n Datenbank extrahieren (mit ALLEN Feldern)",
+      "3. Webflow Collection Struktur analysieren",
+      "4. Slug-Problem debuggen & fixen",
+      "5. n8n Workflow ausführen: 3 Items → Webflow publishen",
+      "6. Detaillierten Error-Report erstellen"
+    ],
+    "documents_needed": [
+      "Webflow API Dokumentation (Sites, Collections, Items)",
+      "n8n Workflow Node Schema",
+      "Webflow Collection Field Mapping",
+      "Error Logs aus Testlauf"
+    ]
+  },
+
+  "github_repository_info": {
+    "repo_url": "https://github.com/S24-MECHTECH/n8n_main_repository",
+    "organization": "S24-MECHTECH",
+    "file_suggestions": [
+      "docs/n8n-mcp-integration.md",
+      "docs/claude-mcp-setup.md",
+      "analysis/webflow-slug-mapping.json",
+      "analysis/n8n-database-schema.sql",
+      "scripts/webflow-test-3-items.json"
+    ]
+  },
+
+  "credentials_status": {
+    "n8n_api_key": "✅ VORHANDEN (Hostinger n8n)",
+    "n8n_contabo_api_key": "✅ VORHANDEN (Contabo n8n)",
+    "webflow_token": "✅ VORHANDEN (aber Scopes unvollständig)",
+    "postgres_credentials": "✅ VORHANDEN & GETESTET",
+    "hostinger_api_token": "✅ VORHANDEN",
+    "google_services": "✅ MULTIPLE CREDENTIALS VORHANDEN"
+  },
+
+  "security_notes": {
+    "warning": "⚠️ SENSITIVE DATA ALERT",
+    "credentials_exposed_in": [
+      "mcp.json (N8N_API_KEY, WEBFLOW_TOKEN, HOSTINGER_API_TOKEN)",
+      "GitHub Repository (falls dort committed)"
+    ],
+    "recommendations": [
+      "1. Alle Credentials in GitHub Secrets speichern",
+      "2. .env Datei zu .gitignore hinzufügen",
+      "3. Nur encrypted credentials in Repo speichern",
+      "4. Rotation der API Keys in Hostinger durchführen",
+      "5. Webflow Token mit minimal erforderlichen Scopes neu generieren"
+    ]
+  },
+
+  "test_results_summary": {
+    "n8n_contabo_workflows": "✅ 2 gefunden (MECHTECH_CONTABO_BASIC_MCP, MECHTECH_LEXWARE_WISSEN_RANDY)",
+    "n8n_postgres_query": "✅ 20 Tabellen identifiziert",
+    "n8n_nodes_search": "✅ Webhook-Nodes gefunden",
+    "webflow_api": "❌ Scopes Problem - OAuth Token unvollständig",
+    "database_access": "✅ Vollständig funktionsfähig"
+  },
+
+  "claude_instructions_pending": {
+    "status": "WARTEN AUF CLAUDE INSTRUCTIONS",
+    "ready_for": [
+      "Debug-Session starten",
+      "3 Test-Items publishen",
+      "Slug-Mapping fixen",
+      "Workflow-Automation implementieren",
+      "Error-Reports generieren"
+    ]
+  }
+}
